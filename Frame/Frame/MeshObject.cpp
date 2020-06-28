@@ -6,18 +6,18 @@ void MeshObject::GetVertexDataArray()
 	{
 		for (Mesh::FaceVertexIter fv_ccwit = mesh.fv_iter(*f_it); fv_ccwit.is_valid(); fv_ccwit++)
 		{
-			vertexData.SetPosState(true);
-			vertexData.SetPosLocation(0);
+			vertexData.setState(STATE_TYPE_POSITION, true);
+			vertexData.setLocation(STATE_TYPE_POSITION, 0);
 			vertexData.position.push_back(vec3(mesh.point(*fv_ccwit).data()[0], mesh.point(*fv_ccwit).data()[1], mesh.point(*fv_ccwit).data()[2]));
-			vertexData.SetNorState(true);
-			vertexData.SetNorLocation(1);
+			vertexData.setState(STATE_TYPE_NORMAL, true);
+			vertexData.setLocation(STATE_TYPE_NORMAL, 1);
 			vertexData.normal.push_back(vec3(mesh.normal(*fv_ccwit).data()[0], mesh.normal(*fv_ccwit).data()[1], mesh.normal(*fv_ccwit).data()[2]));
 			//vertexData.normal.push_back(vec3(1, 1, 0));
-			vertexData.SetTexState(true);
-			vertexData.SetTexLocation(2);
+			vertexData.setState(STATE_TYPE_TEXCOORD, true);
+			vertexData.setLocation(STATE_TYPE_TEXCOORD, 2);
 			vertexData.texcoord.push_back(vec2(mesh.texcoord2D(*fv_ccwit).data()[0], mesh.texcoord2D(*fv_ccwit).data()[1]));
-			vertexData.SetColorState(true);
-			vertexData.SetColorLocation(3);
+			vertexData.setState(STATE_TYPE_COLOR, true);
+			vertexData.setLocation(STATE_TYPE_COLOR, 3);
 			vertexData.color.push_back(vec4(1, 1, 0, 1));
 		}
 	}

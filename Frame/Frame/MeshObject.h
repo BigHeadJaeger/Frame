@@ -1,5 +1,6 @@
 #pragma once
 #include"Object.h"
+#include"VertexData.h"
 typedef OpenMesh::TriMesh_ArrayKernelT<> Mesh;
 
 
@@ -7,6 +8,7 @@ class MeshObject:public Object
 {
 private:
 	Mesh mesh;
+	VertexData vertexData;
 private:
 	void GetVertexDataArray();
 public:
@@ -25,7 +27,7 @@ public:
 	void InitGrid(float radius, int slice, int stack);
 
 	void InitBufferData()override;
-	void UpdateBufferData() override;
+	//void UpdateBufferData() override;
 	void Update(float dt)override;
 	void Draw()override;
 };

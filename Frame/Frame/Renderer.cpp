@@ -130,10 +130,10 @@ void SimpleRenderer::Render(ShaderData* shaderData)
 	glDrawArrays(data->drawType, 0, data->drawUnitNumber);
 }
 
-void VCRenter::Render(ShaderData* shaderData)
+void VertexColorRender::Render(ShaderData* shaderData)
 {
 	glUseProgram(shaderProgram.p);
-	VCShaderData* data = dynamic_cast<VCShaderData*>(shaderData);
+	VertexShaderData* data = dynamic_cast<VertexShaderData*>(shaderData);
 	glBindVertexArray(data->VAO);
 	//´«µÝ×ø±ê±ä»»¾ØÕó
 	SetUniform("worldViewProj", data->worldViewProj, shaderProgram);
@@ -145,6 +145,6 @@ void VCRenter::Render(ShaderData* shaderData)
 
 UE4Renderer* UE4Renderer::instance = NULL;
 SimpleRenderer* SimpleRenderer::instance = NULL;
-MPSRenderer* MPSRenderer::instance = NULL;
-VCRenter* VCRenter::instance = NULL;
+//MPSRenderer* MPSRenderer::instance = NULL;
+VertexColorRender* VertexColorRender::instance = NULL;
 

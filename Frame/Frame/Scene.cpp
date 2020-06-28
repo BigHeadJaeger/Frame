@@ -43,7 +43,7 @@ void MyScene::Init()
 
 	MeshObject* cow = new MeshObject();
 	cow->SetName("cow");
-	cow->readObjFile("Resource\\OBJ\\cow.obj");
+	cow->readObjFile("OBJ\\cow.obj");
 	cow->SetRenderer(VERTEXCOLOR);
 	cow->InitBufferData();
 	cow->GetTransform().SetPosition(vec3(0, 0, 0));

@@ -4,6 +4,7 @@
 #include<string>
 #include<SOIL.h>
 #include<iostream>
+#include"VertexData.h"
 using namespace std;
 
 class ShaderDataInitTool

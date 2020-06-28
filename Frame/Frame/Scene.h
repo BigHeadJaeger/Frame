@@ -3,7 +3,7 @@
 using namespace std;
 #include"Object.h"
 //#include"ParticleGroup.h"
-#include"MPSWaterParticleGroup.h"
+//#include"MPSWaterParticleGroup.h"
 #include"Interaction.h"
 
 struct DrawMode

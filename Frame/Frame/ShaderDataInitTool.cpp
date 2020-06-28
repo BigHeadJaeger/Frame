@@ -97,39 +97,39 @@ void ShaderDataInitTool::InitVertexBuffer(GLuint& VAO, GLuint& VBO, VertexData& 
 			GLintptr size = 0;
 			switch ((*state_it).first)
 			{
-			case TYPEPOSITION:
+			case STATE_TYPE_POSITION:
 				size = vertexData.position.size() * sizeof(vec3);
 				glBufferSubData(GL_ARRAY_BUFFER, offset, size, &vertexData.position[0]);
 
-				glEnableVertexAttribArray(vertexData.GetPosLocation());
-				glVertexAttribPointer(vertexData.GetPosLocation(), 3, GL_FLOAT, GL_FALSE, 1 * sizeof(vec3), (void*)offset);
+				glEnableVertexAttribArray((*state_it).second.location);
+				glVertexAttribPointer((*state_it).second.location, 3, GL_FLOAT, GL_FALSE, 1 * sizeof(vec3), (void*)offset);
 
 				offset += size;
 				break;
-			case TYPENORMAL:
+			case STATE_TYPE_NORMAL:
 				size = vertexData.normal.size() * sizeof(vec3);
 				glBufferSubData(GL_ARRAY_BUFFER, offset, size, &vertexData.normal[0]);
 
-				glEnableVertexAttribArray(vertexData.GetNorLocation());
-				glVertexAttribPointer(vertexData.GetNorLocation(), 3, GL_FLOAT, GL_FALSE, 1 * sizeof(vec3), (void*)offset);
+				glEnableVertexAttribArray((*state_it).second.location);
+				glVertexAttribPointer((*state_it).second.location, 3, GL_FLOAT, GL_FALSE, 1 * sizeof(vec3), (void*)offset);
 
 				offset += size;
 				break;
-			case TYPETEXCOORD:
+			case STATE_TYPE_TEXCOORD:
 				size = vertexData.texcoord.size() * sizeof(vec2);
 				glBufferSubData(GL_ARRAY_BUFFER, offset, size, &vertexData.texcoord[0]);
 
-				glEnableVertexAttribArray(vertexData.GetTexLocation());
-				glVertexAttribPointer(vertexData.GetTexLocation(), 2, GL_FLOAT, GL_FALSE, 1 * sizeof(vec2), (void*)offset);
+				glEnableVertexAttribArray((*state_it).second.location);
+				glVertexAttribPointer((*state_it).second.location, 2, GL_FLOAT, GL_FALSE, 1 * sizeof(vec2), (void*)offset);
 
 				offset += size;
 				break;
-			case TYPECOLOR:
+			case STATE_TYPE_COLOR:
 				size = vertexData.color.size() * sizeof(vec4);
 				glBufferSubData(GL_ARRAY_BUFFER, offset, size, &vertexData.color[0]);
 
-				glEnableVertexAttribArray(vertexData.GetColorLocation());
-				glVertexAttribPointer(vertexData.GetColorLocation(), 4, GL_FLOAT, GL_FALSE, 1 * sizeof(vec4), (void*)offset);
+				glEnableVertexAttribArray((*state_it).second.location);
+				glVertexAttribPointer((*state_it).second.location, 4, GL_FLOAT, GL_FALSE, 1 * sizeof(vec4), (void*)offset);
 
 				offset += size;
 				break;
