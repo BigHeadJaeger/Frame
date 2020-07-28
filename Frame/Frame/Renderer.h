@@ -70,18 +70,34 @@ public:
 //	void Render(unique_ptr<ShaderData> shaderData) override;
 //};
 
+//class VertexColorRender :public Renderer
+//{
+//private:
+//	static shared_ptr<VertexColorRender> instance;
+//	VertexColorRender() = delete;
+//public:
+//	static shared_ptr<VertexColorRender> GetRenderer()
+//	{
+//		if (instance == NULL)
+//			instance = make_shared(new VertexColorRender());
+//		return instance;
+//	}
+//
+//	void Render(shared_ptr<ShaderData> shaderData) override;
+//};
+
 class VertexColorRender :public Renderer
 {
 private:
-	static VertexColorRender* instance;
 	VertexColorRender() {}
 public:
-	static VertexColorRender* GetRenderer()
+	static VertexColorRender& GetRenderer()
 	{
-		if (instance == NULL)
-			instance = new VertexColorRender();
+		static VertexColorRender instance;
 		return instance;
 	}
+
+	VertexColorRender(VertexColorRender&) = delete;
 
 	void Render(shared_ptr<ShaderData> shaderData) override;
 };

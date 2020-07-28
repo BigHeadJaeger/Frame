@@ -146,5 +146,5 @@ void VertexColorRender::Render(shared_ptr<ShaderData> shaderData)
 //UE4Renderer* UE4Renderer::instance = NULL;
 //SimpleRenderer* SimpleRenderer::instance = NULL;
 //MPSRenderer* MPSRenderer::instance = NULL;
-VertexColorRender* VertexColorRender::instance = NULL;
-
+//VertexColorRender* VertexColorRender::instance = NULL;
+//VertexColorRender VertexColorRender::ins
