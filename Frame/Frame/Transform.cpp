@@ -10,7 +10,12 @@ void Transform::MoveByVector(vec3 displacement)
 	position += displacement;
 }
 
-void Transform::SetPosition(vec3 _position)
+void Transform::SetPosition(vec3& _position)
+{
+	position = _position;
+}
+
+void Transform::SetPosition(vec3&& _position)
 {
 	position = _position;
 }

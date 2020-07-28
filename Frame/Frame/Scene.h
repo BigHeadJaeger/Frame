@@ -14,7 +14,8 @@ class MyScene
 {
 private:
 	//各种场景信息（相机、材质、灯光、各种物体的各种矩阵）
-	map<string, Object*> objects;
+	//map<string, Object*> objects;
+	map<string, shared_ptr<Object>> objects;
 	//MeshObject cow;
 	//灯光
 	vec3 lightPos;
@@ -34,10 +35,11 @@ private:
 public:
 	~MyScene()
 	{
-		map<string, Object*>::iterator objs_it;
+		map<string, shared_ptr<Object>>::iterator objs_it;
 		for (objs_it = objects.begin(); objs_it != objects.end(); objs_it++)
 		{
-			delete (*objs_it).second;
+			(*objs_it).second.reset();
+			//delete (*objs_it).second;
 		}
 		objects.clear();
 	}
@@ -45,7 +47,7 @@ public:
 	void Init();			//初始化各种信息
 	void InitKeys();
 
-	void Update(float dt);			//需要动画时，计算各种矩阵（暂时不传入shader中）
-	void Draw();			//绘制场景
+	void Update(float& dt);			//需要动画时，计算各种矩阵（暂时不传入shader中）
+	void Draw();					//绘制场景
 private:
 };

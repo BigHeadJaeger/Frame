@@ -2,9 +2,9 @@
 
 void MeshObject::GetVertexDataArray()
 {
-	for (Mesh::FaceIter f_it = mesh.faces_begin(); f_it != mesh.faces_end(); f_it++)
+	for (auto f_it = mesh.faces_begin(); f_it != mesh.faces_end(); f_it++)
 	{
-		for (Mesh::FaceVertexIter fv_ccwit = mesh.fv_iter(*f_it); fv_ccwit.is_valid(); fv_ccwit++)
+		for (auto fv_ccwit = mesh.fv_iter(*f_it); fv_ccwit.is_valid(); fv_ccwit++)
 		{
 			vertexData.setState(STATE_TYPE_POSITION, true);
 			vertexData.setLocation(STATE_TYPE_POSITION, 0);
@@ -64,6 +64,8 @@ void MeshObject::InitBufferData()
 {
 	shaderData->drawUnitNumber = mesh.n_faces() * 3;
 	vertexData.totalVertex = mesh.n_faces() * 3;
+
+
 	//vector<float> data;
 	//GetVertexDataArray(data);
 

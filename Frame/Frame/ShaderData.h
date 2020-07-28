@@ -63,7 +63,31 @@ public:
 	GLuint tNormal;					//·¨ÏßÌùÍ¼
 	bool bNormal;
 public:
-	void InitTexture(TEXTURETYPE type, string texPath);
+	template<typename T>
+	void InitTexture(TEXTURETYPE& type, T&& texPath)
+	{
+		auto tool = ShaderDataInitTool::GetShaderDataInitTool();
+		switch (type)
+		{
+		case ALBEDO:
+			tool->InitTextureWithFile(tAlbedo, texPath);
+			break;
+		case METALLIC:
+			tool->InitTextureWithFile(tMetallic, texPath);
+			break;
+		case ROUGHNESS:
+			tool->InitTextureWithFile(tRoughness, texPath);
+			break;
+		case AO:
+			tool->InitTextureWithFile(tAo, texPath);
+			break;
+		case NORMAL:
+			tool->InitTextureWithFile(tNormal, texPath);
+			break;
+		default:
+			break;
+		}
+	}
 };
 
 class SimpleShaderData :public ShaderData
@@ -71,7 +95,8 @@ class SimpleShaderData :public ShaderData
 public:
 	vec3 color;
 public:
-	void SetColor(vec3 _color)
+	template<typename T>
+	void SetColor(T&& _color)
 	{
 		color = _color;
 	}

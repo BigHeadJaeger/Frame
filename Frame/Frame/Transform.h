@@ -24,7 +24,8 @@ public:
 
 	void MoveByDir(vec3 dir, float distant);
 	void MoveByVector(vec3 displacement);
-	void SetPosition(vec3 _position);
+	void SetPosition(vec3& _position);
+	void SetPosition(vec3&& _position);
 
 	void RotateByAxis(vec3 axis, float angle);
 	void SetRotation(vec3 _rotation);

@@ -20,27 +20,27 @@ void ShaderData::InitVertexBuffer(VertexData& vertexData)
 	tool->InitVertexBuffer(VAO, VBO, vertexData);
 }
 
-void UE4ShaderData::InitTexture(TEXTURETYPE type, string texPath)
-{
-	ShaderDataInitTool* tool = ShaderDataInitTool::GetShaderDataInitTool();
-	switch (type)
-	{
-	case ALBEDO:
-		tool->InitTextureWithFile(tAlbedo, texPath);
-		break;
-	case METALLIC:
-		tool->InitTextureWithFile(tMetallic, texPath);
-		break;
-	case ROUGHNESS:
-		tool->InitTextureWithFile(tRoughness, texPath);
-		break;
-	case AO:
-		tool->InitTextureWithFile(tAo, texPath);
-		break;
-	case NORMAL:
-		tool->InitTextureWithFile(tNormal, texPath);
-		break;
-	default:
-		break;
-	}
-}
+//void UE4ShaderData::InitTexture(TEXTURETYPE& type, string& texPath)
+//{
+//	ShaderDataInitTool* tool = ShaderDataInitTool::GetShaderDataInitTool();
+//	switch (type)
+//	{
+//	case ALBEDO:
+//		tool->InitTextureWithFile(tAlbedo, texPath);
+//		break;
+//	case METALLIC:
+//		tool->InitTextureWithFile(tMetallic, texPath);
+//		break;
+//	case ROUGHNESS:
+//		tool->InitTextureWithFile(tRoughness, texPath);
+//		break;
+//	case AO:
+//		tool->InitTextureWithFile(tAo, texPath);
+//		break;
+//	case NORMAL:
+//		tool->InitTextureWithFile(tNormal, texPath);
+//		break;
+//	default:
+//		break;
+//	}
+//}

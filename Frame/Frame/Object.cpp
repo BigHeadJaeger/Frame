@@ -5,19 +5,23 @@ void Object::SetRenderer(RENDERERTYPE type)
 	switch (type)
 	{
 	case UE4:
-		renderer = UE4Renderer::GetRenderer();
-		delete shaderData;
-		shaderData = new UE4ShaderData();
-		break;
+		//renderer = UE4Renderer::GetRenderer();
+		////delete shaderData;
+		//shaderData.release();
+		//shaderData = unique_ptr<UE4ShaderData>();
+		//break;
 	case SIMPLE:
-		renderer = SimpleRenderer::GetRenderer();
-		delete shaderData;
-		shaderData = new SimpleShaderData();
-		break;
+		//renderer = SimpleRenderer::GetRenderer();
+		////delete shaderData;
+		//shaderData.release();
+		//shaderData = unique_ptr<SimpleShaderData>();
+		//break;
 	case VERTEXCOLOR:
 		renderer = VertexColorRender::GetRenderer();
-		delete shaderData;
-		shaderData = new VertexShaderData();
+		//delete shaderData;
+		shaderData.reset();
+		shaderData = make_shared<VertexShaderData>();
+		//shaderData = unique_ptr<VertexShaderData>();
 		break;
 	case MPS:
 		break;

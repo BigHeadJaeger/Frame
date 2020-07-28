@@ -41,7 +41,8 @@ void MyScene::Init()
 	//dynamic_cast<SimpleShaderData*>(cow->GetShaderData())->SetColor(vec3(255, 0, 0));
 	//objects.insert(pair<string, Object*>(cow->GetName(), cow));
 
-	MeshObject* cow = new MeshObject();
+	shared_ptr<MeshObject> cow(new MeshObject());
+	//MeshObject* cow = new MeshObject();
 	cow->SetName("cow");
 	cow->readObjFile("OBJ\\cow.obj");
 	cow->SetRenderer(VERTEXCOLOR);
@@ -49,7 +50,7 @@ void MyScene::Init()
 	cow->GetTransform().SetPosition(vec3(0, 0, 0));
 	cow->GetTransform().SetScaler(vec3(2.0));
 	//dynamic_cast<VertexShaderData*>(cow->GetShaderData())->SetColor(vec3(255, 0, 0));
-	objects.insert(pair<string, Object*>(cow->GetName(), cow));
+	objects.insert(pair<string, shared_ptr<Object>>(cow->GetName(), cow));
 
 	//MPSWaterParticleGroup* water = new MPSWaterParticleGroup();
 	//water->SetName("water");
@@ -99,7 +100,7 @@ void MyScene::InitKeys()
 	//keys.push_back(Key(BTNW));
 }
 
-void MyScene::Update(float dt)
+void MyScene::Update(float& dt)
 {
 
 	//计算视角矩阵
@@ -108,7 +109,7 @@ void MyScene::Update(float dt)
 	MainCamera::GetInstance()->SetPro();
 
 	//遍历所有object更新矩阵
-	map<string, Object*>::iterator objs_it;
+	map<string, shared_ptr<Object>>::iterator objs_it;
 	for (objs_it = objects.begin(); objs_it != objects.end(); objs_it++)
 	{
 		(*objs_it).second->Update(dt);
@@ -157,7 +158,7 @@ void MyScene::Draw()
 
 	//glUseProgram(p1.p);						//启用着色器程序
 
-	map<string, Object*>::iterator objs_it;
+	map<string, shared_ptr<Object>>::iterator objs_it;
 	for (objs_it = objects.begin(); objs_it != objects.end(); objs_it++)
 	{
 		(*objs_it).second->Draw();

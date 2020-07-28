@@ -57,7 +57,6 @@ int main(void)
 		lastFrame = currentFrame;
 
 
-
 		//场景更新和绘制
 		scene.Update(deltaTime);
 		scene.Draw();

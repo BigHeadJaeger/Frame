@@ -23,25 +23,25 @@ class Object
 protected:
 	string name;									//object名称
 	Transform transformation;						//和空间位置有关的transform组件
-	ShaderData* shaderData;							//每一个物体的渲染数据，此处为抽象基类，使用不同渲染器时初始化为相应子类
+	shared_ptr<ShaderData> shaderData;							//每一个物体的渲染数据，此处为抽象基类，使用不同渲染器时初始化为相应子类
 	Renderer* renderer;								//只是一个指针，不同的渲染器都是单例,不同的物体初始化时只需要将此指针赋值就行
 protected:
 	//void UpdateMatrix() { shaderData->UpdateMatrix(transformation); }
 public:
 	Object()
 	{
-		shaderData = NULL;
+		//shaderData = NULL;
 		renderer = NULL;
 	}
 
 	~Object()
 	{
-		delete shaderData;
+		//delete shaderData;
 	}
 	//Get
 	string GetName() { return name; }
 	Transform& GetTransform() { return transformation; }
-	ShaderData* GetShaderData() { return shaderData; }
+	auto GetShaderData() { return shaderData; }
 	//Set
 	void SetName(string _name) { name = _name; }
 	void SetRenderer(RENDERERTYPE type);			//设置渲染器并生成对应的shaderData
