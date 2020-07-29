@@ -17,7 +17,7 @@ void Object::SetRenderer(RENDERERTYPE type)
 		//shaderData = unique_ptr<SimpleShaderData>();
 		//break;
 	case VERTEXCOLOR:
-		renderer = VertexColorRender::GetRenderer();
+		renderer = &VertexColorRender::GetRenderer();
 		//delete shaderData;
 		shaderData.reset();
 		shaderData = make_shared<VertexShaderData>();

@@ -2,6 +2,7 @@
 
 void MeshObject::GetVertexDataArray()
 {
+	
 	for (auto f_it = mesh.faces_begin(); f_it != mesh.faces_end(); f_it++)
 	{
 		for (auto fv_ccwit = mesh.fv_iter(*f_it); fv_ccwit.is_valid(); fv_ccwit++)
@@ -64,8 +65,7 @@ void MeshObject::InitBufferData()
 {
 	shaderData->drawUnitNumber = mesh.n_faces() * 3;
 	vertexData.totalVertex = mesh.n_faces() * 3;
-
-
+	vertexData.initMemory(vertexData.totalVertex);
 	//vector<float> data;
 	//GetVertexDataArray(data);
 

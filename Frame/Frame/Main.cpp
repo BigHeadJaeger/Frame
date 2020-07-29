@@ -130,7 +130,7 @@ void cursor_position_callback(GLFWwindow* window, double xpos, double ypos)
 		float disx = scene.mouse.cursorPrePos.x - xpos;
 		float disy = scene.mouse.cursorPrePos.y - ypos;
 		MainCamera::GetInstance()->LRRotate(disx * deltaTime * 0.5);
-		MainCamera::GetInstance()->UDRotate(disy * deltaTime * 0.5);
+		MainCamera::GetInstance()->UDRotate(-disy * deltaTime * 0.5);
 	}
 
 	/*if (scene.mouse.isCatchPoint && scene.mouse.mouseLeftDown)

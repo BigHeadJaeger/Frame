@@ -14,7 +14,7 @@ void MyScene::Init()
 	//UE4Renderer::GetRenderer()->InitProgram("UE4ShaderFile.v", "UE4ShaderFile.f");
 	//SimpleRenderer::GetRenderer()->InitProgram("SF_SimpleColor.v", "SF_SimpleColor.f");
 	//SimpleRenderer::GetRenderer()->InitProgram("SF_VertexColor.v", "SF_VertexColor.f");
-	VertexColorRender::GetRenderer()->InitProgram("SF_VertexColor.v", "SF_VertexColor.f");
+	VertexColorRender::GetRenderer().InitProgram("SF_VertexColor.v", "SF_VertexColor.f");
 
 	//pShadowTex.SetShader("shadowTex.v", "shadowTex.f");WQ
 

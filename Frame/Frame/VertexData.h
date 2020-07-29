@@ -37,7 +37,7 @@ public:
 	vector<vec4> color;
 	map<StateType, StateInfo> propertyState;
 
-	GLuint totalVertex;
+	size_t totalVertex;
 
 public:
 	VertexData()
@@ -54,4 +54,12 @@ public:
 
 	bool getState(StateType _type) { return propertyState[_type].isEnable; }
 	GLint getLocation(StateType _type) { return propertyState[_type].location; }
+
+	void initMemory(size_t& numOfVertex)
+	{
+		position.reserve(numOfVertex);
+		normal.reserve(numOfVertex);
+		texcoord.reserve(numOfVertex);
+		color.reserve(numOfVertex);
+	}
 };
