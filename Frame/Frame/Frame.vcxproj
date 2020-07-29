@@ -173,6 +173,8 @@
     <ClInclude Include="VertexData.h" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="SF_PBR.f" />
+    <None Include="SF_PBR.v" />
     <None Include="SF_VertexColor.f" />
     <None Include="SF_VertexColor.v" />
   </ItemGroup>

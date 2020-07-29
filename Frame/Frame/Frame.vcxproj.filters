@@ -103,5 +103,11 @@
     <None Include="SF_VertexColor.f">
       <Filter>Shader</Filter>
     </None>
+    <None Include="SF_PBR.v">
+      <Filter>Shader</Filter>
+    </None>
+    <None Include="SF_PBR.f">
+      <Filter>Shader</Filter>
+    </None>
   </ItemGroup>
 </Project>

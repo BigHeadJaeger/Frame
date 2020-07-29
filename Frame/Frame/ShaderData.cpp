@@ -20,7 +20,7 @@ void ShaderData::InitVertexBuffer(VertexData& vertexData)
 	tool->InitVertexBuffer(VAO, VBO, vertexData);
 }
 
-//void UE4ShaderData::InitTexture(TEXTURETYPE& type, string& texPath)
+//void PBRShaderData::InitTexture(TEXTURETYPE& type, string& texPath)
 //{
 //	ShaderDataInitTool* tool = ShaderDataInitTool::GetShaderDataInitTool();
 //	switch (type)

@@ -47,7 +47,7 @@ enum TEXTURETYPE
 	NORMAL,
 };
 
-class UE4ShaderData :public ShaderData
+class PBRShaderData :public ShaderData
 {
 public:
 	//物体的贴图编号（不一定全都需要）
@@ -63,8 +63,17 @@ public:
 	GLuint tNormal;					//法线贴图
 	bool bNormal;
 public:
+	PBRShaderData()
+	{
+		bUseTexture = false;
+		bAlbedo = false;
+		bMetallic = false;
+		bRoughness = false;
+		bAo = false;
+		bNormal = false;
+	}
 	template<typename T>
-	void InitTexture(TEXTURETYPE& type, T&& texPath)
+	void InitTexture(TEXTURETYPE type, T&& texPath)
 	{
 		auto tool = ShaderDataInitTool::GetShaderDataInitTool();
 		switch (type)
@@ -88,6 +97,19 @@ public:
 			break;
 		}
 	}
+
+	template<typename T>
+	void SetTextureState(T&& isUse) { bUseTexture = isUse; }
+	template<typename T>
+	void SetAlbedoState(T&& isUse) { bAlbedo = isUse; }
+	template<typename T>
+	void SetNormalState(T&& isUse) { bNormal = isUse; }
+	template<typename T>
+	void SetMetallicState(T&& isUse) { bMetallic = isUse; }
+	template<typename T>
+	void SetAOState(T&& isUse) { bAo = isUse; }
+	template<typename T>
+	void SetRoughnessState(T&& isUse) { bRoughness = isUse; }
 };
 
 class SimpleShaderData :public ShaderData
