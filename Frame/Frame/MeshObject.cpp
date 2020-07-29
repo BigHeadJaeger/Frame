@@ -44,10 +44,10 @@ void MeshObject::readObjFile(string fileName)
 
 	mesh.request_vertex_texcoords2D();
 
-	//UE4ShaderData* temp = dynamic_cast<UE4ShaderData*>(shaderData);
+	//PBRShaderData* temp = dynamic_cast<PBRShaderData*>(shaderData);
 	//if (temp == NULL)
 	//{
-	//	cout << "shaderData ptr convert to UE4ShaderData fail" << endl;
+	//	cout << "shaderData ptr convert to PBRShaderData fail" << endl;
 	//	return;
 	//}
 	//if (!opt.check(OpenMesh::IO::Options::VertexTexCoord))

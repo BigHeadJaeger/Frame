@@ -9,7 +9,7 @@ using namespace std;
 
 enum RENDERERTYPE
 {
-	UE4,
+	PBR,
 	SIMPLE,
 	VERTEXCOLOR,
 	MPS,
@@ -53,22 +53,38 @@ public:
 //};
 
 //不同的渲染器只需要一个，所以都设为单例
-//class UE4Renderer :public Renderer
+//class PBRRenderer :public Renderer
 //{
 //private:
-//	static UE4Renderer* instance;
-//	UE4Renderer() {}
+//	static PBRRenderer* instance;
+//	PBRRenderer() {}
 //public:
-//	static UE4Renderer* GetRenderer()
+//	static PBRRenderer* GetRenderer()
 //	{
 //		if (instance == NULL)
 //		{
-//			instance = new UE4Renderer();
+//			instance = new PBRRenderer();
 //		}
 //		return instance;
 //	}
 //	void Render(unique_ptr<ShaderData> shaderData) override;
 //};
+
+class PBRRenderer :public Renderer
+{
+private:
+	PBRRenderer() {}
+public:
+	static PBRRenderer& GetRenderer()
+	{
+		static PBRRenderer instance;
+		return instance;
+	}
+
+	void Render(shared_ptr<ShaderData> shaderData) override;
+
+	PBRRenderer(PBRRenderer&) = delete;
+};
 
 //class VertexColorRender :public Renderer
 //{

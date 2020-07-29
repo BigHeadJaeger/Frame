@@ -4,12 +4,11 @@ void Object::SetRenderer(RENDERERTYPE type)
 {
 	switch (type)
 	{
-	case UE4:
-		//renderer = UE4Renderer::GetRenderer();
-		////delete shaderData;
-		//shaderData.release();
-		//shaderData = unique_ptr<UE4ShaderData>();
-		//break;
+	case PBR:
+		renderer = &PBRRenderer::GetRenderer();
+		shaderData.reset();
+		shaderData = make_shared<PBRShaderData>();
+		break;
 	case SIMPLE:
 		//renderer = SimpleRenderer::GetRenderer();
 		////delete shaderData;
