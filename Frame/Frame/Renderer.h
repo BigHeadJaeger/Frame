@@ -73,7 +73,10 @@ public:
 class PBRRenderer :public Renderer
 {
 private:
-	PBRRenderer() {}
+	PBRRenderer() 
+	{
+
+	}
 public:
 	static PBRRenderer& GetRenderer()
 	{

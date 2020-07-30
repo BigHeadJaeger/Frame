@@ -1,7 +1,5 @@
 #include "ShaderDataInitTool.h"
 
-ShaderDataInitTool* ShaderDataInitTool::instance = NULL;
-
 void ShaderDataInitTool::InitVertexBuffer(GLuint& VAO, GLuint& VBO, VertexData& vertexData)
 {
 	glDeleteVertexArrays(1, &VAO);
