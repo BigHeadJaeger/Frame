@@ -52,33 +52,6 @@ public:
 	virtual void Draw() = 0;
 };
 
-////Íø¸ñÎïÌå
-//class MeshObject:public Object,public IGetVertexDataArray
-//{
-//private:
-//	Mesh mesh;
-//private:
-//	void GetVertexDataArray(vector<float>& data) override;
-//public:
-//	MeshObject()
-//	{
-//
-//	}
-//	~MeshObject()
-//	{
-//		
-//	}
-//
-//	void readObjFile(string fileName);
-//	void InitBox(float width, float height, float depth);
-//	void InitSphere(float radius, int slice, int stack);
-//	void InitGrid(float radius, int slice, int stack);
-//
-//	void InitBufferData()override;
-//	void UpdateBufferData() override;
-//	void Update(float dt)override;
-//	void Draw()override;
-//};
 
 ////Metaball
 //class Metaball:public Object

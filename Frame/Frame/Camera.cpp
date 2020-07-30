@@ -29,6 +29,3 @@ void Camera::SetOrtho(float left, float right, float bottom, float up, float nea
 {
 	pro = ortho(left, right, bottom, up, near, far);
 }
-
-
-MainCamera* MainCamera::instance = NULL;

@@ -77,6 +77,8 @@ void MeshObject::InitBufferData()
 void MeshObject::Update(float dt)
 {
 	shaderData->UpdateMatrix(transformation);
+	shaderData->UpdateEyePos(MainCamera::GetInstance().eyePos);
+	shaderData->UpdateLight();
 }
 
 void MeshObject::Draw()
