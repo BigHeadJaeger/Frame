@@ -16,7 +16,7 @@ void MyScene::Init()
 	//SimpleRenderer::GetRenderer()->InitProgram("SF_VertexColor.v", "SF_VertexColor.f");
 	VertexColorRender::GetRenderer().InitProgram("SF_VertexColor.v", "SF_VertexColor.f");
 
-	//pShadowTex.SetShader("shadowTex.v", "shadowTex.f");WQ
+	//pShadowTex.SetShader("shadowTex.v", "shadowTex.f");
 
 
 	////指定光源参数
@@ -74,7 +74,8 @@ void MyScene::Init()
 
 	shared_ptr<MeshObject> cube(new MeshObject());
 	cube->SetName("Cube");
-	cube->readObjFile("OBJ\\cube.obj");
+	//cube->readObjFile("OBJ\\cube.obj");
+	cube->InitBox(1, 1, 1);
 	cube->SetRenderer(PBR);
 	cube->InitBufferData();
 	cube->GetTransform().SetPosition(vec3(0, 0, 0));

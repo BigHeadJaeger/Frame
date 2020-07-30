@@ -79,19 +79,19 @@ public:
 		switch (type)
 		{
 		case ALBEDO:
-			tool->InitTextureWithFile(tAlbedo, texPath);
+			tool.InitTextureWithFile(tAlbedo, texPath);
 			break;
 		case METALLIC:
-			tool->InitTextureWithFile(tMetallic, texPath);
+			tool.InitTextureWithFile(tMetallic, texPath);
 			break;
 		case ROUGHNESS:
-			tool->InitTextureWithFile(tRoughness, texPath);
+			tool.InitTextureWithFile(tRoughness, texPath);
 			break;
 		case AO:
-			tool->InitTextureWithFile(tAo, texPath);
+			tool.InitTextureWithFile(tAo, texPath);
 			break;
 		case NORMAL:
-			tool->InitTextureWithFile(tNormal, texPath);
+			tool.InitTextureWithFile(tNormal, texPath);
 			break;
 		default:
 			break;

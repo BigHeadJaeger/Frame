@@ -89,8 +89,9 @@ void PBRRenderer::Render(shared_ptr<ShaderData> shaderData)
 			if (data->bRoughness)
 			{
 				SetTexture(data->tRoughness, 3, GL_TEXTURE3, "roughnessMap", shaderProgram);
-
 			}
+			else
+				SetUniform("roughnessN", 1.0f, shaderProgram);
 
 			//»·¾³¹âaoÌùÍ¼
 			SetUniform("useAO", data->bAo, shaderProgram);

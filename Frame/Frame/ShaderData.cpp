@@ -16,8 +16,8 @@ void ShaderData::UpdateMatrix(Transform& t)
 
 void ShaderData::InitVertexBuffer(VertexData& vertexData)
 {
-	ShaderDataInitTool* tool = ShaderDataInitTool::GetShaderDataInitTool();
-	tool->InitVertexBuffer(VAO, VBO, vertexData);
+	auto tool = ShaderDataInitTool::GetShaderDataInitTool();
+	tool.InitVertexBuffer(VAO, VBO, vertexData);
 }
 
 //void PBRShaderData::InitTexture(TEXTURETYPE& type, string& texPath)
