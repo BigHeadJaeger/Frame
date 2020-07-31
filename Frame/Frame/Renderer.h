@@ -23,7 +23,7 @@ public:
 	template<typename T>
 	void InitProgram(T&& vt, T&& ft);
 
-	virtual void Render(shared_ptr<ShaderData> data);
+	virtual void Render(shared_ptr<ShaderData> shaderData) = 0;
 
 	//´«textureµ½shaderÖÐ
 	void SetTexture(GLuint& texId, int num, GLenum texNum, string samplerName, ShaderProgram& p);

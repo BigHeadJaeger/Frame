@@ -78,7 +78,7 @@ void key_callback(GLFWwindow* window, int key, int scancode, int action, int mod
 	//绑定keep事件后一定要绑定up事件
 	if (key == GLFW_KEY_W && action == GLFW_PRESS)
 		scene.keys[BTNW].BindKeepEvent([]() {
-		MainCamera::GetInstance().Walk(MainCamera::GetInstance().cameraSpeed * deltaTime);
+		MainCamera::GetInstance()->Walk(MainCamera::GetInstance()->cameraSpeed * deltaTime);
 			});
 	if (key == GLFW_KEY_W && action == GLFW_RELEASE)
 		scene.keys[BTNW].BindUpEvent([]() {
@@ -86,7 +86,7 @@ void key_callback(GLFWwindow* window, int key, int scancode, int action, int mod
 
 	if (key == GLFW_KEY_S && action == GLFW_PRESS)
 		scene.keys[BTNS].BindKeepEvent([]() {
-		MainCamera::GetInstance().Walk(-MainCamera::GetInstance().cameraSpeed * deltaTime);
+		MainCamera::GetInstance()->Walk(-MainCamera::GetInstance()->cameraSpeed * deltaTime);
 			});
 	if (key == GLFW_KEY_S && action == GLFW_RELEASE)
 		scene.keys[BTNS].BindUpEvent([]() {
@@ -94,7 +94,7 @@ void key_callback(GLFWwindow* window, int key, int scancode, int action, int mod
 
 	if (key == GLFW_KEY_A && action == GLFW_PRESS)
 		scene.keys[BTNA].BindKeepEvent([]() {
-		MainCamera::GetInstance().LRMove(MainCamera::GetInstance().cameraSpeed * deltaTime);
+		MainCamera::GetInstance()->LRMove(MainCamera::GetInstance()->cameraSpeed * deltaTime);
 			});
 	if (key == GLFW_KEY_A && action == GLFW_RELEASE)
 		scene.keys[BTNA].BindUpEvent([]() {
@@ -102,7 +102,7 @@ void key_callback(GLFWwindow* window, int key, int scancode, int action, int mod
 
 	if (key == GLFW_KEY_D && action == GLFW_PRESS)
 		scene.keys[BTND].BindKeepEvent([]() {
-		MainCamera::GetInstance().LRMove(-MainCamera::GetInstance().cameraSpeed * deltaTime);
+		MainCamera::GetInstance()->LRMove(-MainCamera::GetInstance()->cameraSpeed * deltaTime);
 			});
 	if (key == GLFW_KEY_D && action == GLFW_RELEASE)
 		scene.keys[BTND].BindUpEvent([]() {
@@ -129,8 +129,8 @@ void cursor_position_callback(GLFWwindow* window, double xpos, double ypos)
 	{
 		float disx = scene.mouse.cursorPrePos.x - xpos;
 		float disy = scene.mouse.cursorPrePos.y - ypos;
-		MainCamera::GetInstance().LRRotate(disx * deltaTime * 0.5);
-		MainCamera::GetInstance().UDRotate(-disy * deltaTime * 0.5);
+		MainCamera::GetInstance()->LRRotate(disx * deltaTime * 0.5);
+		MainCamera::GetInstance()->UDRotate(-disy * deltaTime * 0.5);
 	}
 
 	/*if (scene.mouse.isCatchPoint && scene.mouse.mouseLeftDown)

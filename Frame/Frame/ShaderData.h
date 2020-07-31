@@ -17,12 +17,6 @@ public:
 	mat4x4 worldViewProj;			//最终坐标转换矩阵
 	mat4x4 worldInvTranspose;		//用来将法向量转换到世界空间
 
-	vec3 eyePos;					// 观察点的位置
-
-	// 临时灯光，只有定死的位置和颜色属性（以后添加灯光类）**-**
-	vec3 lightPos;
-	vec3 lightColor;
-
 	//物体的VAO、VBO编号
 	GLuint VAO;
 	GLuint VBO;
@@ -37,22 +31,9 @@ public:
 		worldViewProj = mat4(0);
 		worldInvTranspose = mat4(0);
 		drawType = GL_TRIANGLES;
-		lightPos = vec3(-3, 5, 3);
-		lightColor = vec3(400);
 	}
 
 	void UpdateMatrix(Transform& t);
-	template<typename T>
-	void UpdateEyePos(T&& pos)
-	{
-		eyePos = pos;
-	}
-
-	void UpdateLight()
-	{
-
-	}
-
 	void InitVertexBuffer(VertexData& vertexData);
 	virtual void Temp() {}
 };

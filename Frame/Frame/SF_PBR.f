@@ -37,11 +37,11 @@ uniform bool useAO;
 uniform float aoN;
 
 //光照信息(此处使用的是点光源)
-uniform vec3 lightPos;
-uniform vec3 lightColor; 
+//uniform vec3 lightPos;
+//uniform vec3 lightColor; 
 
 //眼睛位置
-uniform vec3 eyePos;
+//uniform vec3 eyePos;
 
 const float PI=3.14159265359;
  
@@ -109,7 +109,9 @@ vec3 GetNormalFromMap()
 
 void main() 
 {
-
+	vec3 lightPos = vec3(0, 5, 3);
+	vec3 lightColor = vec3(400, 400, 400);
+	vec3 eyePos = vec3(2, 2, 3);
 	vec3 color=vec3(1.0,0.0,0.0);
 	if(useTexture)
 	{
