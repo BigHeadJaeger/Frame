@@ -145,6 +145,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="Camera.cpp" />
+    <ClCompile Include="glad.c" />
     <ClCompile Include="Interaction.cpp" />
     <ClCompile Include="Main.cpp" />
     <ClCompile Include="MeshObject.cpp" />

@@ -6,10 +6,10 @@
 void MyScene::Init()
 {
 
-	glGetString(GL_RENDERER);
+	//glGetString(GL_RENDERER);
 	//初始化glew
-	//gladLoadGLLoader((GLADloadproc)glfwGetProcAddress);
-	glewInit();
+	gladLoadGLLoader((GLADloadproc)glfwGetProcAddress);
+	//glewInit();
 	//初始化Renderer中的program
 	PBRRenderer::GetRenderer().InitProgram("SF_PBR.v", "SF_PBR.f");
 	//SimpleRenderer::GetRenderer()->InitProgram("SF_SimpleColor.v", "SF_SimpleColor.f");
