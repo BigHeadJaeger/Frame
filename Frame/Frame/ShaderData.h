@@ -37,7 +37,7 @@ public:
 		worldViewProj = mat4(0);
 		worldInvTranspose = mat4(0);
 		drawType = GL_TRIANGLES;
-		lightPos = vec3(-3, 5, 3);
+		lightPos = vec3(-3, 5, 1);
 		lightColor = vec3(400);
 	}
 
