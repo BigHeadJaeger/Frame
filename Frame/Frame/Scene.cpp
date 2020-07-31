@@ -78,7 +78,7 @@ void MyScene::Init()
 	cube->SetRenderer(PBR);
 	cube->InitBufferData();
 	cube->GetTransform().SetPosition(vec3(0, 0, 0));
-	cube->GetTransform().SetScaler(vec3(0.5));
+	cube->GetTransform().SetScaler(vec3(1));
 	auto cubeShaderData = dynamic_pointer_cast<PBRShaderData>(cube->GetShaderData());
 	cubeShaderData->SetTextureState(true);
 	cubeShaderData->SetAlbedoState(true);
@@ -93,20 +93,26 @@ void MyScene::Init()
 	cubeShaderData->InitTexture(METALLIC, "Material\\metalgrid\\metallic.png");
 	objects.insert(pair<string, shared_ptr<Object>>(cube->GetName(), cube));
 
-	//myBox.InitDirectBox(1, 1, 1);					//顶点、索引信息初始化
-	//myBox.InitBuffers();							//缓冲初始化
-	//myBox.CoorDataInit(vec3(-0.5, 0.5, 1.0)/*, vec3(3.0, 0.1, 3.0)*/);
-	//myBox.TextureUseInfo(true, true, true, true, true, true);				//纹理使用信息初始化
-	//myBox.InitTexture(myBox.TAlbedo, "Material\\metalgrid2-dx\\metalgrid2_basecolor.png");		//生成需要的纹理
-	//myBox.InitTexture(myBox.TNormal, "Material\\metalgrid2-dx\\metalgrid2_normal-dx.png");
-	//myBox.InitTexture(myBox.TAo, "Material\\metalgrid2-dx\\metalgrid2_AO.png");
-	//myBox.InitTexture(myBox.TRoughness, "Material\\metalgrid2-dx\\metalgrid2_roughness.png");
-	//myBox.InitTexture(myBox.TMetallic, "Material\\metalgrid2-dx\\metalgrid2_metallic.png");
-	//myBox.LightUseInfo(true);						//设置是否接收光照
-	//myBox.InitMaterial(vec4(0.5f, 0.5f, 0.5f, 1.0f), vec4(0.5, 0.5, 0.5, 1.0f), vec4(0.7f, 0.7f, 0.7f, 1.0f), 7.0f);
+	shared_ptr<MeshObject> grid(new MeshObject());
+	grid->SetName("Floor");
+	grid->InitGrid(10, 10, 10, 10);
+	grid->SetRenderer(PBR);
+	grid->InitBufferData();
+	grid->GetTransform().SetPosition(vec3(0, -0.5, 0));
+	grid->GetTransform().SetScaler(vec3(1));
+	auto gridShaderData = dynamic_pointer_cast<PBRShaderData>(grid->GetShaderData());
+	gridShaderData->SetTextureState(true);
+	gridShaderData->SetAlbedoState(true);
+	gridShaderData->InitTexture(ALBEDO, "Material\\oakfloor\\basecolor.png");
+	gridShaderData->SetNormalState(true);
+	gridShaderData->InitTexture(NORMAL, "Material\\oakfloor\\normal.png");
+	gridShaderData->SetAOState(true);
+	gridShaderData->InitTexture(AO, "Material\\oakfloor\\AO.png");
+	gridShaderData->SetRoughnessState(true);
+	gridShaderData->InitTexture(ROUGHNESS, "Material\\oakfloor\\roughness.png");
+	objects.insert(pair<string, shared_ptr<Object>>(grid->GetName(), grid));
 
 
-	//STInit();
 }
 
 void MyScene::InitKeys()

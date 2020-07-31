@@ -24,7 +24,7 @@ public:
 	template<typename T>
 	void InitBox(T&& width, T&& height, T&& depth);
 	void InitSphere(float radius, int slice, int stack);
-	void InitGrid(float radius, int slice, int stack);
+	void InitGrid(float width, float height, int m, int n);
 
 	void InitBufferData()override;
 	//void UpdateBufferData() override;
@@ -165,6 +165,67 @@ inline void MeshObject::InitBox(T&& width, T&& height, T&& depth)
 	face_vhandles.push_back(vHandles[22]);
 	face_vhandles.push_back(vHandles[23]);
 	mesh.add_face(face_vhandles);
+
+	//计算法向量
+	mesh.request_vertex_normals();
+	mesh.request_face_normals();
+	mesh.update_normals();
+	mesh.release_face_normals();
+}
+
+inline void MeshObject::InitGrid(float width, float height, int m, int n)
+{
+	mesh.request_vertex_texcoords2D();
+
+	auto nVertsRow = m + 1;			//x方向顶点数
+	auto nVertsCol = n + 1;			//z方向顶点数
+
+	auto oX = -width * 0.5f;			//x方向的起始位置
+	auto oZ = height * 0.5f;			//z方向的起始位置
+
+	auto dX = width / m;			//变化率
+	auto dZ = height / n;
+
+	Mesh::VertexHandle* vHandles;
+	vHandles = new Mesh::VertexHandle[nVertsCol * nVertsRow];
+	//pointsData.resize(nVertsCol * nVertsRow);
+
+	//从左上角开始逐行添加顶点信息
+	for (int i = 0; i < nVertsCol; i++)
+	{
+		float tempZ = oZ - dZ * i;
+		for (int j = 0; j < nVertsRow; j++)
+		{
+			int index = i * nVertsRow + j;
+			//顶点
+			vHandles[index] = mesh.add_vertex(Mesh::Point(oX + dX * j, 0.f, tempZ));
+			//纹理
+			mesh.set_texcoord2D(vHandles[index], OpenMesh::Vec2f(dX * j, dZ * i));
+		}
+	}
+
+	//一共m*n个格子，一个格子分为两个三角形则有6个顶点
+	int temp = 0;
+	std::vector<Mesh::VertexHandle>  face_vhandles;
+	for (int i = 0; i < n; i++)
+	{
+		for (int j = 0; j < m; j++)
+		{
+			face_vhandles.clear();
+			face_vhandles.push_back(vHandles[i * nVertsRow + j]);
+			face_vhandles.push_back(vHandles[i * nVertsRow + j + 1]);
+			face_vhandles.push_back(vHandles[(i + 1) * nVertsRow + j]);
+			mesh.add_face(face_vhandles);
+
+			face_vhandles.clear();
+			face_vhandles.push_back(vHandles[i * nVertsRow + j + 1]);
+			face_vhandles.push_back(vHandles[(i + 1) * nVertsRow + j + 1]);
+			face_vhandles.push_back(vHandles[(i + 1) * nVertsRow + j]);
+			mesh.add_face(face_vhandles);
+		}
+	}
+
+	delete[] vHandles;
 
 	//计算法向量
 	mesh.request_vertex_normals();
