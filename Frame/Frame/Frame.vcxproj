@@ -76,8 +76,8 @@
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <LinkIncremental>true</LinkIncremental>
-    <IncludePath>E:\MyProgram\ComputerGraphics\Render\Frame\ExternalLib\64\glm;E:\MyProgram\ComputerGraphics\Render\Frame\ExternalLib\64\include;$(IncludePath)</IncludePath>
-    <LibraryPath>E:\MyProgram\ComputerGraphics\Render\Frame\ExternalLib\64\lib;$(LibraryPath)</LibraryPath>
+    <IncludePath>E:\Program\ComputerGraphics\Frame\ExternalLib\64\glm;E:\Program\ComputerGraphics\Frame\ExternalLib\64\include;$(IncludePath)</IncludePath>
+    <LibraryPath>E:\Program\ComputerGraphics\Frame\ExternalLib\64\lib;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <LinkIncremental>false</LinkIncremental>

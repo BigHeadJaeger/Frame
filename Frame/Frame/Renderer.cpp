@@ -1,5 +1,20 @@
 #include "Renderer.h"
 
+void Renderer::Render(shared_ptr<ShaderData> data)
+{
+	glUseProgram(shaderProgram.p);
+	//绑定前面设置好的VAO
+	glBindVertexArray(data->VAO);
+	//传递坐标变换矩阵
+	SetUniform("worldViewProj", data->worldViewProj, shaderProgram);
+	SetUniform("world", data->world, shaderProgram);
+	SetUniform("worldInvTranspose", data->worldInvTranspose, shaderProgram);
+	SetUniform("eyePos", data->eyePos, shaderProgram);
+	SetUniform("lightPos", data->lightPos, shaderProgram);
+	SetUniform("lightColor", data->lightColor, shaderProgram);
+	glBindVertexArray(0);
+}
+
 void Renderer::SetTexture(GLuint& texId, int num, GLenum texNum, string samplerName, ShaderProgram& p)
 {
 	GLuint texLocation;
@@ -40,72 +55,68 @@ void Renderer::SetUniform(string&& valueName, float value, ShaderProgram& p)
 
 void PBRRenderer::Render(shared_ptr<ShaderData> shaderData)
 {
+	// 父类处理共有数据
+	Renderer::Render(shaderData);
+
 	auto data = dynamic_pointer_cast<PBRShaderData>(shaderData);
 	glUseProgram(shaderProgram.p);
-	if (data != NULL)
+	glBindVertexArray(data->VAO);				
+	//根据参数上对纹理的选择，将需要的纹理传入着色器
+	//先将是否使用纹理传入shader
+	SetUniform("useTexture", data->bUseTexture, shaderProgram);
+	if (data->bUseTexture)
 	{
-		glBindVertexArray(data->VAO);				//绑定前面设置好的VAO
-								//传递坐标变换矩阵
-		SetUniform("worldViewProj", data->worldViewProj, shaderProgram);
-		SetUniform("world", data->world, shaderProgram);
-		SetUniform("worldInvTranspose", data->worldInvTranspose, shaderProgram);
-		//SetUniform("depthBiasMVP", depthBiasMVP, p);
-		//根据参数上对纹理的选择，将需要的纹理传入着色器
-		//先将是否使用纹理传入shader
-		SetUniform("useTexture", data->bUseTexture, shaderProgram);
-		if (data->bUseTexture)
+		//基础反射贴图
+		SetUniform("useAlbedo", data->bAlbedo, shaderProgram);
+		if (data->bAlbedo)
 		{
-			//基础反射贴图
-			SetUniform("useAlbedo", data->bAlbedo, shaderProgram);
-			if (data->bAlbedo)
-			{
-				SetTexture(data->tAlbedo, 0, GL_TEXTURE0, "albedoMap", shaderProgram);
+			SetTexture(data->tAlbedo, 0, GL_TEXTURE0, "albedoMap", shaderProgram);
 
-			}
-
-			//法线贴图
-			SetUniform("useNormal", data->bNormal, shaderProgram);
-			if (data->bNormal)
-			{
-				SetTexture(data->tNormal, 1, GL_TEXTURE1, "normalMap", shaderProgram);
-
-			}
-
-			//金属度贴图
-			SetUniform("useMetallic", data->bMetallic, shaderProgram);
-			if (data->bMetallic)
-			{
-				SetTexture(data->tMetallic, 2, GL_TEXTURE2, "metallicMap", shaderProgram);
-
-			}
-			else
-			{
-				//此处暂时直接将没有金属贴图的金属度用数字传入shader
-				SetUniform("metallicN", 0.2f, shaderProgram);
-			}
-
-			//粗糙贴图
-			SetUniform("useRoughness", data->bRoughness, shaderProgram);
-			if (data->bRoughness)
-			{
-				SetTexture(data->tRoughness, 3, GL_TEXTURE3, "roughnessMap", shaderProgram);
-			}
-			else
-				SetUniform("roughnessN", 1.0f, shaderProgram);
-
-			//环境光ao贴图
-			SetUniform("useAO", data->bAo, shaderProgram);
-			if (data->bAo)
-			{
-				SetTexture(data->tAo, 4, GL_TEXTURE4, "aoMap", shaderProgram);
-
-			}
 		}
 
-		glDrawArrays(data->drawType, 0, data->drawUnitNumber);
+		//法线贴图
+		SetUniform("useNormal", data->bNormal, shaderProgram);
+		if (data->bNormal)
+		{
+			SetTexture(data->tNormal, 1, GL_TEXTURE1, "normalMap", shaderProgram);
 
-		glBindVertexArray(0);
+		}
+
+		//金属度贴图
+		SetUniform("useMetallic", data->bMetallic, shaderProgram);
+		if (data->bMetallic)
+		{
+			SetTexture(data->tMetallic, 2, GL_TEXTURE2, "metallicMap", shaderProgram);
+
+		}
+		else
+		{
+			//此处暂时直接将没有金属贴图的金属度用数字传入shader
+			SetUniform("metallicN", 0.2f, shaderProgram);
+		}
+
+		//粗糙贴图
+		SetUniform("useRoughness", data->bRoughness, shaderProgram);
+		if (data->bRoughness)
+		{
+			SetTexture(data->tRoughness, 3, GL_TEXTURE3, "roughnessMap", shaderProgram);
+		}
+		else
+			SetUniform("roughnessN", 1.0f, shaderProgram);
+
+		//环境光ao贴图
+		SetUniform("useAO", data->bAo, shaderProgram);
+		if (data->bAo)
+		{
+			SetTexture(data->tAo, 4, GL_TEXTURE4, "aoMap", shaderProgram);
+
+		}
 	}
+
+	glDrawArrays(data->drawType, 0, data->drawUnitNumber);
+
+	glBindVertexArray(0);
+
 }
 //
 //void SimpleRenderer::Render(ShaderData* shaderData)
@@ -124,14 +135,13 @@ void PBRRenderer::Render(shared_ptr<ShaderData> shaderData)
 
 void VertexColorRender::Render(shared_ptr<ShaderData> shaderData)
 {
+	Renderer::Render(shaderData);
+
 	auto data = dynamic_pointer_cast<VertexShaderData>(shaderData);
 	glUseProgram(shaderProgram.p);
 	glBindVertexArray(data->VAO);
-	//传递坐标变换矩阵
-	SetUniform("worldViewProj", data->worldViewProj, shaderProgram);
-	SetUniform("world", data->world, shaderProgram);
-	SetUniform("worldInvTranspose", data->worldInvTranspose, shaderProgram);
 	glDrawArrays(data->drawType, 0, data->drawUnitNumber);
+	glBindVertexArray(0);
 }
 
 
