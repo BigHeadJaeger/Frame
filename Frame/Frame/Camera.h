@@ -41,15 +41,15 @@ public:
 class MainCamera :public Camera
 {
 private:
-	static MainCamera* instance;
 	MainCamera(){}
 public:
-	static MainCamera* GetInstance()
+	static MainCamera& GetInstance()
 	{
-		if (instance == NULL)
-			instance = new MainCamera();
-		return instance;
+		static MainCamera instacne;
+		return instacne;
 	}
+
+	MainCamera(MainCamera&) = delete;
 };
 
 template<typename V>

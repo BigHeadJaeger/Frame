@@ -3,7 +3,6 @@
 #include"VertexData.h"
 typedef OpenMesh::TriMesh_ArrayKernelT<> Mesh;
 
-
 class MeshObject:public Object
 {
 private:
@@ -24,7 +23,6 @@ public:
 	void readObjFile(string fileName);
 	template<typename T>
 	void InitBox(T&& width, T&& height, T&& depth);
-
 	void InitSphere(float radius, int slice, int stack);
 	void InitGrid(float radius, int slice, int stack);
 

@@ -25,7 +25,7 @@ void MyScene::Init()
 
 	//初始化主相机
 	//mainCamera = new Camera();
-	MainCamera::GetInstance()->Init(vec3(0, 2, 3), vec3(0, 0, 0));
+	MainCamera::GetInstance().Init(vec3(0, 2, 3), vec3(0, 0, 0));
 
 	//SetDrawMode(drawMode.isLine, false);
 	drawMode.isLine = false;
@@ -46,7 +46,7 @@ void MyScene::Init()
 	//cow->readObjFile("OBJ\\cow.obj");
 	//cow->SetRenderer(VERTEXCOLOR);
 	//cow->InitBufferData();
-	//cow->GetTransform().SetPosition(vec3(0, 0, 0));
+	//cow->GetTransform().SetPosition(vec3(1, 0, 1));
 	//cow->GetTransform().SetScaler(vec3(2.0));
 	//objects.insert(pair<string, shared_ptr<Object>>(cow->GetName(), cow));
 
@@ -74,24 +74,23 @@ void MyScene::Init()
 
 	shared_ptr<MeshObject> cube(new MeshObject());
 	cube->SetName("Cube");
-	//cube->readObjFile("OBJ\\cube.obj");
 	cube->InitBox(1, 1, 1);
 	cube->SetRenderer(PBR);
 	cube->InitBufferData();
 	cube->GetTransform().SetPosition(vec3(0, 0, 0));
 	cube->GetTransform().SetScaler(vec3(0.5));
-
 	auto cubeShaderData = dynamic_pointer_cast<PBRShaderData>(cube->GetShaderData());
 	cubeShaderData->SetTextureState(true);
 	cubeShaderData->SetAlbedoState(true);
-	cubeShaderData->InitTexture(ALBEDO, "Material\\oakfloor\\basecolor.png");
+	cubeShaderData->InitTexture(ALBEDO, "Material\\metalgrid\\basecolor.png");
 	cubeShaderData->SetNormalState(true);
-	cubeShaderData->InitTexture(NORMAL, "Material\\oakfloor\\normal.png");
+	cubeShaderData->InitTexture(NORMAL, "Material\\metalgrid\\normal.png");
 	cubeShaderData->SetAOState(true);
-	cubeShaderData->InitTexture(AO, "Material\\oakfloor\\AO.png");
+	cubeShaderData->InitTexture(AO, "Material\\metalgrid\\AO.png");
 	cubeShaderData->SetRoughnessState(true);
-	cubeShaderData->InitTexture(ROUGHNESS, "Material\\oakfloor\\roughness.png");
-
+	cubeShaderData->InitTexture(ROUGHNESS, "Material\\metalgrid\\roughness.png");
+	cubeShaderData->SetMetallicState(true);
+	cubeShaderData->InitTexture(METALLIC, "Material\\metalgrid\\metallic.png");
 	objects.insert(pair<string, shared_ptr<Object>>(cube->GetName(), cube));
 
 	//myBox.InitDirectBox(1, 1, 1);					//顶点、索引信息初始化
@@ -124,20 +123,15 @@ void MyScene::Update(float& dt)
 {
 
 	//计算视角矩阵
-	MainCamera::GetInstance()->SetView();
+	MainCamera::GetInstance().SetView();
 	//计算投影矩阵
-	MainCamera::GetInstance()->SetPro();
+	MainCamera::GetInstance().SetPro();
 
 	//遍历所有object更新矩阵
 	for (auto objs_it = objects.begin(); objs_it != objects.end(); objs_it++)
 	{
 		(*objs_it).second->Update(dt);
 	}
-
-	//cow.UpdateMatrix(mainCamera);
-	//myBox.SetObjMat(camera.view, camera.pro);
-	//myBucket.SetObjMat(camera.view, camera.pro);
-	//myGrid.SetObjMat(camera.view, camera.pro);
 
 	//遍历所有key，并执行key当前绑定的事件
 	for (auto keys_it = keys.begin(); keys_it != keys.end(); keys_it++)
