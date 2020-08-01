@@ -160,6 +160,7 @@
   <ItemGroup>
     <ClInclude Include="Camera.h" />
     <ClInclude Include="Const.h" />
+    <ClInclude Include="DataModel.h" />
     <ClInclude Include="DistributeFun.h" />
     <ClInclude Include="Interaction.h" />
     <ClInclude Include="MeshObject.h" />
@@ -167,6 +168,7 @@
     <ClInclude Include="Program.h" />
     <ClInclude Include="PublicStruct.h" />
     <ClInclude Include="Renderer.h" />
+    <ClInclude Include="RenderFrameModel.h" />
     <ClInclude Include="Scene.h" />
     <ClInclude Include="ShaderData.h" />
     <ClInclude Include="ShaderDataInitTool.h" />

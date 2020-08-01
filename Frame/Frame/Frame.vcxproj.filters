@@ -98,6 +98,12 @@
     <ClInclude Include="VertexData.h">
       <Filter>头文件</Filter>
     </ClInclude>
+    <ClInclude Include="DataModel.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="RenderFrameModel.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="SF_VertexColor.v">

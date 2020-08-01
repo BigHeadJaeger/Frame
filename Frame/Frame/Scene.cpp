@@ -8,7 +8,11 @@ void MyScene::Init()
 
 	//glGetString(GL_RENDERER);
 	//初始化glew
-	gladLoadGLLoader((GLADloadproc)glfwGetProcAddress);
+	if (!gladLoadGLLoader((GLADloadproc)glfwGetProcAddress))
+	{
+		std::cout << "initialize glad failed" << std::endl;
+		return;
+	}
 	//glewInit();
 	//初始化Renderer中的program
 	PBRRenderer::GetRenderer().InitProgram("SF_PBR.v", "SF_PBR.f");
@@ -122,6 +126,7 @@ void MyScene::InitKeys()
 	keys.insert(pair<KEYNAME, Key>(BTNS, Key(BTNS)));
 	keys.insert(pair<KEYNAME, Key>(BTND, Key(BTND)));
 	keys.insert(pair<KEYNAME, Key>(BTN1, Key(BTN1)));
+	//keys.insert
 	//keys.push_back(Key(BTNW));
 }
 
