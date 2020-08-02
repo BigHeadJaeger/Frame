@@ -16,12 +16,11 @@ void cursor_position_callback(GLFWwindow* window, double xpos, double ypos);
 
 float deltaTime = 0.0f;
 float lastFrame = 0.0f;
+//创建窗口
+GLFWwindow* window;
 
 int main(void)
 {
-	//创建窗口
-	GLFWwindow* window;
-
 	//初始化glfw
 	if (!glfwInit())
 		return -1;
@@ -63,7 +62,6 @@ int main(void)
 		auto currentFrame = glfwGetTime();
 		deltaTime = currentFrame - lastFrame;
 		lastFrame = currentFrame;
-
 
 
 		//场景更新和绘制
@@ -123,6 +121,11 @@ void key_callback(GLFWwindow* window, int key, int scancode, int action, int mod
 		auto scene = RenderFrameModel::GetInstance().GetCurrentScene();
 		scene->drawMode.isLine = !scene->drawMode.isLine;
 			});
+
+	if (key == GLFW_KEY_ESCAPE && action == GLFW_PRESS)
+	{
+		glfwSetWindowShouldClose(window, true);
+	}
 }
 
 

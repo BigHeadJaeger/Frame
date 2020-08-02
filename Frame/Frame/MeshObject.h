@@ -180,11 +180,16 @@ inline void MeshObject::InitGrid(float width, float height, int m, int n)
 	auto nVertsRow = m + 1;			//x方向顶点数
 	auto nVertsCol = n + 1;			//z方向顶点数
 
-	auto oX = -width * 0.5f;			//x方向的起始位置
-	auto oZ = height * 0.5f;			//z方向的起始位置
+	auto oPosX = -width * 0.5f;			//顶点位置坐标x方向的起始位置
+	auto oPosZ = height * 0.5f;			//顶点位置坐标z方向的起始位置
 
-	auto dX = width / m;			//变化率
-	auto dZ = height / n;
+	//顶点位置坐标变化率
+	auto dPosX = width / m;			
+	auto dPosZ = height / n;
+
+	// 顶点纹理坐标变化率
+	auto dTexX = 1.f / m;
+	auto dTexY = 1.f / n;
 
 	Mesh::VertexHandle* vHandles;
 	vHandles = new Mesh::VertexHandle[nVertsCol * nVertsRow];
@@ -193,14 +198,14 @@ inline void MeshObject::InitGrid(float width, float height, int m, int n)
 	//从左上角开始逐行添加顶点信息
 	for (int i = 0; i < nVertsCol; i++)
 	{
-		float tempZ = oZ - dZ * i;
+		float tempZ = oPosZ - dPosZ * i;
 		for (int j = 0; j < nVertsRow; j++)
 		{
 			int index = i * nVertsRow + j;
 			//顶点
-			vHandles[index] = mesh.add_vertex(Mesh::Point(oX + dX * j, 0.f, tempZ));
+			vHandles[index] = mesh.add_vertex(Mesh::Point(oPosX + dPosX * j, 0.f, tempZ));
 			//纹理
-			mesh.set_texcoord2D(vHandles[index], OpenMesh::Vec2f(dX * j, dZ * i));
+			mesh.set_texcoord2D(vHandles[index], OpenMesh::Vec2f(dTexX * j, dTexY * i));
 		}
 	}
 
