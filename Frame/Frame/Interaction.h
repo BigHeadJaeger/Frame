@@ -11,6 +11,7 @@ enum KEYNAME
 	BTNS,
 	BTND,
 	BTN1,
+	BTNC,
 	NONE,
 };
 
@@ -36,62 +37,79 @@ struct Mouse
 	}
 };
 
+// 因为glfw只有按下和弹起两个键盘事件，因此重写可支持持续按键的键盘按键事件
 class Key
 {
 public:
 	KEYNAME keyName;
 	//bool isDown;
+	// 类似函数指针作用的模板，可以接受普通函数以及lambda函数
 	function<void()> eventFunctionPtr;
 	function<void()> outerFunction;
 private:
-	void EventKeep();
-	void EventUP();
-	void EventDown();
 
 public:
 	Key()
 	{
 		keyName = NONE;
-		eventFunctionPtr = NULL;
-		outerFunction = NULL;
+		eventFunctionPtr = nullptr;
+		outerFunction = nullptr;
 	}
 	Key(KEYNAME name)
 	{
 		keyName = name;
-		eventFunctionPtr = NULL;
-		outerFunction = NULL;
+		eventFunctionPtr = nullptr;
+		outerFunction = nullptr;
 	}
 
 
 	//此函数在update中不断执行传进来的function
-	void Execute();
+	void Execute()
+	{
+		if (eventFunctionPtr != NULL)
+		{
+			eventFunctionPtr();
+		}
+	}
 
 	//指定key执行down事件，并且指定一个需要外部函数
+	// eventFunctionPtr指向按键类型不同的处理方式，比如按下、弹起、持续。outerFunction指定按下这个按钮之后具体在外部要进行的逻辑，eventFunctionPtr和outerFunction都是先将处理记录下来不立即处理，处理时间为下一帧最开始的update中，所以是一个异步的操作
 	template<typename F>
 	void BindDownEvent(F f)
 	{
-		eventFunctionPtr = bind(&Key::EventDown, this);
-		outerFunction = bind(f);
+		eventFunctionPtr = [&]() {
+			// 按钮按下只需要执行一次，执行完了之后解除绑定
+			outerFunction();
+			UnBind();
+		};
+		outerFunction = f;
 	}
 
 	template<typename F>
 	void BindKeepEvent(F f)
 	{
-		eventFunctionPtr = bind(&Key::EventKeep, this);
-		outerFunction = bind(f);
+		eventFunctionPtr = [&]() {
+			// 不断执行，不进行解绑
+			outerFunction();
+		};
+		outerFunction = f;
 	}
 
 	template<typename F>
 	void BindUpEvent(F f)
 	{
-		eventFunctionPtr = bind(&Key::EventUP, this);
-		outerFunction = bind(f);
+		eventFunctionPtr = [&]() {
+			// 按钮按下只需要执行一次，执行完了之后解除绑定
+			outerFunction();
+			UnBind();
+		};
+		outerFunction = f;
 	}
 
 	void UnBind()
 	{
-		eventFunctionPtr = NULL;
-		outerFunction = NULL;
+		eventFunctionPtr = nullptr;
+		outerFunction = nullptr;
 	}
 
 	

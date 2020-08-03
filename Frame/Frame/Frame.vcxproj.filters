@@ -51,6 +51,9 @@
     <ClCompile Include="MeshObject.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
+    <ClCompile Include="glad.c">
+      <Filter>源文件</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Scene.h">
@@ -93,6 +96,12 @@
       <Filter>头文件</Filter>
     </ClInclude>
     <ClInclude Include="VertexData.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="DataModel.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="RenderFrameModel.h">
       <Filter>头文件</Filter>
     </ClInclude>
   </ItemGroup>

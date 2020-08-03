@@ -9,10 +9,12 @@ void Renderer::Render(shared_ptr<ShaderData> data)
 	SetUniform("worldViewProj", data->worldViewProj, shaderProgram);
 	SetUniform("world", data->world, shaderProgram);
 	SetUniform("worldInvTranspose", data->worldInvTranspose, shaderProgram);
-	SetUniform("eyePos", data->eyePos, shaderProgram);
+	SetUniform("eyePos", MainCamera::GetInstance().eyePos, shaderProgram);
 	SetUniform("lightPos", data->lightPos, shaderProgram);
 	SetUniform("lightColor", data->lightColor, shaderProgram);
 	glBindVertexArray(0);
+
+
 }
 
 void Renderer::SetTexture(GLuint& texId, int num, GLenum texNum, string samplerName, ShaderProgram& p)
