@@ -1,11 +1,13 @@
 #pragma once
 #include<glm.hpp>
 #include<gtc\matrix_transform.hpp>
+#include"Const.h"
 //#include<initializer_list>
 using namespace glm;
 class Camera
 {
 public:
+	float fov;
 	vec3 eyePos;
 	vec3 lookAtPoint;
 	vec3 up;
