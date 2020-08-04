@@ -8,6 +8,7 @@
 #include"PublicStruct.h"
 #include"Camera.h"
 #include"VertexData.h"
+#include"Material.h"
 using namespace std;
 
 class ShaderData
