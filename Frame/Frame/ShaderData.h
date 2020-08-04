@@ -1,4 +1,5 @@
 #pragma once
+// shaderdata只有物体自身的属性，像光照这种对物体有影响但是不属于物体自身属性的值存在别处，但在renderer中传入着色器
 //与OpenGLshader配置相关的各种变量和方法
 #include<glad/glad.h>
 #include<SOIL.h>
@@ -8,8 +9,6 @@
 #include"Camera.h"
 #include"VertexData.h"
 using namespace std;
-
-
 
 class ShaderData
 {
@@ -46,6 +45,12 @@ public:
 	template<typename T>
 	void InitTextureWithFile(GLuint& texID, T&& texPath);
 	virtual void Temp() {}
+};
+
+// 创建一个物体默认的shader数据（采用phong光照模型的数据）
+class DefaultShaderData : public ShaderData
+{
+
 };
 
 enum TEXTURETYPE
