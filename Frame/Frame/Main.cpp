@@ -11,6 +11,7 @@
 void key_callback(GLFWwindow* window, int key, int scancode, int action, int mods);
 void mouse_button_callback(GLFWwindow* window, int button, int action, int mods);
 void cursor_position_callback(GLFWwindow* window, double xpos, double ypos);
+void mouse_scroll_callback(GLFWwindow* window, double xoffset, double yoffset);
 
 //MyScene scene;
 
@@ -46,6 +47,8 @@ int main(void)
 	glfwSetMouseButtonCallback(window, mouse_button_callback);		//鼠标按键事件
 
 	glfwSetCursorPosCallback(window, cursor_position_callback);		//鼠标指针事件
+
+	glfwSetScrollCallback(window, mouse_scroll_callback);			// 鼠标滚轮事件
 
 
 	//创建场景
@@ -126,8 +129,13 @@ void key_callback(GLFWwindow* window, int key, int scancode, int action, int mod
 	{
 		glfwSetWindowShouldClose(window, true);
 	}
-}
 
+	if (key == GLFW_KEY_F && action == GLFW_PRESS)
+	{
+		MainCamera::GetInstance().fov = INITFOV;
+	}
+
+}
 
 
 void mouse_button_callback(GLFWwindow* window, int button, int action, int mods)
@@ -164,4 +172,21 @@ void cursor_position_callback(GLFWwindow* window, double xpos, double ypos)
 
 	scene->mouse.cursorPrePos.x = xpos;
 	scene->mouse.cursorPrePos.y = ypos;
+}
+
+void mouse_scroll_callback(GLFWwindow* window, double xoffset, double yoffset)
+{
+	auto num = (MainCamera::GetInstance().fov - yoffset * deltaTime);
+	if (num >= MINFOV && num <= MAXFOV)
+	{
+		MainCamera::GetInstance().fov -= yoffset;
+	}
+	else if (num < MINFOV)
+	{
+		MainCamera::GetInstance().fov = MINFOV;
+	}
+	else if (num > MAXFOV)
+	{
+		MainCamera::GetInstance().fov = MAXFOV;
+	}
 }

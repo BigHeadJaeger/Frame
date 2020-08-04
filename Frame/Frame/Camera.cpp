@@ -10,6 +10,7 @@ Camera::Camera()
 	view = mat4(0);
 	pro = mat4(0);
 	cameraSpeed = 2;
+	fov = 45.f;
 }
 
 void Camera::SetView()
@@ -22,7 +23,7 @@ void Camera::SetView()
 
 void Camera::SetPro()
 {
-	pro = perspective(45.0f, ((float)1200) / (1000), 0.1f, 1000.0f);
+	pro = perspective(radians(fov), ((float)WIDTH) / (HEIGHT), 0.1f, 200.0f);
 }
 
 void Camera::SetOrtho(float left, float right, float bottom, float up, float near, float far)
