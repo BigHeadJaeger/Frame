@@ -24,9 +24,6 @@
     <ClCompile Include="Scene.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
-    <ClCompile Include="ShaderDataInitTool.cpp">
-      <Filter>源文件</Filter>
-    </ClCompile>
     <ClCompile Include="Renderer.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
@@ -90,9 +87,6 @@
       <Filter>头文件</Filter>
     </ClInclude>
     <ClInclude Include="MeshObject.h">
-      <Filter>头文件</Filter>
-    </ClInclude>
-    <ClInclude Include="ShaderDataInitTool.h">
       <Filter>头文件</Filter>
     </ClInclude>
     <ClInclude Include="VertexData.h">

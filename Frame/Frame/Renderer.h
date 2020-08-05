@@ -34,6 +34,29 @@ public:
 	void SetUniform(string&& valueName, float value, ShaderProgram& p);
 };
 
+class DefaultRenderer :public Renderer
+{
+private:
+	DefaultRenderer()
+	{
+
+	}
+public:
+	static DefaultRenderer& GetRenderer()
+	{
+		static DefaultRenderer instance;
+		return instance;
+	}
+
+	void Render(shared_ptr<ShaderData> shaderData) override
+	{
+		auto data = dynamic_pointer_cast<DefaultShaderData>(shaderData);
+		//data->material
+	}
+
+	DefaultRenderer(DefaultRenderer&) = delete;
+};
+
 //class SimpleRenderer :public Renderer
 //{
 //private:

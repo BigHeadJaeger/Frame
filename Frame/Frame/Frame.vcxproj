@@ -154,7 +154,6 @@
     <ClCompile Include="Renderer.cpp" />
     <ClCompile Include="Scene.cpp" />
     <ClCompile Include="ShaderData.cpp" />
-    <ClCompile Include="ShaderDataInitTool.cpp" />
     <ClCompile Include="Transform.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -173,7 +172,6 @@
     <ClInclude Include="RenderFrameModel.h" />
     <ClInclude Include="Scene.h" />
     <ClInclude Include="ShaderData.h" />
-    <ClInclude Include="ShaderDataInitTool.h" />
     <ClInclude Include="Transform.h" />
     <ClInclude Include="VertexData.h" />
   </ItemGroup>

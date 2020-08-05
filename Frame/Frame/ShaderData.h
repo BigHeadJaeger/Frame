@@ -3,6 +3,7 @@
 //与OpenGLshader配置相关的各种变量和方法
 #include<glad/glad.h>
 #include<SOIL.h>
+#include<memory>
 //#include"ShaderDataInitTool.h"
 #include"Transform.h"
 #include"PublicStruct.h"
@@ -30,6 +31,9 @@ public:
 
 	GLint drawType;					//顶点buffer的绘制方式
 	GLint drawUnitNumber;			//绘制单元的数量
+
+	bool isLighting;				// 是否接受光照
+	bool isShadow;					// 是否接受阴影
 public:
 	ShaderData()
 	{
@@ -39,6 +43,8 @@ public:
 		drawType = GL_TRIANGLES;
 		lightPos = vec3(-3, 5, 1);
 		lightColor = vec3(400);
+		isLighting = true;
+		isShadow = true;
 	}
 
 	void UpdateMatrix(Transform& t);
@@ -48,9 +54,21 @@ public:
 	virtual void Temp() {}
 };
 
-// 创建一个物体默认的shader数据（采用phong光照模型的数据）
+// 默认的shader数据，是一个必须包含material的shaderData
 class DefaultShaderData : public ShaderData
 {
+public:
+	shared_ptr<Material> material;
+public:
+	DefaultShaderData() { material = make_shared<PhongMaterial>(); }
+	DefaultShaderData(shared_ptr<Material> _material) { material = _material; }
+
+	// 切换材质
+	void SetShaderData(shared_ptr<Material> _material)
+	{
+		material.reset();
+		material = _material;
+	}
 
 };
 
@@ -81,6 +99,7 @@ public:
 public:
 	PBRShaderData()
 	{
+		
 		bUseTexture = false;
 		bAlbedo = false;
 		bMetallic = false;
