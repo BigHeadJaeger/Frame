@@ -52,7 +52,7 @@ int main(void)
 
 
 	//´´½¨³¡¾°
-	shared_ptr<MyScene> scene = make_shared<MyScene>(MyScene());
+	shared_ptr<MyScene> scene = make_shared<MyScene>();
 	RenderFrameModel::GetInstance().SetCurrentScene(scene);
 
 	scene->Init();
