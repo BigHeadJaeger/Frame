@@ -69,7 +69,6 @@ public:
 		material.reset();
 		material = _material;
 	}
-
 };
 
 enum TEXTURETYPE

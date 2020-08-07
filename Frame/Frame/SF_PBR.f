@@ -7,6 +7,11 @@ in vec3 normalW;
 in vec2 TexCoord;
 //in vec4 shadowCoord;
 
+struct Light
+{
+	vec3 position;
+	vec3 color;
+};
 
 uniform bool useTexture;
 
@@ -37,8 +42,7 @@ uniform bool useAO;
 uniform float aoN;
 
 //光照信息(此处使用的是点光源)
-uniform vec3 lightPos;
-uniform vec3 lightColor; 
+uniform Light light;
 
 //眼睛位置
 uniform vec3 eyePos;
@@ -154,13 +158,13 @@ void main()
 
 
 		//计算辐射度(根据入射方向以及夹角求)
-		vec3 lightDir=normalize(lightPos-posW);				//计算光照向量
+		vec3 lightDir=normalize(light.position-posW);				//计算光照向量
 		vec3 H=normalize(V+lightDir);									//计算中间向量
 
 
-		float distance=length(lightPos-posW);
+		float distance=length(light.position-posW);
 		float attenuation=1.0/(distance*distance);			//计算衰减
-		vec3 radiance=lightColor*attenuation;
+		vec3 radiance=light.color*attenuation;
 
 		//计算BDRF中的镜面反射
 		float D=DistributionGGX(H,N,roughness);

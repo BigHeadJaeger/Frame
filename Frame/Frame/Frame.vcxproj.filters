@@ -51,6 +51,9 @@
     <ClCompile Include="glad.c">
       <Filter>源文件</Filter>
     </ClCompile>
+    <ClCompile Include="ShaderDataTool.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Scene.h">
@@ -104,6 +107,9 @@
     <ClInclude Include="Material.h">
       <Filter>头文件</Filter>
     </ClInclude>
+    <ClInclude Include="ShaderDataTool.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="SF_VertexColor.v">
@@ -116,6 +122,12 @@
       <Filter>Shader</Filter>
     </None>
     <None Include="SF_PBR.f">
+      <Filter>Shader</Filter>
+    </None>
+    <None Include="SF_Phong.v">
+      <Filter>Shader</Filter>
+    </None>
+    <None Include="SF_Phong.f">
       <Filter>Shader</Filter>
     </None>
   </ItemGroup>

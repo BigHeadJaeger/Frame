@@ -1,14 +1,11 @@
 #pragma once
-#include<glm.hpp>
-#include<gtc\matrix_transform.hpp>
-#include<gtc\type_ptr.hpp>
-using namespace glm;
-using namespace std;
+#include"ShaderDataTool.h"
 #include"Program.h"
 #include"ShaderData.h"
 
 enum RENDERERTYPE
 {
+	DEFAULT,
 	PBR,
 	SIMPLE,
 	VERTEXCOLOR,
@@ -26,21 +23,18 @@ public:
 	virtual void Render(shared_ptr<ShaderData> data);
 
 	//传texture到shader中
-	void SetTexture(GLuint& texId, int num, GLenum texNum, string samplerName, ShaderProgram& p);
-	//根据不同类型的值用重载的方式传入shader中
-	void SetUniform(string&& valueName, mat4x4& value, ShaderProgram& p);
-	void SetUniform(string&& valueName, vec4& value, ShaderProgram& p);
-	void SetUniform(string&& valueName, vec3& value, ShaderProgram& p);
-	void SetUniform(string&& valueName, float value, ShaderProgram& p);
+	//void SetTexture(GLuint& texId, int num, GLenum texNum, string samplerName, ShaderProgram& p);
+	////根据不同类型的值用重载的方式传入shader中
+	//void SetUniform(string&& valueName, mat4x4& value, ShaderProgram& p);
+	//void SetUniform(string&& valueName, vec4& value, ShaderProgram& p);
+	//void SetUniform(string&& valueName, vec3& value, ShaderProgram& p);
+	//void SetUniform(string&& valueName, float value, ShaderProgram& p);
 };
 
 class DefaultRenderer :public Renderer
 {
 private:
-	DefaultRenderer()
-	{
-
-	}
+	DefaultRenderer() { }
 public:
 	static DefaultRenderer& GetRenderer()
 	{
@@ -50,8 +44,13 @@ public:
 
 	void Render(shared_ptr<ShaderData> shaderData) override
 	{
+		Renderer::Render(shaderData);
 		auto data = dynamic_pointer_cast<DefaultShaderData>(shaderData);
-		//data->material
+		glUseProgram(shaderProgram.p);
+		glBindVertexArray(data->VAO);
+		data->material->Transfer(shaderProgram);
+		glDrawArrays(data->drawType, 0, data->drawUnitNumber);
+		glBindVertexArray(0);
 	}
 
 	DefaultRenderer(DefaultRenderer&) = delete;
@@ -75,24 +74,6 @@ public:
 //	void Render(unique_ptr<ShaderData> shaderData)override;
 //};
 
-//不同的渲染器只需要一个，所以都设为单例
-//class PBRRenderer :public Renderer
-//{
-//private:
-//	static PBRRenderer* instance;
-//	PBRRenderer() {}
-//public:
-//	static PBRRenderer* GetRenderer()
-//	{
-//		if (instance == NULL)
-//		{
-//			instance = new PBRRenderer();
-//		}
-//		return instance;
-//	}
-//	void Render(unique_ptr<ShaderData> shaderData) override;
-//};
-
 class PBRRenderer :public Renderer
 {
 private:
@@ -111,22 +92,6 @@ public:
 
 	PBRRenderer(PBRRenderer&) = delete;
 };
-
-//class VertexColorRender :public Renderer
-//{
-//private:
-//	static shared_ptr<VertexColorRender> instance;
-//	VertexColorRender() = delete;
-//public:
-//	static shared_ptr<VertexColorRender> GetRenderer()
-//	{
-//		if (instance == NULL)
-//			instance = make_shared(new VertexColorRender());
-//		return instance;
-//	}
-//
-//	void Render(shared_ptr<ShaderData> shaderData) override;
-//};
 
 class VertexColorRender :public Renderer
 {

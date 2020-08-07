@@ -22,28 +22,12 @@ void MyScene::Init()
 
 	//pShadowTex.SetShader("shadowTex.v", "shadowTex.f");
 
-
-	////指定光源参数
-	lightPos = vec3(-3, 5, 3);
-	lightColor = vec3(400.f, 400.f, 400.f);
-
 	//初始化主相机
 	//mainCamera = new Camera();
 	MainCamera::GetInstance().Init(vec3(0, 2, 3), vec3(0, 0, 0));
 
 	//SetDrawMode(drawMode.isLine, false);
 	drawMode.isLine = false;
-
-	//指定物体PBR材质
-	//MeshObject* cow = new MeshObject();
-	//cow->SetName("cow");
-	//cow->readObjFile("Resource\\OBJ\\cow.obj");
-	//cow->SetRenderer(SIMPLE);
-	//cow->InitBufferData();
-	//cow->GetTransform().SetPosition(vec3(0, 0, 0));
-	//cow->GetTransform().SetScaler(vec3(2.0));
-	//dynamic_cast<SimpleShaderData*>(cow->GetShaderData())->SetColor(vec3(255, 0, 0));
-	//objects.insert(pair<string, Object*>(cow->GetName(), cow));
 
 	//shared_ptr<MeshObject> cow(new MeshObject());
 	//cow->SetName("cow");
@@ -54,48 +38,27 @@ void MyScene::Init()
 	//cow->GetTransform().SetScaler(vec3(2.0));
 	//objects.insert(pair<string, shared_ptr<Object>>(cow->GetName(), cow));
 
-	//MPSWaterParticleGroup* water = new MPSWaterParticleGroup();
-	//water->SetName("water");
-	//water->SetRenderer(SIMPLERENDER);
-	//water->GetTransform().SetPosition(vec3(0.5));
-	//water->SetDiameter(0.01);
-	//water->SetViscosity(0.000001);
-	//water->InitParticles();
-	//dynamic_cast<SimpleShaderData*>(water->GetShaderData())->SetColor(vec3(0, 0, 200));
-	//objects.insert(pair<string, Object*>(water->GetName(), water));
 
-
-	//Metaball* balls = new Metaball();
-	//balls->SetName("Metaball");
-	//balls->SetRenderer(SIMPLERENDER);
-	//balls->GetTransform().SetPosition(vec3(-0, -0, 0));
-	//balls->SetSourcePoints(vec3(0.1), 2, 1, 2);
-	//balls->SetRadius(0.005);
-	////balls->GetTransform().SetScaler(vec3(3.0));
-	//dynamic_cast<SimpleShaderData*>(balls->GetShaderData())->SetColor(vec3(0, 0, 255));
-	//objects.insert(pair<string, Object*>(balls->GetName(), balls));
-
-
-	shared_ptr<MeshObject> cube(new MeshObject());
-	cube->SetName("Cube");
-	cube->InitBox(1, 1, 1);
-	cube->SetRenderer(PBR);
-	cube->InitBufferData();
-	cube->GetTransform().SetPosition(vec3(0, 0, 0));
-	cube->GetTransform().SetScaler(vec3(1));
-	auto cubeShaderData = dynamic_pointer_cast<PBRShaderData>(cube->GetShaderData());
-	cubeShaderData->SetTextureState(true);
-	cubeShaderData->SetAlbedoState(true);
-	cubeShaderData->InitTexture(ALBEDO, "Material\\metalgrid\\basecolor.png");
-	cubeShaderData->SetNormalState(true);
-	cubeShaderData->InitTexture(NORMAL, "Material\\metalgrid\\normal.png");
-	cubeShaderData->SetAOState(true);
-	cubeShaderData->InitTexture(AO, "Material\\metalgrid\\AO.png");
-	cubeShaderData->SetRoughnessState(true);
-	cubeShaderData->InitTexture(ROUGHNESS, "Material\\metalgrid\\roughness.png");
-	cubeShaderData->SetMetallicState(true);
-	cubeShaderData->InitTexture(METALLIC, "Material\\metalgrid\\metallic.png");
-	objects.insert(pair<string, shared_ptr<Object>>(cube->GetName(), cube));
+	//shared_ptr<MeshObject> cube(new MeshObject());
+	//cube->SetName("Cube");
+	//cube->InitBox(1, 1, 1);
+	//cube->SetRenderer(PBR);
+	//cube->InitBufferData();
+	//cube->GetTransform().SetPosition(vec3(0, 0, 0));
+	//cube->GetTransform().SetScaler(vec3(1));
+	//auto cubeShaderData = dynamic_pointer_cast<PBRShaderData>(cube->GetShaderData());
+	//cubeShaderData->SetTextureState(true);
+	//cubeShaderData->SetAlbedoState(true);
+	//cubeShaderData->InitTexture(ALBEDO, "Material\\metalgrid\\basecolor.png");
+	//cubeShaderData->SetNormalState(true);
+	//cubeShaderData->InitTexture(NORMAL, "Material\\metalgrid\\normal.png");
+	//cubeShaderData->SetAOState(true);
+	//cubeShaderData->InitTexture(AO, "Material\\metalgrid\\AO.png");
+	//cubeShaderData->SetRoughnessState(true);
+	//cubeShaderData->InitTexture(ROUGHNESS, "Material\\metalgrid\\roughness.png");
+	//cubeShaderData->SetMetallicState(true);
+	//cubeShaderData->InitTexture(METALLIC, "Material\\metalgrid\\metallic.png");
+	//objects.insert(pair<string, shared_ptr<Object>>(cube->GetName(), cube));
 
 	shared_ptr<MeshObject> grid(new MeshObject());
 	grid->SetName("Floor");
@@ -116,6 +79,16 @@ void MyScene::Init()
 	gridShaderData->InitTexture(ROUGHNESS, "Material\\oakfloor\\roughness.png");
 	objects.insert(pair<string, shared_ptr<Object>>(grid->GetName(), grid));
 
+
+	shared_ptr<MeshObject> cow2(new MeshObject());
+	cow2->SetName("cow");
+	cow2->readObjFile("OBJ\\cow.obj");
+	cow2->SetRenderer(DEFAULT);
+	cow2->InitBufferData();
+	cow2->GetTransform().SetPosition(vec3(1, 0, 1));
+	cow2->GetTransform().SetScaler(vec3(2.0));
+	auto cow2ShaderData = dynamic_pointer_cast<DefaultShaderData>(cow2->GetShaderData());
+	objects.insert(pair<string, shared_ptr<Object>>(cow2->GetName(), cow2));
 
 }
 

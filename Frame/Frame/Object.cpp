@@ -4,6 +4,11 @@ void Object::SetRenderer(RENDERERTYPE type)
 {
 	switch (type)
 	{
+	case DEFAULT:
+		renderer = &DefaultRenderer::GetRenderer();
+		shaderData.reset();
+		shaderData = make_shared<DefaultShaderData>();
+		break;
 	case PBR:
 		renderer = &PBRRenderer::GetRenderer();
 		shaderData.reset();

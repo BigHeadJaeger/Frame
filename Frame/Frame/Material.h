@@ -4,6 +4,14 @@
 using namespace glm;
 
 #include"Program.h"
+#include"ShaderDataTool.h"
+
+enum MATERIALTYPE
+{
+    MATERIAL_DEFAULT_DIFFUSE,
+    MATERIAL_DEFAULT_SPECULAR,
+    MATERIAL_PHONG
+};
 
 // 每个物体需要一个Material
 class Material
@@ -43,12 +51,18 @@ public:
     vec3 diffuse = baseColor;
     vec3 specular = vec3(125, 125, 125);
     float shininess = 32.0f;
+    bool isVertexLight = false;
 public:
-    PhongMaterial() { }
+    PhongMaterial() {}
 
     void Transfer(ShaderProgram& shaderProgram) override
     {
-
+        auto tool = ShaderDataTool::GetInstance();
+        tool.SetUniform("isVertexLight", isVertexLight, shaderProgram);
+        tool.SetUniform("material.ambient", ambient / vec3(255), shaderProgram);
+        tool.SetUniform("material.diffuse", diffuse / vec3(255), shaderProgram);
+        tool.SetUniform("material.specular", specular / vec3(255), shaderProgram);
+        tool.SetUniform("material.shininess", shininess, shaderProgram);
     }
 };
 
