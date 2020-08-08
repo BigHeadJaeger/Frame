@@ -6,7 +6,7 @@ using namespace glm;
 #include"Program.h"
 #include"ShaderDataTool.h"
 
-enum MATERIALTYPE
+enum class MATERIALTYPE
 {
     MATERIAL_DEFAULT_DIFFUSE,
     MATERIAL_DEFAULT_SPECULAR,
@@ -17,9 +17,10 @@ enum MATERIALTYPE
 class Material
 {
 public:
-    vec4 baseColor = vec4(255, 255, 255, 255);      // 基础颜色值
+    vec4 baseColor = vec4(125, 125, 125, 255);      // 基础颜色值
     GLuint textureBase;                             // 基础贴图
     bool isTextureBase = false;                     // 是否使用基础贴图，否则用baseColor作为基础颜色
+    MATERIALTYPE type;
 public:
     //Material()
     //{
@@ -47,23 +48,18 @@ class DefaultSpecularMaterial : public Material
 class PhongMaterial:public Material
 {
 public:
-    vec3 ambient = baseColor;
-    vec3 diffuse = baseColor;
+    vec3 ambient = vec3(baseColor.x, baseColor.y, baseColor.z);
+    vec3 diffuse = vec3(baseColor.x, baseColor.y, baseColor.z);
     vec3 specular = vec3(125, 125, 125);
     float shininess = 32.0f;
     bool isVertexLight = false;
 public:
-    PhongMaterial() {}
-
-    void Transfer(ShaderProgram& shaderProgram) override
+    PhongMaterial() 
     {
-        auto tool = ShaderDataTool::GetInstance();
-        tool.SetUniform("isVertexLight", isVertexLight, shaderProgram);
-        tool.SetUniform("material.ambient", ambient / vec3(255), shaderProgram);
-        tool.SetUniform("material.diffuse", diffuse / vec3(255), shaderProgram);
-        tool.SetUniform("material.specular", specular / vec3(255), shaderProgram);
-        tool.SetUniform("material.shininess", shininess, shaderProgram);
+        type = MATERIALTYPE::MATERIAL_PHONG;
     }
+
+    void Transfer(ShaderProgram& shaderProgram) override;
 };
 
 class PBRMaterial :public Material

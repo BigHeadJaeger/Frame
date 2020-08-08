@@ -12,7 +12,7 @@ void Renderer::Render(shared_ptr<ShaderData> data)
 	tool.SetUniform("worldInvTranspose", data->worldInvTranspose, shaderProgram);
 	tool.SetUniform("eyePos", MainCamera::GetInstance().eyePos, shaderProgram);
 	tool.SetUniform("light.position", data->lightPos, shaderProgram);
-	tool.SetUniform("light.color", data->lightColor, shaderProgram);
+	tool.SetUniform("light.color", data->lightColor / vec3(255), shaderProgram);
 	glBindVertexArray(0);
 }
 
@@ -82,7 +82,7 @@ void PBRRenderer::Render(shared_ptr<ShaderData> shaderData)
 	glBindVertexArray(0);
 
 }
-//
+
 //void SimpleRenderer::Render(ShaderData* shaderData)
 //{
 //	glUseProgram(shaderProgram.p);

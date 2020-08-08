@@ -19,6 +19,7 @@ void MyScene::Init()
 	//SimpleRenderer::GetRenderer()->InitProgram("SF_SimpleColor.v", "SF_SimpleColor.f");
 	//SimpleRenderer::GetRenderer()->InitProgram("SF_VertexColor.v", "SF_VertexColor.f");
 	VertexColorRender::GetRenderer().InitProgram("SF_VertexColor.v", "SF_VertexColor.f");
+	DefaultRenderer::GetRenderer().InitProgram("SF_Phong.v", "SF_Phong.f");
 
 	//pShadowTex.SetShader("shadowTex.v", "shadowTex.f");
 
@@ -32,17 +33,17 @@ void MyScene::Init()
 	//shared_ptr<MeshObject> cow(new MeshObject());
 	//cow->SetName("cow");
 	//cow->readObjFile("OBJ\\cow.obj");
-	//cow->SetRenderer(VERTEXCOLOR);
+	//cow->SetRenderer(RENDERERTYPE::VERTEXCOLOR);
 	//cow->InitBufferData();
 	//cow->GetTransform().SetPosition(vec3(1, 0, 1));
 	//cow->GetTransform().SetScaler(vec3(2.0));
-	//objects.insert(pair<string, shared_ptr<Object>>(cow->GetName(), cow));
+	//objects.insert(make_pair(cow->GetName(), cow));
 
 
 	//shared_ptr<MeshObject> cube(new MeshObject());
 	//cube->SetName("Cube");
 	//cube->InitBox(1, 1, 1);
-	//cube->SetRenderer(PBR);
+	//cube->SetRenderer(RENDERERTYPE::PBR);
 	//cube->InitBufferData();
 	//cube->GetTransform().SetPosition(vec3(0, 0, 0));
 	//cube->GetTransform().SetScaler(vec3(1));
@@ -58,12 +59,12 @@ void MyScene::Init()
 	//cubeShaderData->InitTexture(ROUGHNESS, "Material\\metalgrid\\roughness.png");
 	//cubeShaderData->SetMetallicState(true);
 	//cubeShaderData->InitTexture(METALLIC, "Material\\metalgrid\\metallic.png");
-	//objects.insert(pair<string, shared_ptr<Object>>(cube->GetName(), cube));
+	//objects.insert(make_pair(cube->GetName(), cube));
 
 	shared_ptr<MeshObject> grid(new MeshObject());
 	grid->SetName("Floor");
 	grid->InitGrid(10, 10, 10, 10);
-	grid->SetRenderer(PBR);
+	grid->SetRenderer(RENDERERTYPE::PBR);
 	grid->InitBufferData();
 	grid->GetTransform().SetPosition(vec3(0, -0.5, 0));
 	grid->GetTransform().SetScaler(vec3(1));
@@ -77,18 +78,24 @@ void MyScene::Init()
 	gridShaderData->InitTexture(AO, "Material\\oakfloor\\AO.png");
 	gridShaderData->SetRoughnessState(true);
 	gridShaderData->InitTexture(ROUGHNESS, "Material\\oakfloor\\roughness.png");
-	objects.insert(pair<string, shared_ptr<Object>>(grid->GetName(), grid));
+	objects.insert(make_pair(grid->GetName(), grid));
 
 
 	shared_ptr<MeshObject> cow2(new MeshObject());
 	cow2->SetName("cow");
 	cow2->readObjFile("OBJ\\cow.obj");
-	cow2->SetRenderer(DEFAULT);
+	cow2->SetRenderer(RENDERERTYPE::DEFAULT);
 	cow2->InitBufferData();
-	cow2->GetTransform().SetPosition(vec3(1, 0, 1));
+	cow2->GetTransform().SetPosition(vec3(0, 0, 1));
 	cow2->GetTransform().SetScaler(vec3(2.0));
 	auto cow2ShaderData = dynamic_pointer_cast<DefaultShaderData>(cow2->GetShaderData());
-	objects.insert(pair<string, shared_ptr<Object>>(cow2->GetName(), cow2));
+	
+	auto cow2Material = dynamic_pointer_cast<PhongMaterial>(cow2ShaderData->material);
+	cow2Material->ambient = vec3(255.f, 125.f, 80.f);
+	cow2Material->diffuse = vec3(255.f, 125.f, 80.f);
+	cow2Material->specular = vec3(125.f, 125.f, 125.f);
+	//cow2Material->isVertexLight = true;
+	objects.insert(make_pair(cow2->GetName(), cow2));
 
 }
 
@@ -106,18 +113,19 @@ void MyScene::InitKeys()
 void MyScene::Update(float& dt)
 {
 
-	//计算视角矩阵
+	// 计算视角矩阵
 	MainCamera::GetInstance().SetView();
-	//计算投影矩阵
+	// 计算投影矩阵
 	MainCamera::GetInstance().SetPro();
 
-	//遍历所有object更新矩阵
+	// 遍历所有object更新矩阵
 	for (auto objs_it = objects.begin(); objs_it != objects.end(); objs_it++)
 	{
 		(*objs_it).second->Update(dt);
 	}
 
-	//遍历所有key，并执行key当前绑定的事件
+	// 按键事件带来的变换会在下一帧起效
+	// 遍历所有key，并执行key当前绑定的事件
 	for (auto keys_it = keys.begin(); keys_it != keys.end(); keys_it++)
 	{
 		keys_it->second.Execute();

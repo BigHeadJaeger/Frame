@@ -115,6 +115,9 @@ void main()
 {
 
 	vec3 color=vec3(1.0,0.0,0.0);
+
+	vec3 lightColor = light.color * vec3(255);
+	
 	if(useTexture)
 	{
 		vec3 albedo;
@@ -164,7 +167,8 @@ void main()
 
 		float distance=length(light.position-posW);
 		float attenuation=1.0/(distance*distance);			//计算衰减
-		vec3 radiance=light.color*attenuation;
+		//float attenuation=1.0;
+		vec3 radiance=lightColor*attenuation;
 
 		//计算BDRF中的镜面反射
 		float D=DistributionGGX(H,N,roughness);

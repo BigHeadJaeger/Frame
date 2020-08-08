@@ -8,12 +8,10 @@ using namespace std;
 //#include"MarchingCube.h"
 #include"DistributeFun.h"
 
-
-////接口
-//class IGetVertexDataArray
+// 按类型将每个object分开 Camera
+//enum class OBJECTKIND
 //{
-//public:
-//	virtual void GetVertexDataArray(vector<float>& data) = 0;
+//	OBJ_
 //};
 
 

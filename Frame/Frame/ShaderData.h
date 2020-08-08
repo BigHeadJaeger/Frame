@@ -12,6 +12,14 @@
 #include"Material.h"
 using namespace std;
 
+enum class SHADERDATA_TYPE
+{
+	DEFAULT_SHADERDATA,
+	PBR_SHADERDATA,
+	SIMPLE_SHADERDATA,
+	VERTEX_SHADERDATA
+};
+
 class ShaderData
 {
 public:
@@ -34,6 +42,8 @@ public:
 
 	bool isLighting;				// 是否接受光照
 	bool isShadow;					// 是否接受阴影
+
+	SHADERDATA_TYPE type;
 public:
 	ShaderData()
 	{
@@ -42,7 +52,7 @@ public:
 		worldInvTranspose = mat4(0);
 		drawType = GL_TRIANGLES;
 		lightPos = vec3(-3, 5, 1);
-		lightColor = vec3(400);
+		lightColor = vec3(255);
 		isLighting = true;
 		isShadow = true;
 	}
@@ -51,7 +61,7 @@ public:
 	void InitVertexBuffer(VertexData& vertexData);
 	template<typename T>
 	void InitTextureWithFile(GLuint& texID, T&& texPath);
-	virtual void Temp() {}
+	virtual void temp(){}
 };
 
 // 默认的shader数据，是一个必须包含material的shaderData
@@ -60,7 +70,11 @@ class DefaultShaderData : public ShaderData
 public:
 	shared_ptr<Material> material;
 public:
-	DefaultShaderData() { material = make_shared<PhongMaterial>(); }
+	DefaultShaderData()
+	{
+		type = SHADERDATA_TYPE::DEFAULT_SHADERDATA;
+		material = make_shared<PhongMaterial>(); 
+	}
 	DefaultShaderData(shared_ptr<Material> _material) { material = _material; }
 
 	// 切换材质
@@ -98,7 +112,7 @@ public:
 public:
 	PBRShaderData()
 	{
-		
+		type = SHADERDATA_TYPE::PBR_SHADERDATA;
 		bUseTexture = false;
 		bAlbedo = false;
 		bMetallic = false;
@@ -146,22 +160,29 @@ public:
 	void SetRoughnessState(T&& isUse) { bRoughness = isUse; }
 };
 
-class SimpleShaderData :public ShaderData
-{
-public:
-	vec3 color;
-public:
-	template<typename T>
-	void SetColor(T&& _color)
-	{
-		color = _color;
-	}
-};
+//class SimpleShaderData :public ShaderData
+//{
+//public:
+//	vec3 color;
+//public:
+//	SimpleShaderData()
+//	{
+//
+//	}
+//	template<typename T>
+//	void SetColor(T&& _color)
+//	{
+//		color = _color;
+//	}
+//};
 
 class VertexShaderData :public ShaderData
 {
 public:
-
+	VertexShaderData()
+	{
+		type = SHADERDATA_TYPE::VERTEX_SHADERDATA;
+	}
 };
 
 template<typename T>

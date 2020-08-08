@@ -3,7 +3,7 @@
 #include"Program.h"
 #include"ShaderData.h"
 
-enum RENDERERTYPE
+enum class RENDERERTYPE
 {
 	DEFAULT,
 	PBR,
@@ -51,6 +51,14 @@ public:
 		data->material->Transfer(shaderProgram);
 		glDrawArrays(data->drawType, 0, data->drawUnitNumber);
 		glBindVertexArray(0);
+
+		//Renderer::Render(shaderData);
+
+		//auto data = dynamic_pointer_cast<VertexShaderData>(shaderData);
+		//glUseProgram(shaderProgram.p);
+		//glBindVertexArray(data->VAO);
+		//glDrawArrays(data->drawType, 0, data->drawUnitNumber);
+		//glBindVertexArray(0);
 	}
 
 	DefaultRenderer(DefaultRenderer&) = delete;

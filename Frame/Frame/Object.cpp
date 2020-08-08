@@ -4,30 +4,30 @@ void Object::SetRenderer(RENDERERTYPE type)
 {
 	switch (type)
 	{
-	case DEFAULT:
+	case RENDERERTYPE::DEFAULT:
 		renderer = &DefaultRenderer::GetRenderer();
 		shaderData.reset();
 		shaderData = make_shared<DefaultShaderData>();
 		break;
-	case PBR:
+	case RENDERERTYPE::PBR:
 		renderer = &PBRRenderer::GetRenderer();
 		shaderData.reset();
 		shaderData = make_shared<PBRShaderData>();
 		break;
-	case SIMPLE:
+	case RENDERERTYPE::SIMPLE:
 		//renderer = SimpleRenderer::GetRenderer();
 		////delete shaderData;
 		//shaderData.release();
 		//shaderData = unique_ptr<SimpleShaderData>();
 		//break;
-	case VERTEXCOLOR:
+	case RENDERERTYPE::VERTEXCOLOR:
 		renderer = &VertexColorRender::GetRenderer();
 		//delete shaderData;
 		shaderData.reset();
 		shaderData = make_shared<VertexShaderData>();
 		//shaderData = unique_ptr<VertexShaderData>();
 		break;
-	case MPS:
+	case RENDERERTYPE::MPS:
 		break;
 	default:
 		break;
