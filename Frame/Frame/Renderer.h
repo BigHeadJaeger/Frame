@@ -6,7 +6,6 @@
 enum class RENDERERTYPE
 {
 	DEFAULT,
-	PBR,
 	SIMPLE,
 	VERTEXCOLOR,
 	MPS,
@@ -51,14 +50,6 @@ public:
 		data->material->Transfer(shaderProgram);
 		glDrawArrays(data->drawType, 0, data->drawUnitNumber);
 		glBindVertexArray(0);
-
-		//Renderer::Render(shaderData);
-
-		//auto data = dynamic_pointer_cast<VertexShaderData>(shaderData);
-		//glUseProgram(shaderProgram.p);
-		//glBindVertexArray(data->VAO);
-		//glDrawArrays(data->drawType, 0, data->drawUnitNumber);
-		//glBindVertexArray(0);
 	}
 
 	DefaultRenderer(DefaultRenderer&) = delete;
@@ -81,25 +72,6 @@ public:
 //
 //	void Render(unique_ptr<ShaderData> shaderData)override;
 //};
-
-class PBRRenderer :public Renderer
-{
-private:
-	PBRRenderer() 
-	{
-
-	}
-public:
-	static PBRRenderer& GetRenderer()
-	{
-		static PBRRenderer instance;
-		return instance;
-	}
-
-	void Render(shared_ptr<ShaderData> shaderData) override;
-
-	PBRRenderer(PBRRenderer&) = delete;
-};
 
 class VertexColorRender :public Renderer
 {

@@ -15,11 +15,12 @@ void MyScene::Init()
 	}
 	//glewInit();
 	//初始化Renderer中的program
-	PBRRenderer::GetRenderer().InitProgram("SF_PBR.v", "SF_PBR.f");
+	//PBRRenderer::GetRenderer().InitProgram("SF_PBR.v", "SF_PBR.f");
 	//SimpleRenderer::GetRenderer()->InitProgram("SF_SimpleColor.v", "SF_SimpleColor.f");
 	//SimpleRenderer::GetRenderer()->InitProgram("SF_VertexColor.v", "SF_VertexColor.f");
 	VertexColorRender::GetRenderer().InitProgram("SF_VertexColor.v", "SF_VertexColor.f");
-	DefaultRenderer::GetRenderer().InitProgram("SF_Phong.v", "SF_Phong.f");
+	DefaultRenderer::GetRenderer().InitProgram("SF_PBR.v", "SF_PBR.f");
+	//DefaultRenderer::GetRenderer().InitProgram("SF_Phong.v", "SF_Phong.f");
 
 	//pShadowTex.SetShader("shadowTex.v", "shadowTex.f");
 
@@ -61,41 +62,56 @@ void MyScene::Init()
 	//cubeShaderData->InitTexture(METALLIC, "Material\\metalgrid\\metallic.png");
 	//objects.insert(make_pair(cube->GetName(), cube));
 
+	//shared_ptr<MeshObject> grid(new MeshObject());
+	//grid->SetName("Floor");
+	//grid->InitGrid(10, 10, 10, 10);
+	//grid->SetRenderer(RENDERERTYPE::PBR);
+	//grid->InitBufferData();
+	//grid->GetTransform().SetPosition(vec3(0, -0.5, 0));
+	//grid->GetTransform().SetScaler(vec3(1));
+	//auto gridShaderData = dynamic_pointer_cast<PBRShaderData>(grid->GetShaderData());
+	//gridShaderData->SetTextureState(true);
+	//gridShaderData->SetAlbedoState(true);
+	//gridShaderData->InitTexture(ALBEDO, "Material\\oakfloor\\basecolor.png");
+	//gridShaderData->SetNormalState(true);
+	//gridShaderData->InitTexture(NORMAL, "Material\\oakfloor\\normal.png");
+	//gridShaderData->SetAOState(true);
+	//gridShaderData->InitTexture(AO, "Material\\oakfloor\\AO.png");
+	//gridShaderData->SetRoughnessState(true);
+	//gridShaderData->InitTexture(ROUGHNESS, "Material\\oakfloor\\roughness.png");
+	//objects.insert(make_pair(grid->GetName(), grid));
+
 	shared_ptr<MeshObject> grid(new MeshObject());
 	grid->SetName("Floor");
 	grid->InitGrid(10, 10, 10, 10);
-	grid->SetRenderer(RENDERERTYPE::PBR);
+	grid->SetRenderer(RENDERERTYPE::DEFAULT);
 	grid->InitBufferData();
 	grid->GetTransform().SetPosition(vec3(0, -0.5, 0));
 	grid->GetTransform().SetScaler(vec3(1));
-	auto gridShaderData = dynamic_pointer_cast<PBRShaderData>(grid->GetShaderData());
-	gridShaderData->SetTextureState(true);
-	gridShaderData->SetAlbedoState(true);
-	gridShaderData->InitTexture(ALBEDO, "Material\\oakfloor\\basecolor.png");
-	gridShaderData->SetNormalState(true);
-	gridShaderData->InitTexture(NORMAL, "Material\\oakfloor\\normal.png");
-	gridShaderData->SetAOState(true);
-	gridShaderData->InitTexture(AO, "Material\\oakfloor\\AO.png");
-	gridShaderData->SetRoughnessState(true);
-	gridShaderData->InitTexture(ROUGHNESS, "Material\\oakfloor\\roughness.png");
+	auto gridShaderData = dynamic_pointer_cast<DefaultShaderData>(grid->GetShaderData());
+	// 设置材质，默认为phong材质
+	auto testMaterial = make_shared<PBRMaterial>();
+	gridShaderData->SetMaterial(testMaterial);
+	testMaterial->InitTextureBase("Material\\oakfloor\\basecolor.png");
+	testMaterial->InitTextureNormal("Material\\oakfloor\\normal.png");
+	testMaterial->InitTextureAO("Material\\oakfloor\\AO.png");
+	testMaterial->InitTextureRoughness("Material\\oakfloor\\roughness.png");
 	objects.insert(make_pair(grid->GetName(), grid));
 
-
-	shared_ptr<MeshObject> cow2(new MeshObject());
-	cow2->SetName("cow");
-	cow2->readObjFile("OBJ\\cow.obj");
-	cow2->SetRenderer(RENDERERTYPE::DEFAULT);
-	cow2->InitBufferData();
-	cow2->GetTransform().SetPosition(vec3(0, 0, 1));
-	cow2->GetTransform().SetScaler(vec3(2.0));
-	auto cow2ShaderData = dynamic_pointer_cast<DefaultShaderData>(cow2->GetShaderData());
-	
-	auto cow2Material = dynamic_pointer_cast<PhongMaterial>(cow2ShaderData->material);
-	cow2Material->ambient = vec3(255.f, 125.f, 80.f);
-	cow2Material->diffuse = vec3(255.f, 125.f, 80.f);
-	cow2Material->specular = vec3(125.f, 125.f, 125.f);
-	//cow2Material->isVertexLight = true;
-	objects.insert(make_pair(cow2->GetName(), cow2));
+	//shared_ptr<MeshObject> cow2(new MeshObject());
+	//cow2->SetName("cow");
+	//cow2->readObjFile("OBJ\\cow.obj");
+	//cow2->SetRenderer(RENDERERTYPE::DEFAULT);
+	//cow2->InitBufferData();
+	//cow2->GetTransform().SetPosition(vec3(0, 0, 1));
+	//cow2->GetTransform().SetScaler(vec3(2.0));
+	//auto cow2ShaderData = dynamic_pointer_cast<DefaultShaderData>(cow2->GetShaderData());
+	//
+	//auto cow2Material = dynamic_pointer_cast<PhongMaterial>(cow2ShaderData->material);
+	//cow2Material->ambient = vec3(255.f, 125.f, 80.f);
+	//cow2Material->diffuse = vec3(255.f, 125.f, 80.f);
+	//cow2Material->specular = vec3(125.f, 125.f, 125.f);
+	//objects.insert(make_pair(cow2->GetName(), cow2));
 
 }
 

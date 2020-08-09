@@ -9,11 +9,6 @@ void Object::SetRenderer(RENDERERTYPE type)
 		shaderData.reset();
 		shaderData = make_shared<DefaultShaderData>();
 		break;
-	case RENDERERTYPE::PBR:
-		renderer = &PBRRenderer::GetRenderer();
-		shaderData.reset();
-		shaderData = make_shared<PBRShaderData>();
-		break;
 	case RENDERERTYPE::SIMPLE:
 		//renderer = SimpleRenderer::GetRenderer();
 		////delete shaderData;
