@@ -15,6 +15,7 @@ class MyScene
 private:
 	//各种场景信息（相机、材质、灯光、各种物体的各种矩阵）
 	//map<string, Object*> objects;
+	map<string, map<string, shared_ptr<Object>>> objectManager;
 	map<string, shared_ptr<Object>> objects;
 	//MeshObject cow;
 	//灯光

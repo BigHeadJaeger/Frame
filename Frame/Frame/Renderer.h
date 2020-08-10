@@ -3,10 +3,9 @@
 #include"Program.h"
 #include"ShaderData.h"
 
-enum RENDERERTYPE
+enum class RENDERERTYPE
 {
 	DEFAULT,
-	PBR,
 	SIMPLE,
 	VERTEXCOLOR,
 	MPS,
@@ -73,25 +72,6 @@ public:
 //
 //	void Render(unique_ptr<ShaderData> shaderData)override;
 //};
-
-class PBRRenderer :public Renderer
-{
-private:
-	PBRRenderer() 
-	{
-
-	}
-public:
-	static PBRRenderer& GetRenderer()
-	{
-		static PBRRenderer instance;
-		return instance;
-	}
-
-	void Render(shared_ptr<ShaderData> shaderData) override;
-
-	PBRRenderer(PBRRenderer&) = delete;
-};
 
 class VertexColorRender :public Renderer
 {

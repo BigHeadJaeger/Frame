@@ -22,24 +22,22 @@ uniform bool useShadowTex;
 //物体PBR材质
 //当前属性的值是否用纹理来决定
 uniform sampler2D albedoMap;
-uniform bool useAlbedo;
-uniform vec3 albedoN;
+uniform bool isTextureBase;
+uniform vec3 baseColor;
 
 uniform sampler2D normalMap;
-uniform bool useNormal;
-uniform vec3 normalN;
+uniform bool isTextureNormal;
 
 uniform sampler2D metallicMap;
-uniform bool useMetallic;
-uniform float metallicN;
+uniform bool isTextureMetallic;
+uniform float numMetallic;
 
 uniform sampler2D roughnessMap;
-uniform bool useRoughness;
-uniform float roughnessN;
+uniform bool isTextureRoughness;
+uniform float numRoughness;
 
 uniform sampler2D aoMap;
-uniform bool useAO;
-uniform float aoN;
+uniform bool isTextureAO;
 
 //光照信息(此处使用的是点光源)
 uniform Light light;
@@ -113,96 +111,97 @@ vec3 GetNormalFromMap()
 
 void main() 
 {
+	vec3 color = vec3(1,1,1);
+	vec3 lightColor = light.color * vec3(255);
+	
+	vec3 albedo;
+	vec3 N;
+	float roughness;
+	float ao;
+	float metallic;
 
-	vec3 color=vec3(1.0,0.0,0.0);
-	if(useTexture)
-	{
-		vec3 albedo;
-		float roughness;
-		float ao;
-		float metallic;
+	//从各种贴图中获取数据
+	if(isTextureBase)
+		albedo = pow(texture(albedoMap, TexCoord).rgb, vec3(2.2));			//反射率纹理一般创建在rgb空间，所以需要转换到线性空间
+	else
+		albedo = baseColor;
 
-		//从各种贴图中获取数据
-		if(useAlbedo)
-			albedo=pow(texture(albedoMap,TexCoord).rgb,vec3(2.2));			//反射率纹理一般创建在rgb空间，所以需要转换到线性空间
-		 
-		if(useMetallic)
-			metallic=texture(metallicMap,TexCoord).r;
-		else
-			metallic=metallicN;
+	if(isTextureMetallic)
+		metallic = texture(metallicMap, TexCoord).r;
+	else
+		metallic = numMetallic;
 
 
-		if(useRoughness)
-			roughness=texture(roughnessMap,TexCoord).r;
-		else
-			roughness=roughnessN;
+	if(isTextureRoughness)
+		roughness = texture(roughnessMap, TexCoord).r;
+	else
+		roughness = numRoughness;
 
-		if(useAO)
-			ao=texture(aoMap,TexCoord).r;
-		else
-			ao=aoN;
+	if(isTextureAO)
+		ao = texture(aoMap, TexCoord).r;
+	else
+		ao = 1.0;
+	
+	//采用法线贴图
+	if(isTextureNormal)
+		N = GetNormalFromMap();
+	else
+		N = vec3(0.0, 1.0, 0.0);
 
-		
-
-		vec3 N;
-		//采用法线贴图
-		if(useNormal)
-			N = GetNormalFromMap();
-
-		vec3 V = normalize(eyePos - posW);
+	vec3 V = normalize(eyePos - posW);
 	 
-		vec3 F0=vec3(0.04);
-		F0=mix(F0,albedo,metallic);
+	vec3 F0 = vec3(0.04);
+	F0 = mix(F0, albedo, metallic);
 
-		vec3 reflectResult=vec3(0.0);
-
-
-		//计算辐射度(根据入射方向以及夹角求)
-		vec3 lightDir=normalize(light.position-posW);				//计算光照向量
-		vec3 H=normalize(V+lightDir);									//计算中间向量
+	vec3 reflectResult = vec3(0.0);
 
 
-		float distance=length(light.position-posW);
-		float attenuation=1.0/(distance*distance);			//计算衰减
-		vec3 radiance=light.color*attenuation;
-
-		//计算BDRF中的镜面反射
-		float D=DistributionGGX(H,N,roughness);
-		float G=GeometrySmith(N,lightDir,V,roughness);
-		vec3 F=Fresnel(clamp(dot(H,V),0.0,1.0),F0);
-
-		vec3 nom=D*G*F;
-		float denom=4 * max(dot(N, V), 0.0) * max(dot(N, lightDir), 0.0);	//0.001防止除0
-		vec3 specular=nom/max(denom,0.001);
-
-		//计算BDRF中的漫反射
-		vec3 KS=F;					//菲涅尔中已经求出了反射光线的占比
-		vec3 KD=vec3(1.0)-KS;
-		KD*=1.0-metallic;			//因为金属没有漫反射，所以根据金属度重新决定漫反射
+	//计算辐射度(根据入射方向以及夹角求)
+	vec3 lightDir = normalize(light.position - posW);				//计算光照向量
+	vec3 H = normalize(V + lightDir);									//计算中间向量
 
 
-		float NdotL=max(dot(N,lightDir),0.0);
-		reflectResult+=(KD*albedo/PI+specular)*radiance*NdotL;
+	float distance = length(light.position - posW);
+	float attenuation=1.0/(distance*distance);			//计算衰减
+	//float attenuation=1.0;
+	vec3 radiance=lightColor*attenuation;
 
-		vec3 ambient=vec3(0.03)*albedo*ao;
-		color=ambient+reflectResult;
+	//计算BDRF中的镜面反射
+	float D=DistributionGGX(H,N,roughness);
+	float G=GeometrySmith(N,lightDir,V,roughness);
+	vec3 F=Fresnel(clamp(dot(H,V),0.0,1.0),F0);
 
-		//伽马校正
-		color = color / (color + vec3(1.0));
-		color = pow(color, vec3(1.0/2.2));
+	vec3 nom=D*G*F;
+	float denom=4 * max(dot(N, V), 0.0) * max(dot(N, lightDir), 0.0);	//0.001防止除0
+	vec3 specular=nom/max(denom,0.001);
+
+	//计算BDRF中的漫反射
+	vec3 KS=F;					//菲涅尔中已经求出了反射光线的占比
+	vec3 KD=vec3(1.0)-KS;
+	KD*=1.0-metallic;			//因为金属没有漫反射，所以根据金属度重新决定漫反射
 
 
-		//如果当前点的深度大于此点在阴影贴图中的深度，说明这个点在阴影中
-		float bias=0.000;
-		float visibility=1.0;
-		/*if(useShadowTex)
-		{
-			//if(texture(shadowTex,shadowCoord.xy).z+bias<shadowCoord.z)
-			if(texture(shadowTex,vec3(shadowCoord.xy,shadowCoord.z-bias))!=1)
-			visibility=0.5;	
-		}*/
-		color*=visibility;
-	}
+	float NdotL=max(dot(N,lightDir),0.0);
+	reflectResult+=(KD*albedo/PI+specular)*radiance*NdotL;
+
+	vec3 ambient=vec3(0.03)*albedo*ao;
+	color=ambient+reflectResult;
+
+	//伽马校正
+	color = color / (color + vec3(1.0));
+	color = pow(color, vec3(1.0/2.2));
+
+
+	//如果当前点的深度大于此点在阴影贴图中的深度，说明这个点在阴影中
+	float bias=0.000;
+	float visibility=1.0;
+	/*if(useShadowTex)
+	{
+		//if(texture(shadowTex,shadowCoord.xy).z+bias<shadowCoord.z)
+		if(texture(shadowTex,vec3(shadowCoord.xy,shadowCoord.z-bias))!=1)
+		visibility=0.5;	
+	}*/
+	color*=visibility;
 
 
 

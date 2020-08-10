@@ -18,7 +18,7 @@ struct Light
 {
 	vec3 position;
 	vec3 color;
-}
+};
 
 uniform bool isVertexLight;
 uniform vec3 eyePos;
@@ -26,7 +26,7 @@ uniform Material material;
 uniform Light light;
 
 // 计算需要的都是世界坐标下的量
-vec3 PhongLight(posW, normalW)
+vec3 PhongLight(vec3 posW, vec3 normalW)
 {
 	// 环境光
 	vec3 ambient = light.color * material.ambient;
@@ -34,12 +34,12 @@ vec3 PhongLight(posW, normalW)
 	// 漫反射
 	vec3 normal = normalize(normalW);
 	vec3 lightDir = normalize(light.position - posW);
-	float diffcoeff = max(dot(norm, lightDir), 0.0);
+	float diffcoeff = max(dot(normal, lightDir), 0.0);
 	vec3 diffuse = light.color * (diffcoeff * material.diffuse);
 
 	// 镜面反射
 	vec3 viewDir = normalize(eyePos - posW);
-	vec3 reflectDir = reflect(-lightDir, norm);  
+	vec3 reflectDir = reflect(-lightDir, normal);  
     float spec = pow(max(dot(viewDir, reflectDir), 0.0), material.shininess);
     vec3 specular = light.color * (spec * material.specular); 
 
@@ -50,9 +50,9 @@ vec3 PhongLight(posW, normalW)
 
 void main()
 {
-FragColor = vertexColor;
-	/*if(isVertexLight)
+	//FragColor = vec4(1,0,0,1);
+	if(isVertexLight)
 		FragColor = vertexColor;
 	else
-		FragColor = vec4(PhongLight(posW, normalW), 1.0);*/
+		FragColor = vec4(PhongLight(posW, normalW), 1.0);
 }	
