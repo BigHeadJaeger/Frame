@@ -3,16 +3,19 @@
 #include<memory>
 #include<OpenMesh/Core/IO/MeshIO.hh>
 #include<OpenMesh/Core/Mesh/TriMesh_ArrayKernelT.hh>
+#include<map>
 using namespace std;
 #include"Renderer.h"
 //#include"MarchingCube.h"
 #include"DistributeFun.h"
+#include"Component.h"
 
 // 按类型将每个object分开 Camera
 //enum class OBJECTKIND
 //{
 //	OBJ_
 //};
+
 
 
 //基类Object
@@ -23,31 +26,62 @@ protected:
 	Transform transformation;						//和空间位置有关的transform组件
 	shared_ptr<ShaderData> shaderData;							//每一个物体的渲染数据，此处为抽象基类，使用不同渲染器时初始化为相应子类
 	Renderer* renderer;								//只是一个指针，不同的渲染器都是单例,不同的物体初始化时只需要将此指针赋值就行
+	// 组件数组可通过名称查询
+	map<string, shared_ptr<Component>> components;
 protected:
 	//void UpdateMatrix() { shaderData->UpdateMatrix(transformation); }
 public:
 	Object()
 	{
-		//shaderData = NULL;
 		renderer = NULL;
+		// 每个物体默认有坐标组件
+		components.insert(make_pair("Transform", make_shared<Transform>()));
 	}
 
 	~Object()
 	{
 		//delete shaderData;
 	}
+
+	virtual void InitBufferData() = 0;
+	virtual void Update(float dt) = 0;
+	virtual void Draw() = 0;
+
+	shared_ptr<Transform> GetTransform() { return dynamic_pointer_cast<Transform>(components["Transform"]); }
+
+
+
+
+	void AddComponent(COMPONENTTYPE type)
+	{
+		switch (type)
+		{
+		case COMPONENTTYPE::COMPONENT_CAMERA:
+			break;
+		case COMPONENTTYPE::COMPONENT_LIGHT:
+			break;
+		case COMPONENTTYPE::COMPONENT_RENDERER:
+			break;
+		case COMPONENTTYPE::COMPONENT_TRANSFORM:
+			break;
+		default:
+			break;
+		}
+	}
+
+
+
+
+
 	//Get
 	string GetName() { return name; }
-	Transform& GetTransform() { return transformation; }
+	//Transform& GetTransform() { return transformation; }
 	auto GetShaderData() { return shaderData; }
 	//Set
 	void SetName(string _name) { name = _name; }
 	void SetRenderer(RENDERERTYPE type);			//设置渲染器并生成对应的shaderData
 
-	virtual void InitBufferData() = 0;
-	//virtual void UpdateBufferData() = 0;
-	virtual void Update(float dt) = 0;
-	virtual void Draw() = 0;
+
 };
 
 

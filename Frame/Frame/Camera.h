@@ -2,9 +2,10 @@
 #include<glm.hpp>
 #include<gtc\matrix_transform.hpp>
 #include"Const.h"
+#include"Component.h"
 //#include<initializer_list>
 using namespace glm;
-class Camera
+class Camera : public Component
 {
 public:
 	float fov;
@@ -22,12 +23,9 @@ public:
 	Camera();
 	template<typename V>
 	void Init(V&& pos, V&& point);
-	//void Init(vec3& pos, vec3& point);
-	//void Init(vec3&& pos, vec3&& point);
 	void SetView();
 	void SetPro();																				//设置透视投影矩阵
 	void SetOrtho(float left, float right, float bottom, float up, float near, float far);	//设置正交投影矩阵
-public:
 	template<typename D>
 	void Walk(D&& dis);
 	template<typename D>
@@ -36,6 +34,14 @@ public:
 	void LRRotate(D&& dis);
 	template<typename D>
 	void UDRotate(D&& dis);
+public:
+	void Update() override
+	{
+		// 计算视角矩阵
+		MainCamera::GetInstance().SetView();
+		// 计算投影矩阵
+		MainCamera::GetInstance().SetPro();
+	}
 };
 
 //Camera* Camera::MainCamera = NULL;

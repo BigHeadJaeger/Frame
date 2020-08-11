@@ -11,6 +11,7 @@ Camera::Camera()
 	pro = mat4(0);
 	cameraSpeed = 2;
 	fov = 45.f;
+	type = COMPONENTTYPE::COMPONENT_CAMERA;
 }
 
 void Camera::SetView()

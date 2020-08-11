@@ -113,6 +113,9 @@
     <ClInclude Include="ShaderDataTool.h">
       <Filter>头文件</Filter>
     </ClInclude>
+    <ClInclude Include="Component.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="SF_VertexColor.v">
