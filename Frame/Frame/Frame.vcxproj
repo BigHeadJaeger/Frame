@@ -160,6 +160,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Camera.h" />
+    <ClInclude Include="Component.h" />
     <ClInclude Include="Const.h" />
     <ClInclude Include="DataModel.h" />
     <ClInclude Include="DistributeFun.h" />
