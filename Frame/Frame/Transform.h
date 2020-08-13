@@ -4,6 +4,7 @@
 #include<vector>
 using namespace glm;
 #include"Component.h"
+#include"ShaderDataTool.h"
 
 class Transform : public Component
 {
@@ -17,7 +18,6 @@ public:
 	mat4x4 world;					//世界矩阵
 	mat4x4 worldViewProj;			//最终坐标转换矩阵
 	mat4x4 worldInvTranspose;		//用来将法向量转换到世界空间
-
 private:
 
 
@@ -25,7 +25,7 @@ public:
 	//构造函数
 	Transform(vec3 _pos = vec3(0), vec3 _scaler = vec3(1.0), vec3 _rotation = vec3(0)) :position(_pos), scaler(_scaler), rotation(_rotation)
 	{
-		type = COMPONENTTYPE::COMPONENT_TRANSFORM;
+		type = COMPONENT_TRANSFORM;
 	}
 
 	void MoveByDir(vec3 dir, float distant);
@@ -50,6 +50,15 @@ public:
 			world = rotate(world, rotation.z, vec3(0.0, 0.0, 1.0));
 		worldInvTranspose = transpose(inverse(world));
 		worldViewProj = MainCamera::GetInstance().pro * MainCamera::GetInstance().view * world;
+	}
+
+	// 将数据传到
+	void TransferData(ShaderProgram& shaderProgram) override
+	{
+		auto tool = ShaderDataTool::GetInstance();
+		tool.SetUniform("worldViewProj", worldViewProj, shaderProgram);
+		tool.SetUniform("world", world, shaderProgram);
+		tool.SetUniform("worldInvTranspose", worldInvTranspose, shaderProgram);
 	}
 
 	void Update() override
