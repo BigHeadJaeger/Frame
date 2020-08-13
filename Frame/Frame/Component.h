@@ -1,23 +1,31 @@
 #pragma once
 #include<glm.hpp>
+#include<string>
 using namespace glm;
 
-
-enum class COMPONENTTYPE
-{
-	COMPONENT_CAMERA,
-	COMPONENT_LIGHT,
-	COMPONENT_RENDERER,
-	COMPONENT_TRANSFORM
-};
+//
+//enum class COMPONENTTYPE
+//{
+//	COMPONENT_CAMERA,
+//	COMPONENT_LIGHT,
+//	COMPONENT_RENDERER,
+//	COMPONENT_TRANSFORM
+//};
+const string COMPONENT_CAMERA = "Camera";
+const string COMPONENT_TRANSFORM = "Transform";
+const string COMPONENT_MESH = "Mesh";
+const string COMPONENT_MESHRENDER = "MeshRenderer";
 
 class Component
 {
 public:
-	COMPONENTTYPE type;
+	//COMPONENTTYPE type;
+	string type;
 public:
 	// 每个组件在每一帧中需要进行的更新
 	virtual void Update() = 0;
+
+	virtual void TransferData(ShaderProgram& shaderProgram) = 0;
 };
 
 class Light :public Component

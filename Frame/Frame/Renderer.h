@@ -2,6 +2,7 @@
 #include"ShaderDataTool.h"
 #include"Program.h"
 #include"ShaderData.h"
+#include"Component.h"
 
 enum class RENDERERTYPE
 {
@@ -11,7 +12,7 @@ enum class RENDERERTYPE
 	MPS,
 };
 
-class Renderer
+class Renderer : public Component
 {
 protected:
 	ShaderProgram shaderProgram;
@@ -40,6 +41,8 @@ public:
 		static DefaultRenderer instance;
 		return instance;
 	}
+
+
 
 	void Render(shared_ptr<ShaderData> shaderData) override
 	{
@@ -73,21 +76,21 @@ public:
 //	void Render(unique_ptr<ShaderData> shaderData)override;
 //};
 
-class VertexColorRender :public Renderer
-{
-private:
-	VertexColorRender() {}
-public:
-	static VertexColorRender& GetRenderer()
-	{
-		static VertexColorRender instance;
-		return instance;
-	}
-
-	VertexColorRender(VertexColorRender&) = delete;
-
-	void Render(shared_ptr<ShaderData> shaderData) override;
-};
+//class VertexColorRender :public Renderer
+//{
+//private:
+//	VertexColorRender() {}
+//public:
+//	static VertexColorRender& GetRenderer()
+//	{
+//		static VertexColorRender instance;
+//		return instance;
+//	}
+//
+//	VertexColorRender(VertexColorRender&) = delete;
+//
+//	void Render(shared_ptr<ShaderData> shaderData) override;
+//};
 
 //class MPSRenderer:public Renderer
 //{

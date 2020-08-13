@@ -17,8 +17,7 @@ using namespace std;
 //};
 
 
-
-//基类Object
+//基类Object（目前只包含用于渲染的物体，类似gameobject）
 class Object
 {
 protected:
@@ -47,31 +46,28 @@ public:
 	virtual void Update(float dt) = 0;
 	virtual void Draw() = 0;
 
-	shared_ptr<Transform> GetTransform() { return dynamic_pointer_cast<Transform>(components["Transform"]); }
 
-
-
-
-	void AddComponent(COMPONENTTYPE type)
+	template<typename S>
+	void AddComponent(S&& type)
 	{
-		switch (type)
-		{
-		case COMPONENTTYPE::COMPONENT_CAMERA:
-			break;
-		case COMPONENTTYPE::COMPONENT_LIGHT:
-			break;
-		case COMPONENTTYPE::COMPONENT_RENDERER:
-			break;
-		case COMPONENTTYPE::COMPONENT_TRANSFORM:
-			break;
-		default:
-			break;
-		}
+		if (type == COMPONENT_CAMERA)
+			components.insert(make_pair(type, make_shared<Camera>()));
+		else if (type == COMPONENT_TRANSFORM)
+			components.insert(make_pair(type, make_shared<Transform>()));
 	}
 
+	shared_ptr<Transform> GetTransform() { return dynamic_pointer_cast<Transform>(components[COMPONENT_TRANSFORM]); }
 
-
-
+	template<typename S>
+	shared_ptr<Component> GetComponentByName(S&& name)
+	{
+		auto it = components.find(name);
+		if (it != components.end())
+			return it->second;
+		else
+			cout << "The specified component could not be found" << endl;
+		return nullptr;
+	}
 
 	//Get
 	string GetName() { return name; }
@@ -80,8 +76,6 @@ public:
 	//Set
 	void SetName(string _name) { name = _name; }
 	void SetRenderer(RENDERERTYPE type);			//设置渲染器并生成对应的shaderData
-
-
 };
 
 

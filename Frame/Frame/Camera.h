@@ -3,6 +3,7 @@
 #include<gtc\matrix_transform.hpp>
 #include"Const.h"
 #include"Component.h"
+#include"ShaderDataTool.h"
 //#include<initializer_list>
 using namespace glm;
 class Camera : public Component
@@ -41,6 +42,12 @@ public:
 		MainCamera::GetInstance().SetView();
 		// º∆À„Õ∂”∞æÿ’Û
 		MainCamera::GetInstance().SetPro();
+	}
+
+	void TransferData(ShaderProgram& shaderProgram) override
+	{
+		auto tool = ShaderDataTool::GetInstance();
+		tool.SetUniform("eyePos", MainCamera::GetInstance().eyePos, shaderProgram);
 	}
 };
 
