@@ -34,7 +34,8 @@ public:
 	{
 		renderer = NULL;
 		// 每个物体默认有坐标组件
-		components.insert(make_pair("Transform", make_shared<Transform>()));
+		AddComponent(COMPONENT_TRANSFORM);
+		//components.insert(make_pair("Transform", make_shared<Transform>()));
 	}
 
 	~Object()
@@ -44,14 +45,20 @@ public:
 
 	virtual void InitBufferData() = 0;
 	virtual void Update(float dt) = 0;
-	virtual void Draw() = 0;
+	void Draw()
+	{
+		if (isComponent(COMPONENT_MESHRENDER))
+		{
+			//components[COMPONENT_MESHRENDER]->TransferData();
+		}
+	}
 
 
 	template<typename S>
 	void AddComponent(S&& type)
 	{
 		if (type == COMPONENT_CAMERA)
-			components.insert(make_pair(type, make_shared<Camera>()));
+			components.insert(make_pair(type, make_shared<Camera>(this)));
 		else if (type == COMPONENT_TRANSFORM)
 			components.insert(make_pair(type, make_shared<Transform>()));
 	}
@@ -67,6 +74,16 @@ public:
 		else
 			cout << "The specified component could not be found" << endl;
 		return nullptr;
+	}
+
+	template<typename S>
+	bool isComponent(S&& name)
+	{
+		auto it = components.find(name);
+		if (it != components.end())
+			return true;
+		else
+			return false;
 	}
 
 	//Get
