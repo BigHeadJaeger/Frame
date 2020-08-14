@@ -45,9 +45,6 @@
     <ClCompile Include="Interaction.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
-    <ClCompile Include="MeshObject.cpp">
-      <Filter>源文件</Filter>
-    </ClCompile>
     <ClCompile Include="glad.c">
       <Filter>源文件</Filter>
     </ClCompile>
@@ -55,6 +52,12 @@
       <Filter>源文件</Filter>
     </ClCompile>
     <ClCompile Include="Material.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="Mesh.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="MeshReference.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
   </ItemGroup>
@@ -92,9 +95,6 @@
     <ClInclude Include="Interaction.h">
       <Filter>头文件</Filter>
     </ClInclude>
-    <ClInclude Include="MeshObject.h">
-      <Filter>头文件</Filter>
-    </ClInclude>
     <ClInclude Include="VertexData.h">
       <Filter>头文件</Filter>
     </ClInclude>
@@ -114,6 +114,12 @@
       <Filter>头文件</Filter>
     </ClInclude>
     <ClInclude Include="Component.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="Mesh.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="MeshReference.h">
       <Filter>头文件</Filter>
     </ClInclude>
   </ItemGroup>
