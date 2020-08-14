@@ -36,36 +36,36 @@ public:
 	template<typename D>
 	void UDRotate(D&& dis);
 public:
-	void Update() override
-	{
-		// 计算视角矩阵
-		MainCamera::GetInstance().SetView();
-		// 计算投影矩阵
-		MainCamera::GetInstance().SetPro();
-	}
+	//void Update() override
+	//{
+	//	// 计算视角矩阵
+	//	MainCamera::GetInstance().SetView();
+	//	// 计算投影矩阵
+	//	MainCamera::GetInstance().SetPro();
+	//}
 
-	void TransferData(ShaderProgram& shaderProgram) override
-	{
-		auto tool = ShaderDataTool::GetInstance();
-		tool.SetUniform("eyePos", MainCamera::GetInstance().eyePos, shaderProgram);
-	}
+	//void TransferData(ShaderProgram& shaderProgram) override
+	//{
+	//	auto tool = ShaderDataTool::GetInstance();
+	//	tool.SetUniform("eyePos", MainCamera::GetInstance().eyePos, shaderProgram);
+	//}
 };
 
 //Camera* Camera::MainCamera = NULL;
 
-class MainCamera :public Camera
-{
-private:
-	MainCamera(){}
-public:
-	static MainCamera& GetInstance()
-	{
-		static MainCamera instacne;
-		return instacne;
-	}
-
-	MainCamera(MainCamera&) = delete;
-};
+//class MainCamera :public Camera
+//{
+//private:
+//	MainCamera(){}
+//public:
+//	static MainCamera& GetInstance()
+//	{
+//		static MainCamera instacne;
+//		return instacne;
+//	}
+//
+//	MainCamera(MainCamera&) = delete;
+//};
 
 template<typename V>
 inline void Camera::Init(V&& pos, V&& point)

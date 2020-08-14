@@ -63,4 +63,14 @@ public:
 		texcoord.reserve(numOfVertex);
 		color.reserve(numOfVertex);
 	}
+
+	void Clear()
+	{
+		totalVertex = 0;
+		position.clear();
+		normal.clear();
+		texcoord.clear();
+		color.clear();
+		propertyState.clear();
+	}
 };
