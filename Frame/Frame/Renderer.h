@@ -20,6 +20,14 @@ public:
 	template<typename T>
 	void InitProgram(T&& vt, T&& ft);
 
+	void SetTransform(shared_ptr<Transform> transform)
+	{
+		auto tool = ShaderDataTool::GetInstance();
+		tool.SetUniform("worldViewProj", transform->worldViewProj, shaderProgram);
+		tool.SetUniform("world", transform->world, shaderProgram);
+		tool.SetUniform("worldInvTranspose", transform->worldInvTranspose, shaderProgram);
+	}
+
 	virtual void Render(shared_ptr<ShaderData> data);
 
 	//´«textureµ½shaderÖÐ
@@ -34,15 +42,12 @@ public:
 class DefaultRenderer :public Renderer
 {
 private:
-	DefaultRenderer() { }
+	
 public:
-	static DefaultRenderer& GetRenderer()
+	DefaultRenderer()
 	{
-		static DefaultRenderer instance;
-		return instance;
+
 	}
-
-
 
 	void Render(shared_ptr<ShaderData> shaderData) override
 	{
