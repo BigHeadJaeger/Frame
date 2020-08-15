@@ -4,6 +4,7 @@
 #include<gtc\matrix_transform.hpp>
 #include<gtc\type_ptr.hpp>
 #include<SOIL.h>
+#include<string>
 using namespace glm;
 using namespace std;
 

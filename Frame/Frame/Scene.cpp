@@ -1,7 +1,9 @@
 #pragma once
 #include "Scene.h"
-#include"MeshObject.h"
+//#include"MeshObject.h"
+//#include"Object.h"
 #include<GLFW\glfw3.h>
+#include<iostream>
 
 void MyScene::Init()
 {
@@ -18,15 +20,15 @@ void MyScene::Init()
 	//PBRRenderer::GetRenderer().InitProgram("SF_PBR.v", "SF_PBR.f");
 	//SimpleRenderer::GetRenderer()->InitProgram("SF_SimpleColor.v", "SF_SimpleColor.f");
 	//SimpleRenderer::GetRenderer()->InitProgram("SF_VertexColor.v", "SF_VertexColor.f");
-	VertexColorRender::GetRenderer().InitProgram("SF_VertexColor.v", "SF_VertexColor.f");
-	DefaultRenderer::GetRenderer().InitProgram("SF_PBR.v", "SF_PBR.f");
+	//VertexColorRender::GetRenderer().InitProgram("SF_VertexColor.v", "SF_VertexColor.f");
+	//DefaultRenderer::GetRenderer().InitProgram("SF_PBR.v", "SF_PBR.f");
 	//DefaultRenderer::GetRenderer().InitProgram("SF_Phong.v", "SF_Phong.f");
 
 	//pShadowTex.SetShader("shadowTex.v", "shadowTex.f");
 
 	//初始化主相机
 	//mainCamera = new Camera();
-	MainCamera::GetInstance().Init(vec3(0, 2, 3), vec3(0, 0, 0));
+	//MainCamera::GetInstance().Init(vec3(0, 2, 3), vec3(0, 0, 0));
 
 	//SetDrawMode(drawMode.isLine, false);
 	drawMode.isLine = false;
@@ -81,22 +83,22 @@ void MyScene::Init()
 	//gridShaderData->InitTexture(ROUGHNESS, "Material\\oakfloor\\roughness.png");
 	//objects.insert(make_pair(grid->GetName(), grid));
 
-	shared_ptr<MeshObject> grid(new MeshObject());
-	grid->SetName("Floor");
-	grid->InitGrid(10, 10, 10, 10);
-	grid->SetRenderer(RENDERERTYPE::DEFAULT);
-	grid->InitBufferData();
-	grid->GetTransform().SetPosition(vec3(0, -0.5, 0));
-	grid->GetTransform().SetScaler(vec3(1));
-	auto gridShaderData = dynamic_pointer_cast<DefaultShaderData>(grid->GetShaderData());
-	// 设置材质，默认为phong材质
-	auto testMaterial = make_shared<PBRMaterial>();
-	gridShaderData->SetMaterial(testMaterial);
-	testMaterial->InitTextureBase("Material\\oakfloor\\basecolor.png");
-	testMaterial->InitTextureNormal("Material\\oakfloor\\normal.png");
-	testMaterial->InitTextureAO("Material\\oakfloor\\AO.png");
-	testMaterial->InitTextureRoughness("Material\\oakfloor\\roughness.png");
-	objects.insert(make_pair(grid->GetName(), grid));
+	//shared_ptr<MeshObject> grid(new MeshObject());
+	//grid->SetName("Floor");
+	//grid->InitGrid(10, 10, 10, 10);
+	//grid->SetRenderer(RENDERERTYPE::DEFAULT);
+	//grid->InitBufferData();
+	//grid->GetTransform().SetPosition(vec3(0, -0.5, 0));
+	//grid->GetTransform().SetScaler(vec3(1));
+	//auto gridShaderData = dynamic_pointer_cast<DefaultShaderData>(grid->GetShaderData());
+	//// 设置材质，默认为phong材质
+	//auto testMaterial = make_shared<PBRMaterial>();
+	//gridShaderData->SetMaterial(testMaterial);
+	//testMaterial->InitTextureBase("Material\\oakfloor\\basecolor.png");
+	//testMaterial->InitTextureNormal("Material\\oakfloor\\normal.png");
+	//testMaterial->InitTextureAO("Material\\oakfloor\\AO.png");
+	//testMaterial->InitTextureRoughness("Material\\oakfloor\\roughness.png");
+	//objects.insert(make_pair(grid->GetName(), grid));
 
 	//shared_ptr<MeshObject> cow2(new MeshObject());
 	//cow2->SetName("cow");
@@ -130,14 +132,14 @@ void MyScene::Update(float& dt)
 {
 
 	// 计算视角矩阵
-	MainCamera::GetInstance().SetView();
-	// 计算投影矩阵
-	MainCamera::GetInstance().SetPro();
+	//MainCamera::GetInstance().SetView();
+	//// 计算投影矩阵
+	//MainCamera::GetInstance().SetPro();
 
 	// 遍历所有object更新矩阵
 	for (auto objs_it = objects.begin(); objs_it != objects.end(); objs_it++)
 	{
-		(*objs_it).second->Update(dt);
+		//(*objs_it).second->Update(dt);
 	}
 
 	// 按键事件带来的变换会在下一帧起效
@@ -180,7 +182,7 @@ void MyScene::Draw()
 
 	for (auto objs_it = objects.begin(); objs_it != objects.end(); objs_it++)
 	{
-		(*objs_it).second->Draw();
+		//(*objs_it).second->Draw();
 	}
 
 }

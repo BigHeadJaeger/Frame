@@ -5,6 +5,7 @@
 using namespace glm;
 #include"Component.h"
 #include"ShaderDataTool.h"
+#include"RenderFrameModel.h"
 
 class Transform : public Component
 {
@@ -22,6 +23,7 @@ private:
 
 
 public:
+
 	//构造函数
 	Transform(vec3 _pos = vec3(0), vec3 _scaler = vec3(1.0), vec3 _rotation = vec3(0)) :position(_pos), scaler(_scaler), rotation(_rotation)
 	{
@@ -49,19 +51,11 @@ public:
 		if (rotation.z != 0)
 			world = rotate(world, rotation.z, vec3(0.0, 0.0, 1.0));
 		worldInvTranspose = transpose(inverse(world));
-		worldViewProj = MainCamera::GetInstance().pro * MainCamera::GetInstance().view * world;
+		//auto mainCamera = RenderFrameModel::GetInstance().GetMainCamera();
+		//worldViewProj = mainCamera->pro * mainCamera->view * world;
 	}
 
-	// 将数据传到
-	void TransferData(ShaderProgram& shaderProgram) override
-	{
-		auto tool = ShaderDataTool::GetInstance();
-		tool.SetUniform("worldViewProj", worldViewProj, shaderProgram);
-		tool.SetUniform("world", world, shaderProgram);
-		tool.SetUniform("worldInvTranspose", worldInvTranspose, shaderProgram);
-	}
-
-	void Update() override
+	void Update(float dt) override
 	{
 		UpdateMatrix();
 	}

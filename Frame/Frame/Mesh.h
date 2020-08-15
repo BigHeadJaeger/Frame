@@ -1,8 +1,9 @@
 #pragma once
+#include<string>
 #include<glm.hpp>
 #include<OpenMesh/Core/IO/MeshIO.hh>
 #include<OpenMesh/Core/Mesh/TriMesh_ArrayKernelT.hh>
-
+using namespace std;
 using namespace glm;
 
 typedef OpenMesh::TriMesh_ArrayKernelT<> MeshStruct;
@@ -31,63 +32,63 @@ inline void Mesh::InitBox(T&& width, T&& height, T&& depth)
 	float halfD = depth * 0.5f;
 
 	//初始化4*6=24个顶点
-	Mesh::VertexHandle vHandles[24];
-	vHandles[0] = meshStruct.add_vertex(Mesh::Point(-halfW, -halfH, -halfD));
+	MeshStruct::VertexHandle vHandles[24];
+	vHandles[0] = meshStruct.add_vertex(MeshStruct::Point(-halfW, -halfH, -halfD));
 	meshStruct.set_texcoord2D(vHandles[0], OpenMesh::Vec2f(0.f, 1.f));
-	vHandles[1] = meshStruct.add_vertex(Mesh::Point(-halfW, halfH, -halfD));
+	vHandles[1] = meshStruct.add_vertex(MeshStruct::Point(-halfW, halfH, -halfD));
 	meshStruct.set_texcoord2D(vHandles[1], OpenMesh::Vec2f(0.f, 0.f));
-	vHandles[2] = meshStruct.add_vertex(Mesh::Point(halfW, halfH, -halfD));
+	vHandles[2] = meshStruct.add_vertex(MeshStruct::Point(halfW, halfH, -halfD));
 	meshStruct.set_texcoord2D(vHandles[2], OpenMesh::Vec2f(1.f, 0.f));
-	vHandles[3] = meshStruct.add_vertex(Mesh::Point(halfW, -halfH, -halfD));
+	vHandles[3] = meshStruct.add_vertex(MeshStruct::Point(halfW, -halfH, -halfD));
 	meshStruct.set_texcoord2D(vHandles[3], OpenMesh::Vec2f(1.f, 1.f));
 
-	vHandles[4] = meshStruct.add_vertex(Mesh::Point(-halfW, -halfH, halfD));
+	vHandles[4] = meshStruct.add_vertex(MeshStruct::Point(-halfW, -halfH, halfD));
 	meshStruct.set_texcoord2D(vHandles[4], OpenMesh::Vec2f(0.f, 1.f));
-	vHandles[5] = meshStruct.add_vertex(Mesh::Point(-halfW, halfH, halfD));
+	vHandles[5] = meshStruct.add_vertex(MeshStruct::Point(-halfW, halfH, halfD));
 	meshStruct.set_texcoord2D(vHandles[5], OpenMesh::Vec2f(0.0, 0.0));
-	vHandles[6] = meshStruct.add_vertex(Mesh::Point(-halfW, halfH, -halfD));
+	vHandles[6] = meshStruct.add_vertex(MeshStruct::Point(-halfW, halfH, -halfD));
 	meshStruct.set_texcoord2D(vHandles[6], OpenMesh::Vec2f(1.f, 0.f));
-	vHandles[7] = meshStruct.add_vertex(Mesh::Point(-halfW, -halfH, -halfD));
+	vHandles[7] = meshStruct.add_vertex(MeshStruct::Point(-halfW, -halfH, -halfD));
 	meshStruct.set_texcoord2D(vHandles[7], OpenMesh::Vec2f(1.f, 1.f));
 
-	vHandles[8] = meshStruct.add_vertex(Mesh::Point(halfW, -halfH, halfD));
+	vHandles[8] = meshStruct.add_vertex(MeshStruct::Point(halfW, -halfH, halfD));
 	meshStruct.set_texcoord2D(vHandles[8], OpenMesh::Vec2f(0.f, 1.f));
-	vHandles[9] = meshStruct.add_vertex(Mesh::Point(halfW, halfH, halfD));
+	vHandles[9] = meshStruct.add_vertex(MeshStruct::Point(halfW, halfH, halfD));
 	meshStruct.set_texcoord2D(vHandles[9], OpenMesh::Vec2f(0.0, 0.0));
-	vHandles[10] = meshStruct.add_vertex(Mesh::Point(-halfW, halfH, halfD));
+	vHandles[10] = meshStruct.add_vertex(MeshStruct::Point(-halfW, halfH, halfD));
 	meshStruct.set_texcoord2D(vHandles[10], OpenMesh::Vec2f(1.f, 0.f));
-	vHandles[11] = meshStruct.add_vertex(Mesh::Point(-halfW, -halfH, halfD));
+	vHandles[11] = meshStruct.add_vertex(MeshStruct::Point(-halfW, -halfH, halfD));
 	meshStruct.set_texcoord2D(vHandles[11], OpenMesh::Vec2f(1.f, 1.f));
 
-	vHandles[12] = meshStruct.add_vertex(Mesh::Point(halfW, -halfH, -halfD));
+	vHandles[12] = meshStruct.add_vertex(MeshStruct::Point(halfW, -halfH, -halfD));
 	meshStruct.set_texcoord2D(vHandles[12], OpenMesh::Vec2f(0.f, 1.f));
-	vHandles[13] = meshStruct.add_vertex(Mesh::Point(halfW, halfH, -halfD));
+	vHandles[13] = meshStruct.add_vertex(MeshStruct::Point(halfW, halfH, -halfD));
 	meshStruct.set_texcoord2D(vHandles[13], OpenMesh::Vec2f(0.0, 0.0));
-	vHandles[14] = meshStruct.add_vertex(Mesh::Point(halfW, halfH, halfD));
+	vHandles[14] = meshStruct.add_vertex(MeshStruct::Point(halfW, halfH, halfD));
 	meshStruct.set_texcoord2D(vHandles[14], OpenMesh::Vec2f(1.f, 0.f));
-	vHandles[15] = meshStruct.add_vertex(Mesh::Point(halfW, -halfH, halfD));
+	vHandles[15] = meshStruct.add_vertex(MeshStruct::Point(halfW, -halfH, halfD));
 	meshStruct.set_texcoord2D(vHandles[15], OpenMesh::Vec2f(1.f, 1.f));
 
-	vHandles[16] = meshStruct.add_vertex(Mesh::Point(-halfW, halfH, -halfD));
+	vHandles[16] = meshStruct.add_vertex(MeshStruct::Point(-halfW, halfH, -halfD));
 	meshStruct.set_texcoord2D(vHandles[16], OpenMesh::Vec2f(0.f, 1.f));
-	vHandles[17] = meshStruct.add_vertex(Mesh::Point(-halfW, halfH, halfD));
+	vHandles[17] = meshStruct.add_vertex(MeshStruct::Point(-halfW, halfH, halfD));
 	meshStruct.set_texcoord2D(vHandles[17], OpenMesh::Vec2f(0.0, 0.0));
-	vHandles[18] = meshStruct.add_vertex(Mesh::Point(halfW, halfH, halfD));
+	vHandles[18] = meshStruct.add_vertex(MeshStruct::Point(halfW, halfH, halfD));
 	meshStruct.set_texcoord2D(vHandles[18], OpenMesh::Vec2f(1.f, 0.f));
-	vHandles[19] = meshStruct.add_vertex(Mesh::Point(halfW, halfH, -halfD));
+	vHandles[19] = meshStruct.add_vertex(MeshStruct::Point(halfW, halfH, -halfD));
 	meshStruct.set_texcoord2D(vHandles[19], OpenMesh::Vec2f(1.f, 1.f));
 
-	vHandles[20] = meshStruct.add_vertex(Mesh::Point(-halfW, -halfH, halfD));
+	vHandles[20] = meshStruct.add_vertex(MeshStruct::Point(-halfW, -halfH, halfD));
 	meshStruct.set_texcoord2D(vHandles[20], OpenMesh::Vec2f(0.f, 1.f));
-	vHandles[21] = meshStruct.add_vertex(Mesh::Point(-halfW, -halfH, -halfD));
+	vHandles[21] = meshStruct.add_vertex(MeshStruct::Point(-halfW, -halfH, -halfD));
 	meshStruct.set_texcoord2D(vHandles[21], OpenMesh::Vec2f(0.0, 0.0));
-	vHandles[22] = meshStruct.add_vertex(Mesh::Point(halfW, -halfH, -halfD));
+	vHandles[22] = meshStruct.add_vertex(MeshStruct::Point(halfW, -halfH, -halfD));
 	meshStruct.set_texcoord2D(vHandles[22], OpenMesh::Vec2f(1.f, 0.f));
-	vHandles[23] = meshStruct.add_vertex(Mesh::Point(halfW, -halfH, halfD));
+	vHandles[23] = meshStruct.add_vertex(MeshStruct::Point(halfW, -halfH, halfD));
 	meshStruct.set_texcoord2D(vHandles[23], OpenMesh::Vec2f(1.f, 1.f));
 
 	//初始化6个面（12个三角形）
-	std::vector<Mesh::VertexHandle>  face_vhandles;
+	std::vector<MeshStruct::VertexHandle>  face_vhandles;
 	//背面
 	face_vhandles.clear();
 	face_vhandles.push_back(vHandles[0]);

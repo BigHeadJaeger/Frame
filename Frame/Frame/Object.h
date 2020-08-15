@@ -1,20 +1,25 @@
 #pragma once
 #include<string>
 #include<memory>
-#include<OpenMesh/Core/IO/MeshIO.hh>
-#include<OpenMesh/Core/Mesh/TriMesh_ArrayKernelT.hh>
 #include<map>
+#include<glad/glad.h>
+#include<iostream>
 using namespace std;
 #include"Renderer.h"
 //#include"MarchingCube.h"
-#include"DistributeFun.h"
-#include"Component.h"
+//#include"DistributeFun.h"
+//#include"Component.h"
+//#include"RenderFrameModel.h"
 
 // 按类型将每个object分开 Camera
 //enum class OBJECTKIND
 //{
 //	OBJ_
 //};
+
+//#include"Component.h"
+//#include"Camera.h"
+//#include"Transform.h"
 
 
 //基类Object（目前只包含用于渲染的物体，类似gameobject）
@@ -24,54 +29,59 @@ protected:
 	string name;									//object名称
 	// 组件数组可通过名称查询
 	map<string, shared_ptr<Component>> components;
-
-	
-protected:
-	//void UpdateMatrix() { shaderData->UpdateMatrix(transformation); }
 public:
+	void test()
+	{
+		cout << components["Transform"]->object->name << endl;
+	}
+
 	Object()
 	{
 		// 每个物体默认有坐标组件
 		AddComponent(COMPONENT_TRANSFORM);
-		//components.insert(make_pair("Transform", make_shared<Transform>()));
 	}
 
 	~Object()
 	{
-		//delete shaderData;
 	}
 
-	virtual void InitBufferData() = 0;
-	virtual void Update(float dt) = 0;
+	void Update(float dt)
+	{
+		// 组件的更新
+		for (auto it = components.begin(); it != components.end(); it++)
+			it->second->Update(dt);
+	}
+
 	void Draw()
 	{
 		if (isComponent(COMPONENT_MESHRENDER))
 		{
 			auto render = dynamic_pointer_cast<MeshRenderer>(components[COMPONENT_MESHRENDER]);
-
-			
+			render->Render();
 		}
 	}
-
 
 	template<typename S>
-	void AddComponent(S&& type)
+	shared_ptr<Component> AddComponent(S&& type)
 	{
+		shared_ptr<Component> component;
+
 		if (type == COMPONENT_CAMERA)
-		{
-			auto camera = make_shared<Camera>();
-			camera->object = this;
-			components.insert(make_pair(type, camera));
-		}
+			component = make_shared<Camera>();
 		else if (type == COMPONENT_TRANSFORM)
-		{
-			auto transform = make_shared<Transform>();
-			transform->object = this;
-			components.insert(make_pair(type, transform));
-		}
+			component = make_shared<Transform>();
+
+		component->object = this;
+		components.insert(make_pair(type, component));
+
+		return component;
 	}
 
-	shared_ptr<Transform> GetTransform() { return dynamic_pointer_cast<Transform>(components[COMPONENT_TRANSFORM]); }
+	shared_ptr<Transform> GetTransform()
+	{
+		auto t = components[COMPONENT_TRANSFORM];
+		return dynamic_pointer_cast<Transform>(t);
+	}
 
 	template<typename S>
 	shared_ptr<Component> GetComponentByName(S&& name)
@@ -96,11 +106,9 @@ public:
 
 	//Get
 	string GetName() { return name; }
-	//Transform& GetTransform() { return transformation; }
-	auto GetShaderData() { return shaderData; }
 	//Set
 	void SetName(string _name) { name = _name; }
-	void SetRenderer(RENDERERTYPE type);			//设置渲染器并生成对应的shaderData
+	//void SetRenderer(RENDERERTYPE type);			//设置渲染器并生成对应的shaderData
 };
 
 

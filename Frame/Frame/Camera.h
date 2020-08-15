@@ -20,6 +20,8 @@ public:
 	vec3 lookLeft;
 
 	float cameraSpeed;
+
+	float isMainCamera = false;
 public:
 	Camera();
 	template<typename V>
@@ -36,14 +38,18 @@ public:
 	template<typename D>
 	void UDRotate(D&& dis);
 public:
-	//void Update() override
-	//{
-	//	// 计算视角矩阵
-	//	MainCamera::GetInstance().SetView();
-	//	// 计算投影矩阵
-	//	MainCamera::GetInstance().SetPro();
-	//}
+	void Update(float dt) override
+	{
+		// 计算视角矩阵
+		SetView();
+		// 计算投影矩阵
+		SetPro();
+	}
 
+	void SetMain()
+	{
+		isMainCamera = true;
+	}
 	//void TransferData(ShaderProgram& shaderProgram) override
 	//{
 	//	auto tool = ShaderDataTool::GetInstance();

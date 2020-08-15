@@ -30,9 +30,6 @@
     <ClCompile Include="Object.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
-    <ClCompile Include="ShaderData.cpp">
-      <Filter>源文件</Filter>
-    </ClCompile>
     <ClCompile Include="Camera.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
@@ -60,6 +57,9 @@
     <ClCompile Include="MeshReference.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
+    <ClCompile Include="Component.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Scene.h">
@@ -69,9 +69,6 @@
       <Filter>头文件</Filter>
     </ClInclude>
     <ClInclude Include="Renderer.h">
-      <Filter>头文件</Filter>
-    </ClInclude>
-    <ClInclude Include="ShaderData.h">
       <Filter>头文件</Filter>
     </ClInclude>
     <ClInclude Include="Object.h">
@@ -140,6 +137,12 @@
       <Filter>Shader</Filter>
     </None>
     <None Include="SF_Phong.f">
+      <Filter>Shader</Filter>
+    </None>
+    <None Include="SF_SimpleColor.f">
+      <Filter>Shader</Filter>
+    </None>
+    <None Include="SF_SimpleColor.v">
       <Filter>Shader</Filter>
     </None>
   </ItemGroup>
