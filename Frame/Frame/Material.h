@@ -4,6 +4,7 @@
 using namespace glm;
 
 #include"Program.h"
+#include"Transform.h"
 #include"ShaderDataTool.h"
 
 enum class MATERIALTYPE
@@ -18,6 +19,8 @@ enum class MATERIALTYPE
 class Material
 {
 public:
+    ShaderProgram shaderProgram;
+public:
     vec4 baseColor = vec4(125, 30, 160, 255);      // 基础颜色值
     GLuint textureBase;                             // 基础贴图
     bool isTextureBase = false;                     // 是否使用基础贴图，否则用baseColor作为基础颜色
@@ -31,7 +34,13 @@ public:
     }
 
     // 每个材质有自己的方法将数据传输到shader中
-    virtual void Transfer(ShaderProgram& shaderProgram) = 0;
+    virtual void Transfer() = 0;
+};
+
+// 当材质丢失时使用的默认材质
+class NoneMaterial :public Material
+{
+
 };
 
 // 默认漫反射材质
@@ -58,10 +67,11 @@ public:
 public:
     PhongMaterial() 
     {
+        shaderProgram.SetShader("SF_Phong.v", "SF_Phong.f");
         type = MATERIALTYPE::MATERIAL_PHONG;
     }
 
-    void Transfer(ShaderProgram& shaderProgram) override
+    void Transfer() override
     {
         auto tool = ShaderDataTool::GetInstance();
         tool.SetUniform("isVertexLight", isVertexLight, shaderProgram);
@@ -89,6 +99,7 @@ public:
 public:
     PBRMaterial()
     {
+        shaderProgram.SetShader("SF_PBR.v", "SF_PBR.f");
         type = MATERIALTYPE::MATERIAL_PBR;
     }
 

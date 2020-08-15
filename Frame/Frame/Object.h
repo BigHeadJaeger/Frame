@@ -22,17 +22,15 @@ class Object
 {
 protected:
 	string name;									//object名称
-	Transform transformation;						//和空间位置有关的transform组件
-	shared_ptr<ShaderData> shaderData;							//每一个物体的渲染数据，此处为抽象基类，使用不同渲染器时初始化为相应子类
-	Renderer* renderer;								//只是一个指针，不同的渲染器都是单例,不同的物体初始化时只需要将此指针赋值就行
 	// 组件数组可通过名称查询
 	map<string, shared_ptr<Component>> components;
+
+	
 protected:
 	//void UpdateMatrix() { shaderData->UpdateMatrix(transformation); }
 public:
 	Object()
 	{
-		renderer = NULL;
 		// 每个物体默认有坐标组件
 		AddComponent(COMPONENT_TRANSFORM);
 		//components.insert(make_pair("Transform", make_shared<Transform>()));
@@ -49,7 +47,9 @@ public:
 	{
 		if (isComponent(COMPONENT_MESHRENDER))
 		{
-			//components[COMPONENT_MESHRENDER]->TransferData();
+			auto render = dynamic_pointer_cast<MeshRenderer>(components[COMPONENT_MESHRENDER]);
+
+			
 		}
 	}
 
@@ -58,9 +58,17 @@ public:
 	void AddComponent(S&& type)
 	{
 		if (type == COMPONENT_CAMERA)
-			components.insert(make_pair(type, make_shared<Camera>(this)));
+		{
+			auto camera = make_shared<Camera>();
+			camera->object = this;
+			components.insert(make_pair(type, camera));
+		}
 		else if (type == COMPONENT_TRANSFORM)
-			components.insert(make_pair(type, make_shared<Transform>()));
+		{
+			auto transform = make_shared<Transform>();
+			transform->object = this;
+			components.insert(make_pair(type, transform));
+		}
 	}
 
 	shared_ptr<Transform> GetTransform() { return dynamic_pointer_cast<Transform>(components[COMPONENT_TRANSFORM]); }

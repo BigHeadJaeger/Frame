@@ -149,7 +149,8 @@
     <ClCompile Include="Interaction.cpp" />
     <ClCompile Include="Main.cpp" />
     <ClCompile Include="Material.cpp" />
-    <ClCompile Include="MeshObject.cpp" />
+    <ClCompile Include="Mesh.cpp" />
+    <ClCompile Include="MeshReference.cpp" />
     <ClCompile Include="Object.cpp" />
     <ClCompile Include="Program.cpp" />
     <ClCompile Include="Renderer.cpp" />
@@ -167,7 +168,8 @@
     <ClInclude Include="Interaction.h" />
     <ClInclude Include="Light.h" />
     <ClInclude Include="Material.h" />
-    <ClInclude Include="MeshObject.h" />
+    <ClInclude Include="Mesh.h" />
+    <ClInclude Include="MeshReference.h" />
     <ClInclude Include="Object.h" />
     <ClInclude Include="Program.h" />
     <ClInclude Include="PublicStruct.h" />
