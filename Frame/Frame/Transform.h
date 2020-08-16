@@ -6,6 +6,7 @@ using namespace glm;
 #include"Component.h"
 #include"ShaderDataTool.h"
 #include"RenderFrameModel.h"
+#include"Camera.h"
 
 class Transform : public Component
 {
@@ -51,8 +52,8 @@ public:
 		if (rotation.z != 0)
 			world = rotate(world, rotation.z, vec3(0.0, 0.0, 1.0));
 		worldInvTranspose = transpose(inverse(world));
-		//auto mainCamera = RenderFrameModel::GetInstance().GetMainCamera();
-		//worldViewProj = mainCamera->pro * mainCamera->view * world;
+		auto mainCamera = RenderFrameModel::GetInstance().GetMainCamera();
+		worldViewProj = mainCamera->pro * mainCamera->view * world;
 	}
 
 	void Update(float dt) override

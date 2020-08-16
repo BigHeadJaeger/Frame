@@ -8,5 +8,5 @@ uniform mat4 worldInvTranspose;
 
 void main()
 {
-	gl_Position=worldViewProj*vec4(VertexPosition,1.0);
+	gl_Position = worldViewProj * vec4(positionL, 1.0);
 }

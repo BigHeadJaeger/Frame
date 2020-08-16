@@ -75,7 +75,7 @@ public:
 
 	void Update(float dt) override
 	{
-
+		UpdateMeshData();
 	}
 
 	void Render() override

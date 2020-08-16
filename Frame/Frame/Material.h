@@ -51,7 +51,7 @@ public:
     void Transfer() override
     {
         auto tool = ShaderDataTool::GetInstance();
-        tool.SetUniform("color", baseColor, shaderProgram);
+        tool.SetUniform("color", baseColor / vec4(255), shaderProgram);
     }
 };
 

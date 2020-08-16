@@ -30,11 +30,6 @@ protected:
 	// 组件数组可通过名称查询
 	map<string, shared_ptr<Component>> components;
 public:
-	void test()
-	{
-		cout << components["Transform"]->object->name << endl;
-	}
-
 	Object()
 	{
 		// 每个物体默认有坐标组件
@@ -70,6 +65,10 @@ public:
 			component = make_shared<Camera>();
 		else if (type == COMPONENT_TRANSFORM)
 			component = make_shared<Transform>();
+		else if (type == COMPONENT_MESHREFERENCE)
+			component = make_shared<MeshReference>();
+		else if (type == COMPONENT_MESHRENDER)
+			component = make_shared<MeshRenderer>();
 
 		component->object = this;
 		components.insert(make_pair(type, component));
@@ -107,8 +106,16 @@ public:
 	//Get
 	string GetName() { return name; }
 	//Set
-	void SetName(string _name) { name = _name; }
-	//void SetRenderer(RENDERERTYPE type);			//设置渲染器并生成对应的shaderData
+	void SetName(string _name)
+	{
+		name = _name; 
+	}
+
+	void SetPosition(vec3 pos)
+	{
+		auto transform = GetTransform();
+		transform->SetPosition(pos);
+	}
 };
 
 
