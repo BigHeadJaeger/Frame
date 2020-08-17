@@ -12,7 +12,8 @@ enum class MATERIALTYPE
     MATERIAL_DEFAULT_DIFFUSE,
     MATERIAL_DEFAULT_SPECULAR,
     MATERIAL_PHONG,
-    MATERIAL_PBR
+    MATERIAL_PBR,
+    MATERIAL_SIMPLE_COLOR
 };
 
 // 每个物体需要一个Material
@@ -40,7 +41,18 @@ public:
 // 当材质丢失时使用的默认材质
 class NoneMaterial :public Material
 {
-
+public:
+    NoneMaterial()
+    {
+        baseColor = vec4(238, 130, 238, 255);
+        shaderProgram.SetShader("SF_SimpleColor.v", "SF_SimpleColor.f");
+        type = MATERIALTYPE::MATERIAL_SIMPLE_COLOR;
+    }
+    void Transfer() override
+    {
+        auto tool = ShaderDataTool::GetInstance();
+        tool.SetUniform("color", baseColor / vec4(255), shaderProgram);
+    }
 };
 
 // 默认漫反射材质
@@ -128,7 +140,7 @@ public:
         tool.InitTextureWithFile(textureNormal, fileName.c_str());
     }
 
-    void Transfer(ShaderProgram& shaderProgram) override
+    void Transfer() override
     {
         auto tool = ShaderDataTool::GetInstance();
         tool.SetUniform("isTextureBase", isTextureBase, shaderProgram);

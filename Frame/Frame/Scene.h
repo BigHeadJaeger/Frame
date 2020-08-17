@@ -15,7 +15,7 @@ class MyScene
 private:
 	//各种场景信息（相机、材质、灯光、各种物体的各种矩阵）
 	//map<string, Object*> objects;
-	map<string, map<string, shared_ptr<Object>>> objectManager;
+	//map<string, map<string, shared_ptr<Object>>> objectManager;
 	map<string, shared_ptr<Object>> objects;
 	//MeshObject cow;
 	//灯光
@@ -36,13 +36,13 @@ private:
 public:
 	~MyScene()
 	{
-		map<string, shared_ptr<Object>>::iterator objs_it;
-		for (objs_it = objects.begin(); objs_it != objects.end(); objs_it++)
-		{
-			(*objs_it).second.reset();
-			//delete (*objs_it).second;
-		}
-		objects.clear();
+		//map<string, shared_ptr<Object>>::iterator objs_it;
+		//for (objs_it = objects.begin(); objs_it != objects.end(); objs_it++)
+		//{
+		//	(*objs_it).second.reset();
+		//	//delete (*objs_it).second;
+		//}
+		//objects.clear();
 	}
 
 	void Init();			//初始化各种信息

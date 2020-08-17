@@ -89,7 +89,8 @@ void key_callback(GLFWwindow* window, int key, int scancode, int action, int mod
 	//绑定keep事件后一定要绑定up事件
 	if (key == GLFW_KEY_W && action == GLFW_PRESS)
 		scene->keys[BTNW].BindKeepEvent([&]() {
-		MainCamera::GetInstance().Walk(MainCamera::GetInstance().cameraSpeed * deltaTime);
+		auto mainCamera = RenderFrameModel::GetInstance().GetMainCamera();
+		mainCamera->Walk(mainCamera->cameraSpeed * deltaTime);
 			});
 	if (key == GLFW_KEY_W && action == GLFW_RELEASE)
 		scene->keys[BTNW].BindUpEvent([]() {
@@ -97,7 +98,8 @@ void key_callback(GLFWwindow* window, int key, int scancode, int action, int mod
 
 	if (key == GLFW_KEY_S && action == GLFW_PRESS)
 		scene->keys[BTNS].BindKeepEvent([]() {
-		MainCamera::GetInstance().Walk(-MainCamera::GetInstance().cameraSpeed * deltaTime);
+		auto mainCamera = RenderFrameModel::GetInstance().GetMainCamera();
+		mainCamera->Walk(-mainCamera->cameraSpeed * deltaTime);
 			});
 	if (key == GLFW_KEY_S && action == GLFW_RELEASE)
 		scene->keys[BTNS].BindUpEvent([]() {
@@ -105,7 +107,8 @@ void key_callback(GLFWwindow* window, int key, int scancode, int action, int mod
 
 	if (key == GLFW_KEY_A && action == GLFW_PRESS)
 		scene->keys[BTNA].BindKeepEvent([]() {
-		MainCamera::GetInstance().LRMove(MainCamera::GetInstance().cameraSpeed * deltaTime);
+		auto mainCamera = RenderFrameModel::GetInstance().GetMainCamera();
+		mainCamera->LRMove(mainCamera->cameraSpeed * deltaTime);
 			});
 	if (key == GLFW_KEY_A && action == GLFW_RELEASE)
 		scene->keys[BTNA].BindUpEvent([]() {
@@ -113,7 +116,8 @@ void key_callback(GLFWwindow* window, int key, int scancode, int action, int mod
 
 	if (key == GLFW_KEY_D && action == GLFW_PRESS)
 		scene->keys[BTND].BindKeepEvent([]() {
-		MainCamera::GetInstance().LRMove(-MainCamera::GetInstance().cameraSpeed * deltaTime);
+		auto mainCamera = RenderFrameModel::GetInstance().GetMainCamera();
+		mainCamera->LRMove(-mainCamera->cameraSpeed * deltaTime);
 			});
 	if (key == GLFW_KEY_D && action == GLFW_RELEASE)
 		scene->keys[BTND].BindUpEvent([]() {
@@ -132,7 +136,8 @@ void key_callback(GLFWwindow* window, int key, int scancode, int action, int mod
 
 	if (key == GLFW_KEY_F && action == GLFW_PRESS)
 	{
-		MainCamera::GetInstance().fov = INITFOV;
+		auto mainCamera = RenderFrameModel::GetInstance().GetMainCamera();
+		mainCamera->fov = INITFOV;
 	}
 
 }
@@ -150,13 +155,14 @@ void mouse_button_callback(GLFWwindow* window, int button, int action, int mods)
 void cursor_position_callback(GLFWwindow* window, double xpos, double ypos)
 {
 	auto scene = RenderFrameModel::GetInstance().GetCurrentScene();
+	auto mainCamera = RenderFrameModel::GetInstance().GetMainCamera();
 	//cout << xpos << "  " << ypos << endl;
 	if (scene->mouse.mouseRightDown)
 	{
 		auto disx = scene->mouse.cursorPrePos.x - xpos;
 		auto disy = scene->mouse.cursorPrePos.y - ypos;
-		MainCamera::GetInstance().LRRotate(disx * deltaTime * 0.5);
-		MainCamera::GetInstance().UDRotate(-disy * deltaTime * 0.5);
+		mainCamera->LRRotate(disx * deltaTime * 0.5);
+		mainCamera->UDRotate(-disy * deltaTime * 0.5);
 	}
 
 	/*if (scene->mouse.isCatchPoint && scene->mouse.mouseLeftDown)
@@ -176,17 +182,18 @@ void cursor_position_callback(GLFWwindow* window, double xpos, double ypos)
 
 void mouse_scroll_callback(GLFWwindow* window, double xoffset, double yoffset)
 {
-	auto num = (MainCamera::GetInstance().fov - yoffset * deltaTime);
+	auto mainCamera = RenderFrameModel::GetInstance().GetMainCamera();
+	auto num = (mainCamera->fov - yoffset * deltaTime);
 	if (num >= MINFOV && num <= MAXFOV)
 	{
-		MainCamera::GetInstance().fov -= yoffset;
+		mainCamera->fov -= yoffset;
 	}
 	else if (num < MINFOV)
 	{
-		MainCamera::GetInstance().fov = MINFOV;
+		mainCamera->fov = MINFOV;
 	}
 	else if (num > MAXFOV)
 	{
-		MainCamera::GetInstance().fov = MAXFOV;
+		mainCamera->fov = MAXFOV;
 	}
 }

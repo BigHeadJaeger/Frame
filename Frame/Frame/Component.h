@@ -1,6 +1,7 @@
 #pragma once
 #include<glm.hpp>
 #include<string>
+using namespace std;
 using namespace glm;
 
 const string COMPONENT_CAMERA = "Camera";
@@ -21,18 +22,10 @@ public:
 	//void* object;
 public:
 	// 每个组件在每一帧中需要进行的更新
-	virtual void Update() = 0;
+	virtual void Update(float dt) = 0;
 
 	~Component()
 	{
 		object = nullptr;
 	}
-};
-
-class Light :public Component
-{
-public:
-
-public:
-
 };

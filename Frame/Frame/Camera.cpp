@@ -1,4 +1,5 @@
 #include "Camera.h"
+#include"Object.h"
 
 Camera::Camera()
 {
@@ -6,7 +7,6 @@ Camera::Camera()
 	lookLeft = vec3(-1.0, 0.0, 0.0);
 	lookAtPoint = vec3(0.0, 0.0, 0.0);
 	lookDir = vec3(0.0f, 0.0f, -1.0f);
-	eyePos = vec3(0.0, 0.0, 0.0);
 	view = mat4(0);
 	pro = mat4(0);
 	cameraSpeed = 2;
@@ -14,11 +14,21 @@ Camera::Camera()
 	type = COMPONENT_CAMERA;
 }
 
+void Camera::Init(vec3 point)
+{
+	auto pos = object->GetTransform()->position;
+	lookAtPoint = point;
+	lookDir = normalize(lookAtPoint - pos);
+
+	//计算up
+	lookLeft = cross(vec3(0.0, 1.0, 0.0), lookDir);
+	up = cross(lookDir, lookLeft);
+}
+
 void Camera::SetView()
 {
-	//lookDir = normalize(lookAtPoint - eyePos);
 	//lookAtPoint用eyepos加上lookDir即可
-	view = lookAt(eyePos, lookAtPoint, up);
+	view = lookAt(object->GetTransform()->position, lookAtPoint, up);
 	//view *= rotate(mat4(1.0f), 45.0f, vec3(0.0, 1.0, 0.0));
 }
 
@@ -30,4 +40,9 @@ void Camera::SetPro()
 void Camera::SetOrtho(float left, float right, float bottom, float up, float near, float far)
 {
 	pro = ortho(left, right, bottom, up, near, far);
+}
+
+vec3& Camera::GetEyePosition()
+{
+	return object->GetTransform()->position;
 }

@@ -1,9 +1,10 @@
 #pragma once
 #include"ShaderDataTool.h"
-//#include"Program.h"
 #include"Component.h"
 #include"Material.h"
 #include"MeshReference.h"
+#include"RenderFrameModel.h"
+#include"Camera.h"
 
 enum class RENDERERTYPE
 {
@@ -17,24 +18,12 @@ class Renderer : public Component
 {
 public:
 	shared_ptr<Material> material;
-
 private:
 
 public:
+	void SetTransform();
 
-	void SetTransform()
-	{
-		auto transform = object->GetTransform();
-		auto tool = ShaderDataTool::GetInstance();
-		tool.SetUniform("worldViewProj", transform->worldViewProj, material->shaderProgram);
-		tool.SetUniform("world", transform->world, material->shaderProgram);
-		tool.SetUniform("worldInvTranspose", transform->worldInvTranspose, material->shaderProgram);
-	}
-
-	void SetCamera()
-	{
-
-	}
+	void SetCamera();
 
 	virtual void Render() = 0;
 
@@ -63,39 +52,40 @@ private:
 
 	GLint drawType;					//顶点buffer的绘制方式
 	GLint drawUnitNumber;			//绘制单元的数量
+
+	bool isLighting;				// 是否接受光照
+	bool isShadow;					// 是否接受阴影
+private:
+	void InitVertexBuffer(VertexData& vertexData);
 public:
 	MeshRenderer()
 	{
+		// 默认纹理
+		material = make_shared<NoneMaterial>();
 		type = COMPONENT_MESHRENDER;
+		drawType = GL_TRIANGLES;
 	}
 
-	void SetMeshData()
-	{
-		if (object->isComponent(COMPONENT_MESHREFERENCE))
-		{
-			auto meshReference = dynamic_pointer_cast<MeshReference>(object->GetComponentByName(COMPONENT_MESHREFERENCE));
-			meshReference->vertexData
-		}
-	}
+	void UpdateMeshData();
 
 	void SetLight()
 	{
 
 	}
 
+	void Update(float dt) override
+	{
+		UpdateMeshData();
+	}
+
 	void Render() override
 	{
 		SetTransform();
-		//Renderer::Render(shaderData);
-		//auto data = dynamic_pointer_cast<DefaultShaderData>(shaderData);
-		
 		glUseProgram(material->shaderProgram.p);
-		glBindVertexArray(data->VAO);
-		data->material->Transfer(material->shaderProgram);
-		glDrawArrays(data->drawType, 0, data->drawUnitNumber);
+		glBindVertexArray(VAO);
+		material->Transfer();
+		glDrawArrays(drawType, 0, drawUnitNumber);
 		glBindVertexArray(0);
 	}
-
-	MeshRenderer(MeshRenderer&);
 };
 

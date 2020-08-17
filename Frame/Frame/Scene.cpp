@@ -1,7 +1,10 @@
 #pragma once
 #include "Scene.h"
-#include"MeshObject.h"
+//#include"MeshObject.h"
+//#include"Object.h"
 #include<GLFW\glfw3.h>
+#include<iostream>
+#include"RenderFrameModel.h"
 
 void MyScene::Init()
 {
@@ -18,15 +21,15 @@ void MyScene::Init()
 	//PBRRenderer::GetRenderer().InitProgram("SF_PBR.v", "SF_PBR.f");
 	//SimpleRenderer::GetRenderer()->InitProgram("SF_SimpleColor.v", "SF_SimpleColor.f");
 	//SimpleRenderer::GetRenderer()->InitProgram("SF_VertexColor.v", "SF_VertexColor.f");
-	VertexColorRender::GetRenderer().InitProgram("SF_VertexColor.v", "SF_VertexColor.f");
-	DefaultRenderer::GetRenderer().InitProgram("SF_PBR.v", "SF_PBR.f");
+	//VertexColorRender::GetRenderer().InitProgram("SF_VertexColor.v", "SF_VertexColor.f");
+	//DefaultRenderer::GetRenderer().InitProgram("SF_PBR.v", "SF_PBR.f");
 	//DefaultRenderer::GetRenderer().InitProgram("SF_Phong.v", "SF_Phong.f");
 
 	//pShadowTex.SetShader("shadowTex.v", "shadowTex.f");
 
 	//初始化主相机
 	//mainCamera = new Camera();
-	MainCamera::GetInstance().Init(vec3(0, 2, 3), vec3(0, 0, 0));
+	//MainCamera::GetInstance().Init(vec3(0, 2, 3), vec3(0, 0, 0));
 
 	//SetDrawMode(drawMode.isLine, false);
 	drawMode.isLine = false;
@@ -81,22 +84,22 @@ void MyScene::Init()
 	//gridShaderData->InitTexture(ROUGHNESS, "Material\\oakfloor\\roughness.png");
 	//objects.insert(make_pair(grid->GetName(), grid));
 
-	shared_ptr<MeshObject> grid(new MeshObject());
-	grid->SetName("Floor");
-	grid->InitGrid(10, 10, 10, 10);
-	grid->SetRenderer(RENDERERTYPE::DEFAULT);
-	grid->InitBufferData();
-	grid->GetTransform().SetPosition(vec3(0, -0.5, 0));
-	grid->GetTransform().SetScaler(vec3(1));
-	auto gridShaderData = dynamic_pointer_cast<DefaultShaderData>(grid->GetShaderData());
-	// 设置材质，默认为phong材质
-	auto testMaterial = make_shared<PBRMaterial>();
-	gridShaderData->SetMaterial(testMaterial);
-	testMaterial->InitTextureBase("Material\\oakfloor\\basecolor.png");
-	testMaterial->InitTextureNormal("Material\\oakfloor\\normal.png");
-	testMaterial->InitTextureAO("Material\\oakfloor\\AO.png");
-	testMaterial->InitTextureRoughness("Material\\oakfloor\\roughness.png");
-	objects.insert(make_pair(grid->GetName(), grid));
+	//shared_ptr<MeshObject> grid(new MeshObject());
+	//grid->SetName("Floor");
+	//grid->InitGrid(10, 10, 10, 10);
+	//grid->SetRenderer(RENDERERTYPE::DEFAULT);
+	//grid->InitBufferData();
+	//grid->GetTransform().SetPosition(vec3(0, -0.5, 0));
+	//grid->GetTransform().SetScaler(vec3(1));
+	//auto gridShaderData = dynamic_pointer_cast<DefaultShaderData>(grid->GetShaderData());
+	//// 设置材质，默认为phong材质
+	//auto testMaterial = make_shared<PBRMaterial>();
+	//gridShaderData->SetMaterial(testMaterial);
+	//testMaterial->InitTextureBase("Material\\oakfloor\\basecolor.png");
+	//testMaterial->InitTextureNormal("Material\\oakfloor\\normal.png");
+	//testMaterial->InitTextureAO("Material\\oakfloor\\AO.png");
+	//testMaterial->InitTextureRoughness("Material\\oakfloor\\roughness.png");
+	//objects.insert(make_pair(grid->GetName(), grid));
 
 	//shared_ptr<MeshObject> cow2(new MeshObject());
 	//cow2->SetName("cow");
@@ -112,6 +115,22 @@ void MyScene::Init()
 	//cow2Material->diffuse = vec3(255.f, 125.f, 80.f);
 	//cow2Material->specular = vec3(125.f, 125.f, 125.f);
 	//objects.insert(make_pair(cow2->GetName(), cow2));
+
+	shared_ptr<Object> mainCamera(new Object);
+	mainCamera->SetName("MainCamera");
+	mainCamera->SetPosition(vec3(0, 2, 3));
+	auto cameraComponent = dynamic_pointer_cast<Camera>(mainCamera->AddComponent(COMPONENT_CAMERA));
+	cameraComponent->Init(vec3(0, 0, 0));
+	RenderFrameModel::GetInstance().SetMainCamera(cameraComponent);
+	objects.insert(make_pair(mainCamera->GetName(), mainCamera));
+
+
+	shared_ptr<Object> box(new Object);
+	box->SetName("box1");
+	auto meshReference = dynamic_pointer_cast<MeshReference>(box->AddComponent(COMPONENT_MESHREFERENCE));
+	meshReference->CreateBox(1, 1, 1);
+	box->AddComponent(COMPONENT_MESHRENDER);
+	objects.insert(make_pair(box->GetName(), box));
 
 }
 
@@ -130,9 +149,9 @@ void MyScene::Update(float& dt)
 {
 
 	// 计算视角矩阵
-	MainCamera::GetInstance().SetView();
-	// 计算投影矩阵
-	MainCamera::GetInstance().SetPro();
+	//MainCamera::GetInstance().SetView();
+	//// 计算投影矩阵
+	//MainCamera::GetInstance().SetPro();
 
 	// 遍历所有object更新矩阵
 	for (auto objs_it = objects.begin(); objs_it != objects.end(); objs_it++)

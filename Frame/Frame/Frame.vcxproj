@@ -145,6 +145,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="Camera.cpp" />
+    <ClCompile Include="Component.cpp" />
     <ClCompile Include="glad.c" />
     <ClCompile Include="Interaction.cpp" />
     <ClCompile Include="Main.cpp" />
@@ -155,7 +156,6 @@
     <ClCompile Include="Program.cpp" />
     <ClCompile Include="Renderer.cpp" />
     <ClCompile Include="Scene.cpp" />
-    <ClCompile Include="ShaderData.cpp" />
     <ClCompile Include="ShaderDataTool.cpp" />
     <ClCompile Include="Transform.cpp" />
   </ItemGroup>
@@ -176,7 +176,6 @@
     <ClInclude Include="Renderer.h" />
     <ClInclude Include="RenderFrameModel.h" />
     <ClInclude Include="Scene.h" />
-    <ClInclude Include="ShaderData.h" />
     <ClInclude Include="ShaderDataTool.h" />
     <ClInclude Include="Transform.h" />
     <ClInclude Include="VertexData.h" />
@@ -188,6 +187,8 @@
     <None Include="SF_Phong.v" />
     <None Include="SF_VertexColor.f" />
     <None Include="SF_VertexColor.v" />
+    <None Include="SF_SimpleColor.f" />
+    <None Include="SF_SimpleColor.v" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
