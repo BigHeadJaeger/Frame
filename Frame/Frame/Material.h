@@ -86,6 +86,7 @@ public:
     void Transfer() override
     {
         auto tool = ShaderDataTool::GetInstance();
+            
         tool.SetUniform("isVertexLight", isVertexLight, shaderProgram);
         tool.SetUniform("material.ambient", ambient / vec3(255), shaderProgram);
         tool.SetUniform("material.diffuse", diffuse / vec3(255), shaderProgram);

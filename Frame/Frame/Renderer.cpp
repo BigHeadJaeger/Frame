@@ -1,5 +1,6 @@
 #include "Renderer.h"
 #include"Object.h"
+#include"Light.h"
 
 //void Renderer::Render(shared_ptr<ShaderData> data)
 //{
@@ -145,10 +146,20 @@ void Renderer::SetCamera()
 {
 	auto tool = ShaderDataTool::GetInstance();
 	auto mainCamera = RenderFrameModel::GetInstance().GetMainCamera();
-	tool.SetUniform("eyePos", mainCamera->object->GetTransform()->position, material->shaderProgram);
+	if (mainCamera->isUseable())
+	{
+		tool.SetUniform("eyePos", mainCamera->object->GetTransform()->position, material->shaderProgram);
+	}
 }
 
 void Renderer::SetLight()
 {
+	auto list = RenderFrameModel::GetInstance().GetLightList();
+	for (auto light : list)
+	{
+		if (light->isUseable())
+		{
 
+		}
+	}
 }
