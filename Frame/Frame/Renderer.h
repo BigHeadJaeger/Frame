@@ -25,6 +25,8 @@ public:
 
 	void SetCamera();
 
+	void SetLight();
+
 	virtual void Render() = 0;
 
 	void SetMaterial(shared_ptr<Material> _material)
@@ -68,18 +70,19 @@ public:
 
 	void UpdateMeshData();
 
-	void SetLight()
-	{
 
-	}
 
 	void Update(float dt) override
 	{
+		if (!isActive)
+			return;
 		UpdateMeshData();
 	}
 
 	void Render() override
 	{
+		if (!isActive)
+			return;
 		SetTransform();
 		glUseProgram(material->shaderProgram.p);
 		glBindVertexArray(VAO);

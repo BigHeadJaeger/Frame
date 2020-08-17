@@ -9,6 +9,7 @@ const string COMPONENT_TRANSFORM = "Transform";
 const string COMPONENT_MESH = "Mesh";
 const string COMPONENT_MESHRENDER = "MeshRenderer";
 const string COMPONENT_MESHREFERENCE = "MeshReference";
+const string COMPONENT_LIGHT = "Light";
 
 class Object;
 
@@ -17,7 +18,7 @@ class Component
 public:
 	//COMPONENTTYPE type;
 	string type;
-
+	bool isActive = true;
 	Object* object;
 	//void* object;
 public:

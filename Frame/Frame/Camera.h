@@ -38,6 +38,8 @@ public:
 public:
 	void Update(float dt) override
 	{
+		if (!isActive)
+			return;
 		// 计算视角矩阵
 		SetView();
 		// 计算投影矩阵
