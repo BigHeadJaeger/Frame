@@ -28,7 +28,8 @@ public:
 
 	void Update(float dt)
 	{
-
+		if (!isActive)
+			return;
 	}
 
 	void CreateBox(int width, int height, int depth)

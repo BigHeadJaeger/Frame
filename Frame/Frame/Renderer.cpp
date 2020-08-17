@@ -42,7 +42,6 @@
 //	glBindVertexArray(0);
 //}
 
-
 //PBRRenderer* PBRRenderer::instance = NULL;
 //SimpleRenderer* SimpleRenderer::instance = NULL;
 //MPSRenderer* MPSRenderer::instance = NULL;
@@ -147,4 +146,9 @@ void Renderer::SetCamera()
 	auto tool = ShaderDataTool::GetInstance();
 	auto mainCamera = RenderFrameModel::GetInstance().GetMainCamera();
 	tool.SetUniform("eyePos", mainCamera->object->GetTransform()->position, material->shaderProgram);
+}
+
+void Renderer::SetLight()
+{
+
 }

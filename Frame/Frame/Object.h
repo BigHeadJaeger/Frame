@@ -12,14 +12,12 @@ using namespace std;
 //#include"RenderFrameModel.h"
 
 // 按类型将每个object分开 Camera
-//enum class OBJECTKIND
-//{
-//	OBJ_
-//};
+enum class TAG
+{
+	DEFAULT,
+	MAIN_CAMERA
+};
 
-//#include"Component.h"
-//#include"Camera.h"
-//#include"Transform.h"
 
 
 //基类Object（目前只包含用于渲染的物体，类似gameobject）
@@ -27,6 +25,8 @@ class Object
 {
 protected:
 	string name;									//object名称
+	string tag;
+	bool isActive = true;
 	// 组件数组可通过名称查询
 	map<string, shared_ptr<Component>> components;
 public:
@@ -42,6 +42,8 @@ public:
 
 	void Update(float dt)
 	{
+		if (!isActive)
+			return;
 		// 组件的更新
 		for (auto it = components.begin(); it != components.end(); it++)
 			it->second->Update(dt);
@@ -49,6 +51,8 @@ public:
 
 	void Draw()
 	{
+		if (!isActive)
+			return;
 		if (isComponent(COMPONENT_MESHRENDER))
 		{
 			auto render = dynamic_pointer_cast<MeshRenderer>(components[COMPONENT_MESHRENDER]);
@@ -76,23 +80,6 @@ public:
 		return component;
 	}
 
-	shared_ptr<Transform> GetTransform()
-	{
-		auto t = components[COMPONENT_TRANSFORM];
-		return dynamic_pointer_cast<Transform>(t);
-	}
-
-	template<typename S>
-	shared_ptr<Component> GetComponentByName(S&& name)
-	{
-		auto it = components.find(name);
-		if (it != components.end())
-			return it->second;
-		else
-			cout << "The specified component could not be found" << endl;
-		return nullptr;
-	}
-
 	template<typename S>
 	bool isComponent(S&& name)
 	{
@@ -105,6 +92,22 @@ public:
 
 	//Get
 	string GetName() { return name; }
+
+	shared_ptr<Transform> GetTransform() { return dynamic_pointer_cast<Transform>(GetComponentByName(COMPONENT_TRANSFORM)); }
+	shared_ptr<MeshReference> GetMeshReference() { return dynamic_pointer_cast<MeshReference>(GetComponentByName(COMPONENT_MESHREFERENCE)); }
+	shared_ptr<MeshRenderer> GetMeshRender() { return dynamic_pointer_cast<MeshRenderer>(GetComponentByName(COMPONENT_MESHRENDER)); }
+
+	template<typename S>
+	shared_ptr<Component> GetComponentByName(S&& name)
+	{
+		auto it = components.find(name);
+		if (it != components.end())
+			return it->second;
+		else
+			cout << "The specified component could not be found" << endl;
+		return nullptr;
+	}
+
 	//Set
 	void SetName(string _name)
 	{

@@ -1,12 +1,14 @@
 #pragma once
 #include<iostream>
 #include<glm.hpp>
+#include<vector>
 using namespace glm;
 
 #include"DataModel.h"
 
 class Camera;
 class MyScene;
+class Light;
 
 class RenderFrameModel : public DataModel
 {
@@ -22,6 +24,7 @@ public:
 public:
 	weak_ptr<MyScene> currentScene;
 	//map<string, weak_ptr<Camera>>cameraList;
+	std::vector<shared_ptr<Light>> lightList;
 	weak_ptr<Camera> mainCamera;
 public:
 	void SetCurrentScene(shared_ptr<MyScene> scene) { currentScene = scene; }
@@ -40,13 +43,10 @@ public:
 
 	shared_ptr<Camera> GetMainCamera()
 	{
-		//auto it = cameraList.find("MainCamera");
-		//if (it != cameraList.end())
-		//	if (!it->second.expired())
-		//		return it->second.lock();
-
 		if (!mainCamera.expired())
 			return mainCamera.lock();
 		return nullptr;
 	}
+
+
 };

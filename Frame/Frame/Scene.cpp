@@ -132,6 +132,8 @@ void MyScene::Init()
 	box->AddComponent(COMPONENT_MESHRENDER);
 	objects.insert(make_pair(box->GetName(), box));
 
+	//shared_ptr<PhongMaterial> testMaterial(new PhongMaterial);
+	//box->GetMeshRender()->SetMaterial(testMaterial);
 }
 
 void MyScene::InitKeys()

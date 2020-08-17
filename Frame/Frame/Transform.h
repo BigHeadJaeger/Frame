@@ -58,6 +58,8 @@ public:
 
 	void Update(float dt) override
 	{
+		if (!isActive)
+			return;
 		UpdateMatrix();
 	}
 };
