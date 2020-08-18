@@ -38,7 +38,7 @@ public:
 public:
 	void Update(float dt) override
 	{
-		if (!isActive)
+		if (!isUseable())
 			return;
 		// º∆À„ ”Ω«æÿ’Û
 		SetView();

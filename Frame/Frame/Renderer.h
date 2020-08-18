@@ -74,14 +74,14 @@ public:
 
 	void Update(float dt) override
 	{
-		if (!isActive)
+		if (!isUseable())
 			return;
 		UpdateMeshData();
 	}
 
 	void Render() override
 	{
-		if (!isActive)
+		if (!isUseable())
 			return;
 		SetTransform();
 		glUseProgram(material->shaderProgram.p);

@@ -48,5 +48,8 @@ public:
 		return nullptr;
 	}
 
-
+	std::vector<shared_ptr<Light>>& GetLightList()
+	{
+		return lightList;
+	}
 };

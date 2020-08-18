@@ -29,4 +29,7 @@ public:
 	{
 		object = nullptr;
 	}
+
+	// 通过依附object和自身active判断是否发挥组件的功能
+	bool isUseable();
 };

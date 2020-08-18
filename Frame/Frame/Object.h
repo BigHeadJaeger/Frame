@@ -23,7 +23,7 @@ enum class TAG
 //基类Object（目前只包含用于渲染的物体，类似gameobject）
 class Object
 {
-protected:
+public:
 	string name;									//object名称
 	string tag;
 	bool isActive = true;

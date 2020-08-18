@@ -15,11 +15,20 @@ struct Material
     float shininess;
 }; 
 
-struct Light
+struct DirLight
 {
 	vec3 position;
 	vec3 color;
+	vec3 dir;
 };
+
+struct PointLight
+{
+	vec3 position;
+	vec3 color;
+	float radius;
+	float attenuation;
+}
 
 uniform mat4 world;
 uniform mat4 worldViewProj;
@@ -28,9 +37,13 @@ uniform mat4 worldInvTranspose;
 uniform bool isVertexLight;
 uniform vec3 eyePos;
 uniform Material material;
-uniform Light light;
+#define DIR_LIGHT_NUM 1
+uniform DirLight dirLights[LIGHT_NUM];
 
-
+vec3 CalDirLight(DirLight dirLight, vec3 normal, vec3 viewDir)
+{
+	
+}
 
 // 计算需要的都是世界坐标下的量
 vec3 PhongLight(vec3 posW, vec3 normalW)
@@ -60,8 +73,6 @@ void main()
 	posW=(world*vec4(positionL,1.0)).xyz;
 	normalW=(worldInvTranspose*vec4(normalL,1.0)).xyz;
 	gl_Position = worldViewProj * vec4(positionL, 1.0);
-
-
 
 	if(isVertexLight)
 		vertexColor = vec4(PhongLight(posW, normalW), 1.0);
