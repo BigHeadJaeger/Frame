@@ -125,7 +125,7 @@ void MyScene::Init()
 	objects.insert(make_pair(box->GetName(), box));
 
 	shared_ptr<PhongMaterial> testMaterial(new PhongMaterial);
-	box->GetMeshRender()->SetMaterial(testMaterial);
+	box->GetComponent<MeshRenderer>()->SetMaterial(testMaterial);
 
 	auto testCom = box->GetComponent<Transform>();
 	testCom->isUseable();

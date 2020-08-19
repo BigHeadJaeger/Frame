@@ -123,21 +123,6 @@ public:
 	//Get
 	string GetName() { return name; }
 
-	shared_ptr<Transform> GetTransform() { return dynamic_pointer_cast<Transform>(GetComponentByName(COMPONENT_TRANSFORM)); }
-	shared_ptr<MeshReference> GetMeshReference() { return dynamic_pointer_cast<MeshReference>(GetComponentByName(COMPONENT_MESHREFERENCE)); }
-	shared_ptr<MeshRenderer> GetMeshRender() { return dynamic_pointer_cast<MeshRenderer>(GetComponentByName(COMPONENT_MESHRENDER)); }
-
-	template<typename S>
-	shared_ptr<Component> GetComponentByName(S&& name)
-	{
-		auto it = components.find(name);
-		if (it != components.end())
-			return it->second;
-		else
-			cout << "The specified component could not be found" << endl;
-		return nullptr;
-	}
-
 	const vec3& GetPosition()
 	{
 		return transform->position;

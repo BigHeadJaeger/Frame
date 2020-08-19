@@ -77,7 +77,7 @@ void MeshRenderer::UpdateMeshData()
 {
 	if (object->isComponent(COMPONENT_MESHREFERENCE))
 	{
-		auto meshReference = dynamic_pointer_cast<MeshReference>(object->GetComponentByName(COMPONENT_MESHREFERENCE));
+		auto meshReference = object->GetComponent<MeshReference>();
 		if (meshReference->meshChange)
 		{
 			meshReference->meshChange = false;
@@ -89,7 +89,7 @@ void MeshRenderer::UpdateMeshData()
 
 void Renderer::SetTransform()
 {
-	auto transform = object->GetTransform();
+	auto transform = object->transform;
 	auto tool = ShaderDataTool::GetInstance();
 	tool.SetUniform("worldViewProj", transform->worldViewProj, material->shaderProgram);
 	tool.SetUniform("world", transform->world, material->shaderProgram);
@@ -102,7 +102,7 @@ void Renderer::SetCamera()
 	auto mainCamera = RenderFrameModel::GetInstance().GetMainCamera();
 	if (mainCamera->isUseable())
 	{
-		tool.SetUniform("eyePos", mainCamera->object->GetTransform()->position, material->shaderProgram);
+		tool.SetUniform("eyePos", mainCamera->object->transform->position, material->shaderProgram);
 	}
 }
 
