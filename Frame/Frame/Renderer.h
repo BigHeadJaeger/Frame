@@ -83,7 +83,9 @@ public:
 	{
 		if (!isUseable())
 			return;
+		SetCamera();
 		SetTransform();
+		SetLight();
 		glUseProgram(material->shaderProgram.p);
 		glBindVertexArray(VAO);
 		material->Transfer();

@@ -6,6 +6,7 @@
 #include<iostream>
 using namespace std;
 #include"Renderer.h"
+#include"LightComponent.h"
 //#include"MarchingCube.h"
 //#include"DistributeFun.h"
 //#include"Component.h"
@@ -18,8 +19,6 @@ enum class TAG
 	MAIN_CAMERA
 };
 
-
-
 //基类Object（目前只包含用于渲染的物体，类似gameobject）
 class Object
 {
@@ -29,6 +28,8 @@ public:
 	bool isActive = true;
 	// 组件数组可通过名称查询
 	map<string, shared_ptr<Component>> components;
+
+	shared_ptr<Transform> transform;
 public:
 	Object()
 	{
@@ -68,17 +69,28 @@ public:
 		if (type == COMPONENT_CAMERA)
 			component = make_shared<Camera>();
 		else if (type == COMPONENT_TRANSFORM)
-			component = make_shared<Transform>();
+		{
+			auto tran = make_shared<Transform>();
+			component = tran;
+			transform = tran;
+		}
 		else if (type == COMPONENT_MESHREFERENCE)
 			component = make_shared<MeshReference>();
 		else if (type == COMPONENT_MESHRENDER)
 			component = make_shared<MeshRenderer>();
+		else if (type == COMPONENT_LIGHT)
+		{
+			auto lightComponent = make_shared<LightComponent>();
+			component = lightComponent;
+			RenderFrameModel::GetInstance().PushLight(lightComponent);
+		}
 
 		component->object = this;
 		components.insert(make_pair(type, component));
 
 		return component;
 	}
+
 
 	template<typename S>
 	bool isComponent(S&& name)
@@ -90,6 +102,24 @@ public:
 			return false;
 	}
 
+public:
+	//Set
+	void SetName(string _name)
+	{
+		name = _name;
+	}
+
+
+	void SetPosition(vec3&& pos)
+	{
+		transform->SetPosition(pos);
+	}
+	void SetPosition(vec3& pos)
+	{
+		transform->SetPosition(pos);
+	}
+
+public:
 	//Get
 	string GetName() { return name; }
 
@@ -108,16 +138,32 @@ public:
 		return nullptr;
 	}
 
-	//Set
-	void SetName(string _name)
+	const vec3& GetPosition()
 	{
-		name = _name; 
+		return transform->position;
 	}
 
-	void SetPosition(vec3 pos)
+	template<typename TYPE>
+	shared_ptr<TYPE> GetComponent()
 	{
-		auto transform = GetTransform();
-		transform->SetPosition(pos);
+		auto requireName = typeid(TYPE).name();
+
+		shared_ptr<Component> res = nullptr;
+		for (auto component : components)
+		{
+			auto targetName = typeid(*component.second.get()).name();
+			if (targetName == requireName)
+			{
+				res = component.second;
+				break;
+			}
+		}
+		if (res)
+			return dynamic_pointer_cast<TYPE>(res);
+		else
+			cout << "The specified component could not be found" << endl;
+
+		return nullptr;
 	}
 };
 

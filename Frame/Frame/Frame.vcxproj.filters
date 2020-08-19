@@ -119,6 +119,9 @@
     <ClInclude Include="MeshReference.h">
       <Filter>头文件</Filter>
     </ClInclude>
+    <ClInclude Include="LightComponent.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="SF_VertexColor.v">

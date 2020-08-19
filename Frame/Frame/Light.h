@@ -10,24 +10,34 @@ enum class LIGHT_TYPE
 };
 
 // 每个光照也是一个object，所有光照需要整合在一个集合中处理
-class Light : public Component
+class Light
 {
 public:
 	LIGHT_TYPE type;
-	vec3 lightPos = vec3(0);
 	vec3 lightColor = vec3(255);
+
+ 	virtual void temp() = 0;
 };
 
 // 方向光，平行光
 class DirLight:public Light
 {
 public:
-	vec3 lightDir = vec3(lightPos.x, lightPos.y - 1, lightPos.z);
+	vec3 lightDir;
 public:
 	DirLight()
 	{
+		lightDir = normalize(vec3(1, -1, 1));
 		type = LIGHT_TYPE::DIRECT_LIGHT;
 	}
+
+	template<typename V>
+	void SetDir(V&& dir)
+	{
+		lightDir = normalize(dir);
+	}
+
+	void temp()override {}
 };
 
 
@@ -41,4 +51,5 @@ public:
 	{
 		type = LIGHT_TYPE::POINT_LIGHT;
 	}
+	void temp()override {}
 };

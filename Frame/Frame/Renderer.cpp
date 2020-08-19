@@ -1,53 +1,7 @@
 #include "Renderer.h"
 #include"Object.h"
 #include"Light.h"
-
-//void Renderer::Render(shared_ptr<ShaderData> data)
-//{
-//	glUseProgram(shaderProgram.p);
-//	//绑定前面设置好的VAO
-//	glBindVertexArray(data->VAO);
-//	//传递坐标变换矩阵
-//	auto tool = ShaderDataTool::GetInstance();
-//	tool.SetUniform("worldViewProj", data->worldViewProj, shaderProgram);
-//	tool.SetUniform("world", data->world, shaderProgram);
-//	tool.SetUniform("worldInvTranspose", data->worldInvTranspose, shaderProgram);
-//	tool.SetUniform("eyePos", MainCamera::GetInstance().eyePos, shaderProgram);
-//	tool.SetUniform("light.position", data->lightPos, shaderProgram);
-//	tool.SetUniform("light.color", data->lightColor / vec3(255), shaderProgram);
-//	glBindVertexArray(0);
-//}
-
-//void SimpleRenderer::Render(ShaderData* shaderData)
-//{
-//	glUseProgram(shaderProgram.p);
-//	auto data = dynamic_cast<SimpleShaderData*>(shaderData);
-//	glBindVertexArray(data->VAO);
-//	//传递坐标变换矩阵
-//	SetUniform("worldViewProj", data->worldViewProj, shaderProgram);
-//	SetUniform("world", data->world, shaderProgram);
-//	SetUniform("worldInvTranspose", data->worldInvTranspose, shaderProgram);
-//
-//	SetUniform("color", data->color, shaderProgram);
-//	glDrawArrays(data->drawType, 0, data->drawUnitNumber);
-//}
-
-//void VertexColorRender::Render(shared_ptr<ShaderData> shaderData)
-//{
-//	Renderer::Render(shaderData);
-//
-//	auto data = dynamic_pointer_cast<VertexShaderData>(shaderData);
-//	glUseProgram(shaderProgram.p);
-//	glBindVertexArray(data->VAO);
-//	glDrawArrays(data->drawType, 0, data->drawUnitNumber);
-//	glBindVertexArray(0);
-//}
-
-//PBRRenderer* PBRRenderer::instance = NULL;
-//SimpleRenderer* SimpleRenderer::instance = NULL;
-//MPSRenderer* MPSRenderer::instance = NULL;
-//VertexColorRender* VertexColorRender::instance = NULL;
-//VertexColorRender VertexColorRender::ins
+#include"LightComponent.h"
 
 void MeshRenderer::InitVertexBuffer(VertexData& vertexData)
 {
@@ -154,12 +108,32 @@ void Renderer::SetCamera()
 
 void Renderer::SetLight()
 {
-	auto list = RenderFrameModel::GetInstance().GetLightList();
-	for (auto light : list)
+	auto tool = ShaderDataTool::GetInstance();
+	auto lightComponents = RenderFrameModel::GetInstance().GetLightList();
+	int dirCount = 0;
+	int pointCount = 0;
+	for (size_t i = 0; i < lightComponents.size(); i++)
 	{
-		if (light->isUseable())
+		if (lightComponents[i]->isUseable())
 		{
-
+			
+			switch (lightComponents[i]->light->type)
+			{
+			case LIGHT_TYPE::DIRECT_LIGHT:
+			{
+				auto light = dynamic_pointer_cast<DirLight>(lightComponents[i]->light);
+				string preName = "dirLights[" + to_string(dirCount) + "].";
+				dirCount++;
+				tool.SetUniform((preName + "position"), lightComponents[i]->object->GetPosition(), material->shaderProgram);
+				tool.SetUniform((preName + "color"), light->lightColor / vec3(255), material->shaderProgram);
+				tool.SetUniform((preName + "dir"), normalize(light->lightDir), material->shaderProgram);
+				break;
+			}
+			case LIGHT_TYPE::POINT_LIGHT:
+				break;
+			default:
+				break;
+			}
 		}
 	}
 }

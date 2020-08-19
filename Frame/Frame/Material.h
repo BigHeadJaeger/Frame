@@ -75,7 +75,6 @@ public:
     vec3 diffuse = vec3(baseColor.x, baseColor.y, baseColor.z);
     vec3 specular = vec3(125, 125, 125);
     float shininess = 32.0f;
-    bool isVertexLight = false;
 public:
     PhongMaterial() 
     {
@@ -87,7 +86,6 @@ public:
     {
         auto tool = ShaderDataTool::GetInstance();
             
-        tool.SetUniform("isVertexLight", isVertexLight, shaderProgram);
         tool.SetUniform("material.ambient", ambient / vec3(255), shaderProgram);
         tool.SetUniform("material.diffuse", diffuse / vec3(255), shaderProgram);
         tool.SetUniform("material.specular", specular / vec3(255), shaderProgram);

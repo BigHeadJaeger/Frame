@@ -1,38 +1,5 @@
 #include "Object.h"
 
-//void Object::Update(float dt)
-//{
-//
-//}
-
-//void Object::SetRenderer(RENDERERTYPE type)
-//{
-//	switch (type)
-//	{
-//	case RENDERERTYPE::DEFAULT:
-//		renderer = &DefaultRenderer::GetRenderer();
-//		shaderData.reset();
-//		shaderData = make_shared<DefaultShaderData>();
-//		break;
-//	case RENDERERTYPE::SIMPLE:
-//		//renderer = SimpleRenderer::GetRenderer();
-//		////delete shaderData;
-//		//shaderData.release();
-//		//shaderData = unique_ptr<SimpleShaderData>();
-//		//break;
-//	case RENDERERTYPE::VERTEXCOLOR:
-//		renderer = &VertexColorRender::GetRenderer();
-//		//delete shaderData;
-//		shaderData.reset();
-//		shaderData = make_shared<VertexShaderData>();
-//		//shaderData = unique_ptr<VertexShaderData>();
-//		break;
-//	case RENDERERTYPE::MPS:
-//		break;
-//	default:
-//		break;
-//	}
-//}
 
 //void Metaball::SetSourcePoints(vec3 firstPos, int w, int h, int d)
 //{
