@@ -75,9 +75,9 @@ void MeshRenderer::InitVertexBuffer(VertexData& vertexData)
 
 void MeshRenderer::UpdateMeshData()
 {
-	if (object->isComponent(COMPONENT_MESHREFERENCE))
+	auto meshReference = object->GetComponent<MeshReference>();
+	if (meshReference)
 	{
-		auto meshReference = object->GetComponent<MeshReference>();
 		if (meshReference->meshChange)
 		{
 			meshReference->meshChange = false;

@@ -34,7 +34,7 @@ public:
 	Object()
 	{
 		// 每个物体默认有坐标组件
-		AddComponent(COMPONENT_TRANSFORM);
+		AddComponent<Transform>();
 	}
 
 	~Object()
@@ -54,48 +54,42 @@ public:
 	{
 		if (!isActive)
 			return;
-		if (isComponent(COMPONENT_MESHRENDER))
-		{
-			auto render = dynamic_pointer_cast<MeshRenderer>(components[COMPONENT_MESHRENDER]);
-			render->Render();
-		}
+
+		auto meshRender = GetComponent<MeshRenderer>();
+		if (meshRender)
+			meshRender->Render();
 	}
 
-	template<typename S>
-	shared_ptr<Component> AddComponent(S&& type)
+	template<typename TYPE>
+	shared_ptr<TYPE> AddComponent()
 	{
-		shared_ptr<Component> component;
-
-		if (type == COMPONENT_CAMERA)
-			component = make_shared<Camera>();
-		else if (type == COMPONENT_TRANSFORM)
+		string typeName = typeid(TYPE).name();
+		auto it = components.find(typeName);
+		if (it != components.end())
 		{
-			auto tran = make_shared<Transform>();
-			component = tran;
-			transform = tran;
-		}
-		else if (type == COMPONENT_MESHREFERENCE)
-			component = make_shared<MeshReference>();
-		else if (type == COMPONENT_MESHRENDER)
-			component = make_shared<MeshRenderer>();
-		else if (type == COMPONENT_LIGHT)
-		{
-			auto lightComponent = make_shared<LightComponent>();
-			component = lightComponent;
-			RenderFrameModel::GetInstance().PushLight(lightComponent);
+			cout << "the specify component has been added" << endl;
+			return nullptr;
 		}
 
+		auto component = make_shared<TYPE>();
 		component->object = this;
-		components.insert(make_pair(type, component));
+		if (typeName == "class Transform")
+			transform = dynamic_pointer_cast<Transform>(component);
+		else if (typeName == "class LightComponent")
+		{
+			RenderFrameModel::GetInstance().PushLight(dynamic_pointer_cast<LightComponent>(component));
+		}
+
+		components.insert(make_pair(typeid(TYPE).name(), component));
 
 		return component;
 	}
 
 
-	template<typename S>
-	bool isComponent(S&& name)
+	template<typename TYPE>
+	bool isComponent()
 	{
-		auto it = components.find(name);
+		auto it = components.find(typeid(TYPE).name());
 		if (it != components.end())
 			return true;
 		else
@@ -132,21 +126,9 @@ public:
 	shared_ptr<TYPE> GetComponent()
 	{
 		auto requireName = typeid(TYPE).name();
-
-		shared_ptr<Component> res = nullptr;
-		for (auto component : components)
-		{
-			auto targetName = typeid(*component.second.get()).name();
-			if (targetName == requireName)
-			{
-				res = component.second;
-				break;
-			}
-		}
-		if (res)
-			return dynamic_pointer_cast<TYPE>(res);
-		else
-			cout << "The specified component could not be found" << endl;
+		auto it = components.find(requireName);
+		if (it != components.end())
+			return dynamic_pointer_cast<TYPE>(it->second);
 
 		return nullptr;
 	}

@@ -104,7 +104,7 @@ void MyScene::Init()
 	shared_ptr<Object> mainCamera(new Object);
 	mainCamera->SetName("MainCamera");
 	mainCamera->SetPosition(vec3(0, 2, 3));
-	auto cameraComponent = dynamic_pointer_cast<Camera>(mainCamera->AddComponent(COMPONENT_CAMERA));
+	auto cameraComponent = mainCamera->AddComponent<Camera>();
 	cameraComponent->Init(vec3(0, 0, 0));
 	RenderFrameModel::GetInstance().SetMainCamera(cameraComponent);
 	objects.insert(make_pair(mainCamera->GetName(), mainCamera));
@@ -112,23 +112,19 @@ void MyScene::Init()
 	shared_ptr<Object> dirLight(new Object);
 	dirLight->SetName("DirLight");
 	dirLight->SetPosition(vec3(-3, 1, -2));
-	auto lightComponent = dynamic_pointer_cast<LightComponent>(dirLight->AddComponent(COMPONENT_LIGHT));
+	auto lightComponent = dirLight->AddComponent<LightComponent>();
 	dynamic_pointer_cast<DirLight>(lightComponent->light)->lightColor = vec3(150);
 	objects.insert(make_pair(dirLight->GetName(), dirLight));
 
 	shared_ptr<Object> box(new Object);
 	box->SetName("box1");
-	auto meshReference = dynamic_pointer_cast<MeshReference>(box->AddComponent(COMPONENT_MESHREFERENCE));
+	auto meshReference = box->AddComponent<MeshReference>();
 	meshReference->CreateBox(1, 1, 1);
-	box->AddComponent(COMPONENT_MESHRENDER);
-	//box->transform->position = vec3(1, 0, 0);
+	box->AddComponent<MeshRenderer>();
 	objects.insert(make_pair(box->GetName(), box));
 
 	shared_ptr<PhongMaterial> testMaterial(new PhongMaterial);
 	box->GetComponent<MeshRenderer>()->SetMaterial(testMaterial);
-
-	auto testCom = box->GetComponent<Transform>();
-	testCom->isUseable();
 }
 
 void MyScene::InitKeys()
