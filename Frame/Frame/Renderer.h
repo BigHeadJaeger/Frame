@@ -91,6 +91,7 @@ public:
 		material->Transfer();
 		glDrawArrays(drawType, 0, drawUnitNumber);
 		glBindVertexArray(0);
+		glUseProgram(0);
 	}
 };
 

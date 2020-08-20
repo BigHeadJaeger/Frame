@@ -91,9 +91,11 @@ void Renderer::SetTransform()
 {
 	auto transform = object->transform;
 	auto tool = ShaderDataTool::GetInstance();
+	glUseProgram(material->shaderProgram.p);
 	tool.SetUniform("worldViewProj", transform->worldViewProj, material->shaderProgram);
 	tool.SetUniform("world", transform->world, material->shaderProgram);
 	tool.SetUniform("worldInvTranspose", transform->worldInvTranspose, material->shaderProgram);
+	glUseProgram(0);
 }
 
 void Renderer::SetCamera()
@@ -102,12 +104,15 @@ void Renderer::SetCamera()
 	auto mainCamera = RenderFrameModel::GetInstance().GetMainCamera();
 	if (mainCamera->isUseable())
 	{
+		glUseProgram(material->shaderProgram.p);
 		tool.SetUniform("eyePos", mainCamera->object->transform->position, material->shaderProgram);
+		glUseProgram(0);
 	}
 }
 
 void Renderer::SetLight()
 {
+	glUseProgram(material->shaderProgram.p);
 	auto tool = ShaderDataTool::GetInstance();
 	auto lightComponents = RenderFrameModel::GetInstance().GetLightList();
 	int dirCount = 0;
@@ -136,4 +141,5 @@ void Renderer::SetLight()
 			}
 		}
 	}
+	glUseProgram(0);
 }

@@ -118,13 +118,25 @@ void MyScene::Init()
 
 	shared_ptr<Object> box(new Object);
 	box->SetName("box1");
+	box->SetPosition(vec3(0.5, 0, 0));
 	auto meshReference = box->AddComponent<MeshReference>();
 	meshReference->CreateBox(1, 1, 1);
-	box->AddComponent<MeshRenderer>();
+	auto bR = box->AddComponent<MeshRenderer>();
+	shared_ptr<PhongMaterial> testMaterial(new PhongMaterial);
+	box->GetComponent<MeshRenderer>()->material = testMaterial;
+	bR->material->baseColor = vec4(255, 0, 0, 0);
 	objects.insert(make_pair(box->GetName(), box));
 
-	shared_ptr<PhongMaterial> testMaterial(new PhongMaterial);
-	box->GetComponent<MeshRenderer>()->SetMaterial(testMaterial);
+	shared_ptr<Object> sphere(new Object);
+	sphere->GetComponent<Transform>()->position = vec3(0, 0, 0);
+	//sphere->transform->position = vec3(1, 0, 0);
+	sphere->SetName("sphere1");
+	auto sphereMR = sphere->AddComponent<MeshReference>();
+	sphereMR->CreateSphere(1);
+	auto sR = sphere->AddComponent<MeshRenderer>();
+	shared_ptr<PhongMaterial> sphereMaterial(new PhongMaterial);
+	sR->material = sphereMaterial;
+	objects.insert(make_pair(sphere->GetName(), sphere));
 }
 
 void MyScene::InitKeys()

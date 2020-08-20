@@ -1,5 +1,4 @@
 #pragma once
-#include"Camera.h"
 
 const float g = 9.8;				//重力加速度
 

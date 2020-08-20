@@ -22,7 +22,7 @@ class Material
 public:
     ShaderProgram shaderProgram;
 public:
-    vec4 baseColor = vec4(125, 30, 160, 255);      // 基础颜色值
+    vec4 baseColor = vec4(225, 225, 225, 255);      // 基础颜色值
     GLuint textureBase;                             // 基础贴图
     bool isTextureBase = false;                     // 是否使用基础贴图，否则用baseColor作为基础颜色
     MATERIALTYPE type;
