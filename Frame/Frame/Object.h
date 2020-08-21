@@ -6,6 +6,7 @@
 #include<iostream>
 using namespace std;
 #include"Renderer.h"
+#include"LightComponent.h"
 //#include"MarchingCube.h"
 //#include"DistributeFun.h"
 //#include"Component.h"
@@ -18,8 +19,6 @@ enum class TAG
 	MAIN_CAMERA
 };
 
-
-
 //基类Object（目前只包含用于渲染的物体，类似gameobject）
 class Object
 {
@@ -29,11 +28,13 @@ public:
 	bool isActive = true;
 	// 组件数组可通过名称查询
 	map<string, shared_ptr<Component>> components;
+
+	shared_ptr<Transform> transform;
 public:
 	Object()
 	{
 		// 每个物体默认有坐标组件
-		AddComponent(COMPONENT_TRANSFORM);
+		AddComponent<Transform>();
 	}
 
 	~Object()
@@ -53,71 +54,83 @@ public:
 	{
 		if (!isActive)
 			return;
-		if (isComponent(COMPONENT_MESHRENDER))
-		{
-			auto render = dynamic_pointer_cast<MeshRenderer>(components[COMPONENT_MESHRENDER]);
-			render->Render();
-		}
+
+		auto meshRender = GetComponent<MeshRenderer>();
+		if (meshRender)
+			meshRender->Render();
 	}
 
-	template<typename S>
-	shared_ptr<Component> AddComponent(S&& type)
+	template<typename TYPE>
+	shared_ptr<TYPE> AddComponent()
 	{
-		shared_ptr<Component> component;
+		string typeName = typeid(TYPE).name();
+		auto it = components.find(typeName);
+		if (it != components.end())
+		{
+			cout << "the specify component has been added" << endl;
+			return nullptr;
+		}
 
-		if (type == COMPONENT_CAMERA)
-			component = make_shared<Camera>();
-		else if (type == COMPONENT_TRANSFORM)
-			component = make_shared<Transform>();
-		else if (type == COMPONENT_MESHREFERENCE)
-			component = make_shared<MeshReference>();
-		else if (type == COMPONENT_MESHRENDER)
-			component = make_shared<MeshRenderer>();
-
+		auto component = make_shared<TYPE>();
 		component->object = this;
-		components.insert(make_pair(type, component));
+		if (typeName == "class Transform")
+			transform = dynamic_pointer_cast<Transform>(component);
+		else if (typeName == "class LightComponent")
+		{
+			RenderFrameModel::GetInstance().PushLight(dynamic_pointer_cast<LightComponent>(component));
+		}
+
+		components.insert(make_pair(typeid(TYPE).name(), component));
 
 		return component;
 	}
 
-	template<typename S>
-	bool isComponent(S&& name)
+
+	template<typename TYPE>
+	bool isComponent()
 	{
-		auto it = components.find(name);
+		auto it = components.find(typeid(TYPE).name());
 		if (it != components.end())
 			return true;
 		else
 			return false;
 	}
 
-	//Get
-	string GetName() { return name; }
-
-	shared_ptr<Transform> GetTransform() { return dynamic_pointer_cast<Transform>(GetComponentByName(COMPONENT_TRANSFORM)); }
-	shared_ptr<MeshReference> GetMeshReference() { return dynamic_pointer_cast<MeshReference>(GetComponentByName(COMPONENT_MESHREFERENCE)); }
-	shared_ptr<MeshRenderer> GetMeshRender() { return dynamic_pointer_cast<MeshRenderer>(GetComponentByName(COMPONENT_MESHRENDER)); }
-
-	template<typename S>
-	shared_ptr<Component> GetComponentByName(S&& name)
-	{
-		auto it = components.find(name);
-		if (it != components.end())
-			return it->second;
-		else
-			cout << "The specified component could not be found" << endl;
-		return nullptr;
-	}
-
+public:
 	//Set
 	void SetName(string _name)
 	{
-		name = _name; 
+		name = _name;
 	}
 
-	void SetPosition(vec3 pos)
+
+	void SetPosition(vec3&& pos)
 	{
-		auto transform = GetTransform();
 		transform->SetPosition(pos);
+	}
+	void SetPosition(vec3& pos)
+	{
+		transform->SetPosition(pos);
+	}
+
+public:
+	//Get
+	string GetName() { return name; }
+
+	const vec3& GetPosition()
+	{
+		return transform->position;
+	}
+
+	template<typename TYPE>
+	shared_ptr<TYPE> GetComponent()
+	{
+		auto requireName = typeid(TYPE).name();
+		auto it = components.find(requireName);
+		if (it != components.end())
+			return dynamic_pointer_cast<TYPE>(it->second);
+
+		return nullptr;
 	}
 };
 

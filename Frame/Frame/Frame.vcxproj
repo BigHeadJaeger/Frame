@@ -167,6 +167,7 @@
     <ClInclude Include="DistributeFun.h" />
     <ClInclude Include="Interaction.h" />
     <ClInclude Include="Light.h" />
+    <ClInclude Include="LightComponent.h" />
     <ClInclude Include="Material.h" />
     <ClInclude Include="Mesh.h" />
     <ClInclude Include="MeshReference.h" />
@@ -181,6 +182,8 @@
     <ClInclude Include="VertexData.h" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="SF_DefaultSpecular.f" />
+    <None Include="SF_DefaultSpecular.v" />
     <None Include="SF_PBR.f" />
     <None Include="SF_PBR.v" />
     <None Include="SF_Phong.f" />

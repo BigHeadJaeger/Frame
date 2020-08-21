@@ -39,6 +39,17 @@ public:
 		ConvertMeshData();
 	}
 
-	//void InitBufferData()override;
-	//void UpdateBufferData() override;
+	void CreateSphere(float radius, int slice = 20, int stack = 20)
+	{
+		meshChange = true;
+		mesh.InitSphere(radius, slice, stack);
+		ConvertMeshData();
+	}
+
+	void CreateGrid(float width, float height, int m = 10, int n = 10)
+	{
+		meshChange = true;
+		mesh.InitGrid(width, height, m, n);
+		ConvertMeshData();
+	}
 };

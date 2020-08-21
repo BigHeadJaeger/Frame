@@ -8,7 +8,7 @@ using namespace glm;
 
 class Camera;
 class MyScene;
-class Light;
+class LightComponent;
 
 class RenderFrameModel : public DataModel
 {
@@ -24,13 +24,18 @@ public:
 public:
 	weak_ptr<MyScene> currentScene;
 	//map<string, weak_ptr<Camera>>cameraList;
-	std::vector<shared_ptr<Light>> lightList;
+	std::vector<shared_ptr<LightComponent>> lightList;
 	weak_ptr<Camera> mainCamera;
 public:
 	void SetCurrentScene(shared_ptr<MyScene> scene) { currentScene = scene; }
 	void SetMainCamera(shared_ptr<Camera> camera)
 	{
 		mainCamera = camera;
+	}
+
+	void PushLight(shared_ptr<LightComponent> lightComponent)
+	{
+		lightList.push_back(lightComponent);
 	}
 public:
 	shared_ptr<MyScene> GetCurrentScene()
@@ -48,7 +53,7 @@ public:
 		return nullptr;
 	}
 
-	std::vector<shared_ptr<Light>>& GetLightList()
+	std::vector<shared_ptr<LightComponent>>& GetLightList()
 	{
 		return lightList;
 	}

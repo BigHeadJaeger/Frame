@@ -101,39 +101,36 @@ void MyScene::Init()
 	//testMaterial->InitTextureRoughness("Material\\oakfloor\\roughness.png");
 	//objects.insert(make_pair(grid->GetName(), grid));
 
-	//shared_ptr<MeshObject> cow2(new MeshObject());
-	//cow2->SetName("cow");
-	//cow2->readObjFile("OBJ\\cow.obj");
-	//cow2->SetRenderer(RENDERERTYPE::DEFAULT);
-	//cow2->InitBufferData();
-	//cow2->GetTransform().SetPosition(vec3(0, 0, 1));
-	//cow2->GetTransform().SetScaler(vec3(2.0));
-	//auto cow2ShaderData = dynamic_pointer_cast<DefaultShaderData>(cow2->GetShaderData());
-	//
-	//auto cow2Material = dynamic_pointer_cast<PhongMaterial>(cow2ShaderData->material);
-	//cow2Material->ambient = vec3(255.f, 125.f, 80.f);
-	//cow2Material->diffuse = vec3(255.f, 125.f, 80.f);
-	//cow2Material->specular = vec3(125.f, 125.f, 125.f);
-	//objects.insert(make_pair(cow2->GetName(), cow2));
-
 	shared_ptr<Object> mainCamera(new Object);
 	mainCamera->SetName("MainCamera");
 	mainCamera->SetPosition(vec3(0, 2, 3));
-	auto cameraComponent = dynamic_pointer_cast<Camera>(mainCamera->AddComponent(COMPONENT_CAMERA));
+	auto cameraComponent = mainCamera->AddComponent<Camera>();
 	cameraComponent->Init(vec3(0, 0, 0));
 	RenderFrameModel::GetInstance().SetMainCamera(cameraComponent);
 	objects.insert(make_pair(mainCamera->GetName(), mainCamera));
 
+	shared_ptr<Object> dirLight(new Object);
+	dirLight->SetName("DirLight");
+	dirLight->SetPosition(vec3(-3, 1, -2));
+	auto lightComponent = dirLight->AddComponent<LightComponent>();
+	dynamic_pointer_cast<DirLight>(lightComponent->light)->lightColor = vec3(150);
+	objects.insert(make_pair(dirLight->GetName(), dirLight));
 
 	shared_ptr<Object> box(new Object);
 	box->SetName("box1");
-	auto meshReference = dynamic_pointer_cast<MeshReference>(box->AddComponent(COMPONENT_MESHREFERENCE));
+	box->SetPosition(vec3(0, 0, 0));
+	auto meshReference = box->AddComponent<MeshReference>();
 	meshReference->CreateBox(1, 1, 1);
-	box->AddComponent(COMPONENT_MESHRENDER);
+	auto bR = box->AddComponent<MeshRenderer>();
+	shared_ptr<DefaultSpecularMaterial> specularMaterial(new DefaultSpecularMaterial);
+	specularMaterial->SetTextureBase("");
+	specularMaterial->baseColor = vec4(255, 0, 0, 0);
+	//specularMaterial->specular = vec3(125, 0, 0);
+	box->GetComponent<MeshRenderer>()->material = specularMaterial;
+	//shared_ptr<PhongMaterial> testMaterial(new PhongMaterial);
+	//box->GetComponent<MeshRenderer>()->material = testMaterial;
+	//bR->material->baseColor = vec4(255, 0, 0, 0);
 	objects.insert(make_pair(box->GetName(), box));
-
-	shared_ptr<PhongMaterial> testMaterial(new PhongMaterial);
-	box->GetMeshRender()->SetMaterial(testMaterial);
 }
 
 void MyScene::InitKeys()
@@ -149,16 +146,10 @@ void MyScene::InitKeys()
 
 void MyScene::Update(float& dt)
 {
-
-	// 计算视角矩阵
-	//MainCamera::GetInstance().SetView();
-	//// 计算投影矩阵
-	//MainCamera::GetInstance().SetPro();
-
 	// 遍历所有object更新矩阵
 	for (auto objs_it = objects.begin(); objs_it != objects.end(); objs_it++)
 	{
-		(*objs_it).second->Update(dt);
+		objs_it->second->Update(dt);
 	}
 
 	// 按键事件带来的变换会在下一帧起效
@@ -201,7 +192,7 @@ void MyScene::Draw()
 
 	for (auto objs_it = objects.begin(); objs_it != objects.end(); objs_it++)
 	{
-		(*objs_it).second->Draw();
+		objs_it->second->Draw();
 	}
 
 }

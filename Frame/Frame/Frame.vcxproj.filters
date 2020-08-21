@@ -119,6 +119,9 @@
     <ClInclude Include="MeshReference.h">
       <Filter>头文件</Filter>
     </ClInclude>
+    <ClInclude Include="LightComponent.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="SF_VertexColor.v">
@@ -143,6 +146,12 @@
       <Filter>Shader</Filter>
     </None>
     <None Include="SF_SimpleColor.v">
+      <Filter>Shader</Filter>
+    </None>
+    <None Include="SF_DefaultSpecular.v">
+      <Filter>Shader</Filter>
+    </None>
+    <None Include="SF_DefaultSpecular.f">
       <Filter>Shader</Filter>
     </None>
   </ItemGroup>
