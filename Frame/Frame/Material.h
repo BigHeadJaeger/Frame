@@ -24,14 +24,19 @@ public:
 public:
     vec4 baseColor = vec4(225, 225, 225, 255);      // 基础颜色值
     GLuint textureBase;                             // 基础贴图
-    bool isTextureBase = false;                     // 是否使用基础贴图，否则用baseColor作为基础颜色
     MATERIALTYPE type;
 public:
-    void InitTextureBase(string fileName)
+    void SetTextureBase(string fileName)
     {
-        isTextureBase = true;
         auto tool = ShaderDataTool::GetInstance();
-        tool.InitTextureWithFile(textureBase, fileName.c_str());
+        if (fileName == "")
+        {
+            tool.InitTextureWithFile(textureBase, "Material\\Default\\BaseColor.png");
+        }
+        else
+        {
+            tool.InitTextureWithFile(textureBase, fileName.c_str());
+        }
     }
 
     // 每个材质有自己的方法将数据传输到shader中
@@ -64,7 +69,24 @@ class DefaultDiffuseMaterial : public Material
 // 默认镜面反射材质
 class DefaultSpecularMaterial : public Material
 {
+public:
     vec3 specular;
+    float shininess = 32.0f;
+public:
+    DefaultSpecularMaterial()
+    {
+        specular = vec3(baseColor.x, baseColor.y, baseColor.z);
+        shaderProgram.SetShader("SF_DefaultSpecular.v", "SF_DefaultSpecular.f");
+    }
+
+    void Transfer() override
+    {
+        auto tool = ShaderDataTool::GetInstance();
+        tool.SetUniform("baseColor", vec3(baseColor.x, baseColor.y, baseColor.z) / vec3(255), shaderProgram);
+        tool.SetUniform("specular", specular / vec3(255), shaderProgram);
+        tool.SetUniform("shininess", shininess, shaderProgram);
+        tool.SetTexture(textureBase, 0, GL_TEXTURE0, "albedoMap", shaderProgram);
+    }
 };
 
 // 包含了环境 漫反射 镜面反射的材质，且只用数字控制，不涉及贴图
@@ -73,7 +95,7 @@ class PhongMaterial:public Material
 public:
     vec3 ambient = vec3(baseColor.x, baseColor.y, baseColor.z);
     vec3 diffuse = vec3(baseColor.x, baseColor.y, baseColor.z);
-    vec3 specular = vec3(125, 125, 125);
+    vec3 specular = vec3(baseColor.x, baseColor.y, baseColor.z);
     float shininess = 32.0f;
 public:
     PhongMaterial() 
@@ -114,7 +136,7 @@ public:
         type = MATERIALTYPE::MATERIAL_PBR;
     }
 
-    void InitTextureMetallic(string fileName)
+    void SetTextureMetallic(string fileName)
     {
         isTextureMetallic = true;
         auto tool = ShaderDataTool::GetInstance();
@@ -126,13 +148,13 @@ public:
         auto tool = ShaderDataTool::GetInstance();
         tool.InitTextureWithFile(textureRoughness, fileName.c_str());
     }
-    void InitTextureAO(string fileName)
+    void SetTextureAO(string fileName)
     {
         isTextureAO = true;
         auto tool = ShaderDataTool::GetInstance();
         tool.InitTextureWithFile(textureAO, fileName.c_str());
     }
-    void InitTextureNormal(string fileName)
+    void SetTextureNormal(string fileName)
     {
         isTextureNormal = true;
         auto tool = ShaderDataTool::GetInstance();
@@ -142,11 +164,8 @@ public:
     void Transfer() override
     {
         auto tool = ShaderDataTool::GetInstance();
-        tool.SetUniform("isTextureBase", isTextureBase, shaderProgram);
-        if (isTextureBase)
-            tool.SetTexture(textureBase, 0, GL_TEXTURE0, "albedoMap", shaderProgram);
-        else
-            tool.SetUniform("baseColor", vec3(baseColor.x, baseColor.y, baseColor.z) / vec3(255), shaderProgram);
+        tool.SetUniform("baseColor", vec3(baseColor.x, baseColor.y, baseColor.z) / vec3(255), shaderProgram);
+        tool.SetTexture(textureBase, 0, GL_TEXTURE0, "albedoMap", shaderProgram);
 
         tool.SetUniform("isTextureMetallic", isTextureMetallic, shaderProgram);
         if (isTextureMetallic)

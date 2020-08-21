@@ -1,6 +1,6 @@
 #version 460
 
-in vec3 posW;
+in vec3 positionW;
 in vec3 normalW;
 
 out vec4 FragColor;
@@ -72,5 +72,5 @@ vec3 PhongLight(vec3 posW, vec3 normalW)
 void main()
 {
 	//FragColor = vec4(1,0,0,1);
-	FragColor = vec4(PhongLight(posW, normalW), 1.0);
+	FragColor = vec4(PhongLight(positionW, normalW), 1.0);
 }	

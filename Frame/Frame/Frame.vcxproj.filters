@@ -148,5 +148,11 @@
     <None Include="SF_SimpleColor.v">
       <Filter>Shader</Filter>
     </None>
+    <None Include="SF_DefaultSpecular.v">
+      <Filter>Shader</Filter>
+    </None>
+    <None Include="SF_DefaultSpecular.f">
+      <Filter>Shader</Filter>
+    </None>
   </ItemGroup>
 </Project>
