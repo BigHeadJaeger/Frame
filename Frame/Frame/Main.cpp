@@ -2,15 +2,6 @@
 #include<glad\glad.h>
 #include<GLFW\glfw3.h>
 
-
-//#include<assimp/Importer.hpp>
-//#include<assimp/postprocess.h>
-//#include<assimp/scene.h>
-//
-//Assimp::Importer importer;
-//
-//const aiScene* scene1 = importer.ReadFile("OBJ\\cow.obj", aiProcess_Triangulate | aiProcess_FlipUVs);
-
 #include"Scene.h"
 #include"Const.h"
 #include"RenderFrameModel.h"

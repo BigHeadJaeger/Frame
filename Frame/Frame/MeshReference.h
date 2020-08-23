@@ -52,4 +52,11 @@ public:
 		mesh.InitGrid(width, height, m, n);
 		ConvertMeshData();
 	}
+
+	void LoadMesh(string path)
+	{
+		meshChange = true;
+		mesh.LoadModel(path);
+		ConvertMeshData();
+	}
 };
