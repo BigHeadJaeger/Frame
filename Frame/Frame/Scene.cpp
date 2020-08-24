@@ -116,21 +116,24 @@ void MyScene::Init()
 	dynamic_pointer_cast<DirLight>(lightComponent->light)->lightColor = vec3(150);
 	objects.insert(make_pair(dirLight->GetName(), dirLight));
 
-	shared_ptr<Object> box(new Object);
-	box->SetName("box1");
-	box->SetPosition(vec3(0, 0, 0));
-	auto meshReference = box->AddComponent<MeshReference>();
-	meshReference->CreateBox(1, 1, 1);
-	auto bR = box->AddComponent<MeshRenderer>();
-	shared_ptr<DefaultSpecularMaterial> specularMaterial(new DefaultSpecularMaterial);
-	specularMaterial->SetTextureBase("");
-	specularMaterial->baseColor = vec4(255, 0, 0, 0);
-	//specularMaterial->specular = vec3(125, 0, 0);
-	box->GetComponent<MeshRenderer>()->material = specularMaterial;
-	//shared_ptr<PhongMaterial> testMaterial(new PhongMaterial);
-	//box->GetComponent<MeshRenderer>()->material = testMaterial;
-	//bR->material->baseColor = vec4(255, 0, 0, 0);
-	objects.insert(make_pair(box->GetName(), box));
+	//shared_ptr<Object> box(new Object);
+	//box->SetName("box1");
+	//box->SetPosition(vec3(0, 0, 0));
+	//auto meshReference = box->AddComponent<MeshReference>();
+	//meshReference->CreateBox(1, 1, 1);
+	//auto bR = box->AddComponent<MeshRenderer>();
+	//shared_ptr<DefaultSpecularMaterial> specularMaterial(new DefaultSpecularMaterial);
+	//specularMaterial->SetTextureBase("");
+	//specularMaterial->baseColor = vec4(255, 0, 0, 0);
+	//box->GetComponent<MeshRenderer>()->material = specularMaterial;
+	//objects.insert(make_pair(box->GetName(), box));
+
+
+	shared_ptr<Object> model(new Object);
+	model->SetName("Model1");
+	auto modelMeshReference = model->AddComponent<MeshReference>();
+	modelMeshReference->LoadMesh("OBJ\\Neptune.obj");
+
 }
 
 void MyScene::InitKeys()

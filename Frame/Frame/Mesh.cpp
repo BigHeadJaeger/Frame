@@ -1,6 +1,7 @@
 #include"Mesh.h"
 #include"Const.h"
 
+
 void Mesh::readObjFile(string fileName)
 {
 	meshStruct.request_vertex_normals();
@@ -321,5 +322,23 @@ void Mesh::InitGrid(float width, float height, int m, int n)
 	meshStruct.request_face_normals();
 	meshStruct.update_normals();
 	meshStruct.release_face_normals();
+
+}
+
+void Mesh::LoadModel(string path)
+{
+	Assimp::Importer importer;
+	const aiScene* scene = importer.ReadFile("OBJ\\cow.obj", aiProcess_Triangulate | aiProcess_FlipUVs);
+	if (!scene || scene->mFlags & AI_SCENE_FLAGS_INCOMPLETE || !scene->mRootNode)
+	{
+		cout << "ERROR::ASSIMP::" << importer.GetErrorString() << endl;
+		return;
+	}
+
+
+}
+
+void Mesh::ProcessModelNode(aiNode* rootNode, const aiScene* scene)
+{
 
 }

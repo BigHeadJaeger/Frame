@@ -22,6 +22,9 @@ GLFWwindow* window;
 
 int main(void)
 {
+	
+
+
 	//≥ı ºªØglfw
 	if (!glfwInit())
 		return -1;
