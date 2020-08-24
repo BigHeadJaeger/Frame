@@ -53,10 +53,10 @@ public:
 		ConvertMeshData();
 	}
 
-	void LoadMesh(string path)
+	void SetMesh(Mesh _mesh)
 	{
 		meshChange = true;
-		mesh.LoadModel(path);
+		mesh = _mesh;
 		ConvertMeshData();
 	}
 };

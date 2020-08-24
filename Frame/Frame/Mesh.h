@@ -4,24 +4,18 @@
 #include<OpenMesh/Core/IO/MeshIO.hh>
 #include<OpenMesh/Core/Mesh/TriMesh_ArrayKernelT.hh>
 
-#include<assimp/Importer.hpp>
-#include<assimp/postprocess.h>
-#include<assimp/scene.h>
-
-
-
-
 
 using namespace std;
 using namespace glm;
 
 typedef OpenMesh::TriMesh_ArrayKernelT<> MeshStruct;
 
+
+
 class Mesh
 {
 public:
 	MeshStruct meshStruct;
-
 public:
 	void readObjFile(string fileName);
 	void InitBox(float width, float height, float depth);
@@ -29,8 +23,13 @@ public:
 	void InitGrid(float width, float height, int m, int n);
 
 	// ¶ÁÈ¡Ä£ÐÍ
-	void LoadModel(string path);
+	//void LoadModel(string path);
+	MeshStruct& GetMeshStruct()
+	{
+		return meshStruct;
+	}
 
 private:
-	void ProcessModelNode(aiNode* rootNode, const aiScene* scene);
+	//void ProcessModelNode(aiNode* rootNode, const aiScene* scene);
+	//void ProcessModelMesh(aiMesh* mesh, const aiScene* scene);
 };

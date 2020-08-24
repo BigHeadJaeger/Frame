@@ -5,6 +5,7 @@
 #include<GLFW\glfw3.h>
 #include<iostream>
 #include"RenderFrameModel.h"
+#include"Model.h"
 
 void MyScene::Init()
 {
@@ -132,8 +133,13 @@ void MyScene::Init()
 	shared_ptr<Object> model(new Object);
 	model->SetName("Model1");
 	auto modelMeshReference = model->AddComponent<MeshReference>();
-	modelMeshReference->LoadMesh("OBJ\\Neptune.obj");
+	model->transform->SetScaler(vec3(0.2, 0.2, 0.2));
 
+	Model testModel;
+	testModel.LoadModel("OBJ\\Neptune.obj");
+	modelMeshReference->SetMesh(testModel.meshs[0]);
+	model->AddComponent<MeshRenderer>();
+	objects.insert(make_pair(model->GetName(), model));
 }
 
 void MyScene::InitKeys()

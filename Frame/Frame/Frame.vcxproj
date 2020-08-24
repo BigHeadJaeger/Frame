@@ -152,6 +152,7 @@
     <ClCompile Include="Material.cpp" />
     <ClCompile Include="Mesh.cpp" />
     <ClCompile Include="MeshReference.cpp" />
+    <ClCompile Include="Model.cpp" />
     <ClCompile Include="Object.cpp" />
     <ClCompile Include="Program.cpp" />
     <ClCompile Include="Renderer.cpp" />
@@ -171,6 +172,7 @@
     <ClInclude Include="Material.h" />
     <ClInclude Include="Mesh.h" />
     <ClInclude Include="MeshReference.h" />
+    <ClInclude Include="Model.h" />
     <ClInclude Include="Object.h" />
     <ClInclude Include="Program.h" />
     <ClInclude Include="PublicStruct.h" />
@@ -178,6 +180,8 @@
     <ClInclude Include="RenderFrameModel.h" />
     <ClInclude Include="Scene.h" />
     <ClInclude Include="ShaderDataTool.h" />
+    <ClInclude Include="Texture.h" />
+    <ClInclude Include="TextureManager.h" />
     <ClInclude Include="Transform.h" />
     <ClInclude Include="VertexData.h" />
   </ItemGroup>
