@@ -75,7 +75,7 @@ void MeshRenderer::InitVertexBuffer(VertexData& vertexData)
 
 void MeshRenderer::UpdateMeshData()
 {
-	auto meshReference = object->GetComponent<MeshReference>();
+	auto meshReference = object.lock()->GetComponent<MeshReference>();
 	if (meshReference)
 	{
 		if (meshReference->meshChange)
@@ -89,7 +89,8 @@ void MeshRenderer::UpdateMeshData()
 
 void Renderer::SetTransform()
 {
-	auto transform = object->transform;
+	shared_ptr<Transform> transform = object.lock()->transform;
+	//auto transform = object.lock()->transform;
 	auto tool = ShaderDataTool::GetInstance();
 	tool.SetUniform("worldViewProj", transform->worldViewProj, material->shaderProgram);
 	tool.SetUniform("world", transform->world, material->shaderProgram);
@@ -102,7 +103,7 @@ void Renderer::SetCamera()
 	auto mainCamera = RenderFrameModel::GetInstance().GetMainCamera();
 	if (mainCamera->isUseable())
 	{
-		tool.SetUniform("eyePos", mainCamera->object->transform->position, material->shaderProgram);
+		tool.SetUniform("eyePos", mainCamera->object.lock()->transform->position, material->shaderProgram);
 	}
 }
 
@@ -124,7 +125,7 @@ void Renderer::SetLight()
 				auto light = dynamic_pointer_cast<DirLight>(lightComponents[i]->light);
 				string preName = "dirLights[" + to_string(dirCount) + "].";
 				dirCount++;
-				tool.SetUniform((preName + "position"), lightComponents[i]->object->GetPosition(), material->shaderProgram);
+				tool.SetUniform((preName + "position"), lightComponents[i]->object.lock()->GetPosition(), material->shaderProgram);
 				tool.SetUniform((preName + "color"), light->lightColor / vec3(255), material->shaderProgram);
 				tool.SetUniform((preName + "dir"), normalize(light->lightDir), material->shaderProgram);
 				break;

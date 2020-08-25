@@ -16,7 +16,7 @@ Camera::Camera()
 
 void Camera::Init(vec3 point)
 {
-	auto pos = object->transform->position;
+	auto pos = object.lock()->transform->position;
 	lookAtPoint = point;
 	lookDir = normalize(lookAtPoint - pos);
 
@@ -28,7 +28,7 @@ void Camera::Init(vec3 point)
 void Camera::SetView()
 {
 	//lookAtPoint用eyepos加上lookDir即可
-	view = lookAt(object->transform->position, lookAtPoint, up);
+	view = lookAt(object.lock()->transform->position, lookAtPoint, up);
 	//view *= rotate(mat4(1.0f), 45.0f, vec3(0.0, 1.0, 0.0));
 }
 
@@ -44,5 +44,5 @@ void Camera::SetOrtho(float left, float right, float bottom, float up, float nea
 
 vec3& Camera::GetEyePosition()
 {
-	return object->transform->position;
+	return object.lock()->transform->position;
 }

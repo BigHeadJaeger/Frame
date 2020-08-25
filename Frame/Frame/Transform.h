@@ -2,6 +2,7 @@
 #pragma once
 #include<glm.hpp>
 #include<vector>
+#include<list>
 using namespace glm;
 #include"Component.h"
 #include"ShaderDataTool.h"
@@ -24,7 +25,6 @@ private:
 
 
 public:
-
 	//¹¹Ôìº¯Êý
 	Transform(vec3 _pos = vec3(0), vec3 _scaler = vec3(1.0), vec3 _rotation = vec3(0)) :position(_pos), scaler(_scaler), rotation(_rotation)
 	{

@@ -35,111 +35,56 @@ void MyScene::Init()
 	//SetDrawMode(drawMode.isLine, false);
 	drawMode.isLine = false;
 
-	//shared_ptr<MeshObject> cow(new MeshObject());
-	//cow->SetName("cow");
-	//cow->readObjFile("OBJ\\cow.obj");
-	//cow->SetRenderer(RENDERERTYPE::VERTEXCOLOR);
-	//cow->InitBufferData();
-	//cow->GetTransform().SetPosition(vec3(1, 0, 1));
-	//cow->GetTransform().SetScaler(vec3(2.0));
-	//objects.insert(make_pair(cow->GetName(), cow));
+	//auto root = RenderFrameModel::GetInstance().GetSceneRoot();
 
 
-	//shared_ptr<MeshObject> cube(new MeshObject());
-	//cube->SetName("Cube");
-	//cube->InitBox(1, 1, 1);
-	//cube->SetRenderer(RENDERERTYPE::PBR);
-	//cube->InitBufferData();
-	//cube->GetTransform().SetPosition(vec3(0, 0, 0));
-	//cube->GetTransform().SetScaler(vec3(1));
-	//auto cubeShaderData = dynamic_pointer_cast<PBRShaderData>(cube->GetShaderData());
-	//cubeShaderData->SetTextureState(true);
-	//cubeShaderData->SetAlbedoState(true);
-	//cubeShaderData->InitTexture(ALBEDO, "Material\\metalgrid\\basecolor.png");
-	//cubeShaderData->SetNormalState(true);
-	//cubeShaderData->InitTexture(NORMAL, "Material\\metalgrid\\normal.png");
-	//cubeShaderData->SetAOState(true);
-	//cubeShaderData->InitTexture(AO, "Material\\metalgrid\\AO.png");
-	//cubeShaderData->SetRoughnessState(true);
-	//cubeShaderData->InitTexture(ROUGHNESS, "Material\\metalgrid\\roughness.png");
-	//cubeShaderData->SetMetallicState(true);
-	//cubeShaderData->InitTexture(METALLIC, "Material\\metalgrid\\metallic.png");
-	//objects.insert(make_pair(cube->GetName(), cube));
-
-	//shared_ptr<MeshObject> grid(new MeshObject());
-	//grid->SetName("Floor");
-	//grid->InitGrid(10, 10, 10, 10);
-	//grid->SetRenderer(RENDERERTYPE::PBR);
-	//grid->InitBufferData();
-	//grid->GetTransform().SetPosition(vec3(0, -0.5, 0));
-	//grid->GetTransform().SetScaler(vec3(1));
-	//auto gridShaderData = dynamic_pointer_cast<PBRShaderData>(grid->GetShaderData());
-	//gridShaderData->SetTextureState(true);
-	//gridShaderData->SetAlbedoState(true);
-	//gridShaderData->InitTexture(ALBEDO, "Material\\oakfloor\\basecolor.png");
-	//gridShaderData->SetNormalState(true);
-	//gridShaderData->InitTexture(NORMAL, "Material\\oakfloor\\normal.png");
-	//gridShaderData->SetAOState(true);
-	//gridShaderData->InitTexture(AO, "Material\\oakfloor\\AO.png");
-	//gridShaderData->SetRoughnessState(true);
-	//gridShaderData->InitTexture(ROUGHNESS, "Material\\oakfloor\\roughness.png");
-	//objects.insert(make_pair(grid->GetName(), grid));
-
-	//shared_ptr<MeshObject> grid(new MeshObject());
-	//grid->SetName("Floor");
-	//grid->InitGrid(10, 10, 10, 10);
-	//grid->SetRenderer(RENDERERTYPE::DEFAULT);
-	//grid->InitBufferData();
-	//grid->GetTransform().SetPosition(vec3(0, -0.5, 0));
-	//grid->GetTransform().SetScaler(vec3(1));
-	//auto gridShaderData = dynamic_pointer_cast<DefaultShaderData>(grid->GetShaderData());
-	//// 设置材质，默认为phong材质
-	//auto testMaterial = make_shared<PBRMaterial>();
-	//gridShaderData->SetMaterial(testMaterial);
-	//testMaterial->InitTextureBase("Material\\oakfloor\\basecolor.png");
-	//testMaterial->InitTextureNormal("Material\\oakfloor\\normal.png");
-	//testMaterial->InitTextureAO("Material\\oakfloor\\AO.png");
-	//testMaterial->InitTextureRoughness("Material\\oakfloor\\roughness.png");
-	//objects.insert(make_pair(grid->GetName(), grid));
-
-	shared_ptr<Object> mainCamera(new Object);
+	shared_ptr<Object> mainCamera = make_shared<Object>();
+	mainCamera->AddComponent<Transform>();
+	rootObject->AddChild(mainCamera);
 	mainCamera->SetName("MainCamera");
 	mainCamera->SetPosition(vec3(0, 2, 3));
 	auto cameraComponent = mainCamera->AddComponent<Camera>();
 	cameraComponent->Init(vec3(0, 0, 0));
 	RenderFrameModel::GetInstance().SetMainCamera(cameraComponent);
-	objects.insert(make_pair(mainCamera->GetName(), mainCamera));
+	objectManager.InsertObject(mainCamera);
+	//objects.insert(make_pair(mainCamera->GetName(), mainCamera));
 
-	shared_ptr<Object> dirLight(new Object);
-	dirLight->SetName("DirLight");
-	dirLight->SetPosition(vec3(-3, 1, -2));
-	auto lightComponent = dirLight->AddComponent<LightComponent>();
-	dynamic_pointer_cast<DirLight>(lightComponent->light)->lightColor = vec3(150);
-	objects.insert(make_pair(dirLight->GetName(), dirLight));
 
-	//shared_ptr<Object> box(new Object);
-	//box->SetName("box1");
-	//box->SetPosition(vec3(0, 0, 0));
-	//auto meshReference = box->AddComponent<MeshReference>();
-	//meshReference->CreateBox(1, 1, 1);
-	//auto bR = box->AddComponent<MeshRenderer>();
+
+	//shared_ptr<Object> dirLight(new Object);
+	//dirLight->SetName("DirLight");
+	//dirLight->SetPosition(vec3(-3, 1, -2));
+	//auto lightComponent = dirLight->AddComponent<LightComponent>();
+	//dynamic_pointer_cast<DirLight>(lightComponent->light)->lightColor = vec3(150);
+	//objects.insert(make_pair(dirLight->GetName(), dirLight));
+
+	shared_ptr<Object> box(new Object);
+	box->AddComponent<Transform>();
+	rootObject->AddChild(box);
+	box->SetName("box1");
+	box->SetPosition(vec3(0, 0, 0));
+	auto meshReference = box->AddComponent<MeshReference>();
+	meshReference->CreateBox(1, 1, 1);
+	auto bR = box->AddComponent<MeshRenderer>();
 	//shared_ptr<DefaultSpecularMaterial> specularMaterial(new DefaultSpecularMaterial);
 	//specularMaterial->SetTextureBase("");
 	//specularMaterial->baseColor = vec4(255, 0, 0, 0);
 	//box->GetComponent<MeshRenderer>()->material = specularMaterial;
+
+	objectManager.InsertObject(box);
 	//objects.insert(make_pair(box->GetName(), box));
 
 
-	shared_ptr<Object> model(new Object);
-	model->SetName("Model1");
-	auto modelMeshReference = model->AddComponent<MeshReference>();
-	model->transform->SetScaler(vec3(0.2, 0.2, 0.2));
+	//shared_ptr<Object> model(new Object);
+	//model->SetName("Model1");
+	//auto modelMeshReference = model->AddComponent<MeshReference>();
+	//model->transform->SetScaler(vec3(0.2, 0.2, 0.2));
 
-	Model testModel;
-	testModel.LoadModel("OBJ\\Neptune.obj");
-	modelMeshReference->SetMesh(testModel.meshs[0]);
-	model->AddComponent<MeshRenderer>();
-	objects.insert(make_pair(model->GetName(), model));
+	//Model testModel;
+	//testModel.LoadModel("OBJ\\Neptune.obj");
+	//modelMeshReference->SetMesh(testModel.meshs[0]);
+	//model->AddComponent<MeshRenderer>();
+	//objects.insert(make_pair(model->GetName(), model));
 }
 
 void MyScene::InitKeys()
@@ -155,11 +100,15 @@ void MyScene::InitKeys()
 
 void MyScene::Update(float& dt)
 {
-	// 遍历所有object更新矩阵
-	for (auto objs_it = objects.begin(); objs_it != objects.end(); objs_it++)
-	{
-		objs_it->second->Update(dt);
-	}
+	// 从场景中的根节点遍历所有object，进行更新
+	UpdateObject(rootObject, dt);
+
+
+	//// 遍历所有object更新矩阵
+	//for (auto objs_it = objects.begin(); objs_it != objects.end(); objs_it++)
+	//{
+	//	objs_it->second->Update(dt);
+	//}
 
 	// 按键事件带来的变换会在下一帧起效
 	// 遍历所有key，并执行key当前绑定的事件
@@ -168,6 +117,18 @@ void MyScene::Update(float& dt)
 		keys_it->second.Execute();
 	}
 }
+
+void MyScene::UpdateObject(shared_ptr<Object> obj, float dt)
+{
+	obj->Update(dt);
+	for (auto it = obj->children.begin(); it != obj->children.end(); it++)
+	{
+		if(!it->expired())
+			UpdateObject(it->lock(), dt);
+	}
+}
+
+
 
 void MyScene::Draw()
 {
@@ -198,10 +159,20 @@ void MyScene::Draw()
 	//glCullFace(GL_FRONT);
 
 	//glUseProgram(p1.p);						//启用着色器程序
+	//for (auto objs_it = objects.begin(); objs_it != objects.end(); objs_it++)
+	//{
+	//	objs_it->second->Draw();
+	//}
 
-	for (auto objs_it = objects.begin(); objs_it != objects.end(); objs_it++)
+	RenderObject(rootObject);
+}
+
+void MyScene::RenderObject(shared_ptr<Object> obj)
+{
+	obj->Draw();
+	for (auto it = obj->children.begin(); it != obj->children.end(); it++)
 	{
-		objs_it->second->Draw();
+		if (!it->expired())
+			RenderObject(it->lock());
 	}
-
 }

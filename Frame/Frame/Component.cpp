@@ -3,5 +3,5 @@
 
 bool Component::isUseable()
 {
-	return isActive && object->isActive;
+	return isActive && object.lock()->isActive;
 }
