@@ -131,7 +131,16 @@ void Renderer::SetLight()
 				break;
 			}
 			case LIGHT_TYPE::POINT_LIGHT:
+			{
+				auto light = dynamic_pointer_cast<PointLight>(lightComponents[i]->light);
+				string preName = "pointLights[" + to_string(pointCount) + "].";
+				pointCount++;
+				tool.SetUniform((preName + "position"), lightComponents[i]->object.lock()->GetPosition(), material->shaderProgram);
+				tool.SetUniform((preName + "color"), light->lightColor / vec3(255), material->shaderProgram);
+				tool.SetUniform((preName + "radius"), light->radius, material->shaderProgram);
+				tool.SetUniform((preName + "attenuation"), light->attenuation, material->shaderProgram);
 				break;
+			}
 			default:
 				break;
 			}

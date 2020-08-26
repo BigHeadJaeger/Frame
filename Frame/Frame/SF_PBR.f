@@ -7,13 +7,20 @@ in vec3 normalW;
 in vec2 TexCoord;
 //in vec4 shadowCoord;
 
-struct Light
+struct DirLight
 {
 	vec3 position;
 	vec3 color;
+	vec3 dir;
 };
 
-uniform bool useTexture;
+struct PointLight
+{
+	vec3 position;
+	vec3 color;
+	float radius;
+	float attenuation;
+};
 
 //阴影贴图纹理采样器
 uniform sampler2DShadow shadowTex;
@@ -39,8 +46,11 @@ uniform float numRoughness;
 uniform sampler2D aoMap;
 uniform bool isTextureAO;
 
-//光照信息(此处使用的是点光源)
-uniform Light light;
+//光照信息
+#define DIR_LIGHT_NUM 1
+uniform DirLight dirLights[DIR_LIGHT_NUM];
+#define POINT_LIGHT_NUM 1
+uniform PointLight pointLights[POINT_LIGHT_NUM];
 
 //眼睛位置
 uniform vec3 eyePos;
@@ -112,7 +122,7 @@ vec3 GetNormalFromMap()
 void main() 
 {
 	vec3 color = vec3(1,1,1);
-	vec3 lightColor = light.color * vec3(255);
+	vec3 lightColor = pointLights[0].color * vec3(255);
 	
 	vec3 albedo;
 	vec3 N;
@@ -121,10 +131,12 @@ void main()
 	float metallic;
 
 	//从各种贴图中获取数据
-	if(isTextureBase)
-		albedo = pow(texture(albedoMap, TexCoord).rgb, vec3(2.2));			//反射率纹理一般创建在rgb空间，所以需要转换到线性空间
+	albedo = pow(texture(albedoMap, TexCoord).rgb, vec3(2.2));		//反射率纹理一般创建在rgb空间，所以需要转换到线性空间
+
+	/*if(isTextureBase)
+		albedo = pow(texture(albedoMap, TexCoord).rgb, vec3(2.2));			
 	else
-		albedo = baseColor;
+		albedo = baseColor;*/
 
 	if(isTextureMetallic)
 		metallic = texture(metallicMap, TexCoord).r;
@@ -157,11 +169,11 @@ void main()
 
 
 	//计算辐射度(根据入射方向以及夹角求)
-	vec3 lightDir = normalize(light.position - posW);				//计算光照向量
+	vec3 lightDir = normalize(pointLights[0].position - posW);				//计算光照向量
 	vec3 H = normalize(V + lightDir);									//计算中间向量
 
 
-	float distance = length(light.position - posW);
+	float distance = length(pointLights[0].position - posW);
 	float attenuation=1.0/(distance*distance);			//计算衰减
 	//float attenuation=1.0;
 	vec3 radiance=lightColor*attenuation;

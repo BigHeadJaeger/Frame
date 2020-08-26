@@ -140,7 +140,7 @@ public:
         auto tool = ShaderDataTool::GetInstance();
         tool.InitTextureWithFile(textureMetallic, fileName.c_str());
     }
-    void InitTextureRoughness(string fileName)
+    void SetTextureRoughness(string fileName)
     {
         isTextureRoughness = true;
         auto tool = ShaderDataTool::GetInstance();
