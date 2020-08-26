@@ -66,6 +66,9 @@
     <ClCompile Include="RenderFrameModel.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
+    <ClCompile Include="ModelManager.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Scene.h">
@@ -138,6 +141,9 @@
       <Filter>头文件</Filter>
     </ClInclude>
     <ClInclude Include="ObjectManager.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="ModelManager.h">
       <Filter>头文件</Filter>
     </ClInclude>
   </ItemGroup>

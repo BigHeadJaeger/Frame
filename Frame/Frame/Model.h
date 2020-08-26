@@ -51,7 +51,7 @@ public:
 
 
 	// ¶ÁÈ¡Ä£ÐÍ
-	void LoadModel(string path);
+	bool LoadModel(string path);
 private:
 	void ProcessModelNode(aiNode* rootNode, const aiScene* scene, shared_ptr<MeshNode> parent);
 	shared_ptr<Mesh> ProcessModelMesh(aiMesh* mesh, const aiScene* scene);

@@ -20,6 +20,7 @@ public:
 		static ShaderDataTool instance;
 		return instance;
 	}
+	ShaderDataTool(ShaderDataTool&) = delete;
 	// 从文件初始化图片到id中
 	template<typename T>
 	void InitTextureWithFile(GLuint& texID, T&& texPath);

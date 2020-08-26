@@ -91,7 +91,7 @@ void Renderer::SetTransform()
 {
 	shared_ptr<Transform> transform = object.lock()->transform;
 	//auto transform = object.lock()->transform;
-	auto tool = ShaderDataTool::GetInstance();
+	decltype(auto) tool = ShaderDataTool::GetInstance();
 	tool.SetUniform("worldViewProj", transform->worldViewProj, material->shaderProgram);
 	tool.SetUniform("world", transform->world, material->shaderProgram);
 	tool.SetUniform("worldInvTranspose", transform->worldInvTranspose, material->shaderProgram);
@@ -99,7 +99,7 @@ void Renderer::SetTransform()
 
 void Renderer::SetCamera()
 {
-	auto tool = ShaderDataTool::GetInstance();
+	decltype(auto) tool = ShaderDataTool::GetInstance();
 	auto mainCamera = RenderFrameModel::GetInstance().GetMainCamera();
 	if (mainCamera->isUseable())
 	{
@@ -109,7 +109,7 @@ void Renderer::SetCamera()
 
 void Renderer::SetLight()
 {
-	auto tool = ShaderDataTool::GetInstance();
+	decltype(auto) tool = ShaderDataTool::GetInstance();
 	auto lightComponents = RenderFrameModel::GetInstance().GetLightList();
 	int dirCount = 0;
 	int pointCount = 0;

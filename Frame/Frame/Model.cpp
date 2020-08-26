@@ -1,18 +1,19 @@
 #include "Model.h"
 
-void Model::LoadModel(string path)
+bool Model::LoadModel(string path)
 {
 	Assimp::Importer importer;
 	auto scene = importer.ReadFile(path, aiProcess_Triangulate | aiProcess_FlipUVs);
 	if (!scene || scene->mFlags & AI_SCENE_FLAGS_INCOMPLETE || !scene->mRootNode)
 	{
 		cout << "ERROR::ASSIMP::" << importer.GetErrorString() << endl;
-		return;
+		return false;
 	}
 	//meshStruct.clean();
 	//meshStruct.request_vertex_texcoords2D();
 
 	ProcessModelNode(scene->mRootNode, scene, root);
+	return true;
 }
 
 void Model::ProcessModelNode(aiNode* rootNode, const aiScene* scene, shared_ptr<MeshNode> node)

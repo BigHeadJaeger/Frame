@@ -5,7 +5,7 @@
 #include<GLFW\glfw3.h>
 #include<iostream>
 #include"RenderFrameModel.h"
-#include"Model.h"
+#include"ModelManager.h"
 
 void MyScene::Init()
 {
@@ -17,25 +17,11 @@ void MyScene::Init()
 		std::cout << "initialize glad failed" << std::endl;
 		return;
 	}
-	//glewInit();
-	//初始化Renderer中的program
-	//PBRRenderer::GetRenderer().InitProgram("SF_PBR.v", "SF_PBR.f");
-	//SimpleRenderer::GetRenderer()->InitProgram("SF_SimpleColor.v", "SF_SimpleColor.f");
-	//SimpleRenderer::GetRenderer()->InitProgram("SF_VertexColor.v", "SF_VertexColor.f");
-	//VertexColorRender::GetRenderer().InitProgram("SF_VertexColor.v", "SF_VertexColor.f");
-	//DefaultRenderer::GetRenderer().InitProgram("SF_PBR.v", "SF_PBR.f");
-	//DefaultRenderer::GetRenderer().InitProgram("SF_Phong.v", "SF_Phong.f");
 
-	//pShadowTex.SetShader("shadowTex.v", "shadowTex.f");
+	ModelInit();
 
-	//初始化主相机
-	//mainCamera = new Camera();
-	//MainCamera::GetInstance().Init(vec3(0, 2, 3), vec3(0, 0, 0));
-
-	//SetDrawMode(drawMode.isLine, false);
 	drawMode.isLine = false;
 
-	//auto root = RenderFrameModel::GetInstance().GetSceneRoot();
 
 
 	shared_ptr<Object> mainCamera = make_shared<Object>();
@@ -94,13 +80,13 @@ void MyScene::Init()
 	auto modelMeshReference = model->AddComponent<MeshReference>();
 	model->transform->SetScaler(vec3(0.2, 0.2, 0.2));
 
-	Model testModel;
-	testModel.LoadModel("OBJ\\Neptune.obj");
+	shared_ptr<Model> testModel = ModelManager::GetInstance().GetModel("OBJ\\Neptune.obj");
 
-	auto it = testModel.root->children.begin();
+	auto it = testModel->root->children.begin();
 	
 	modelMeshReference->SetMesh((*it)->data[0]);
 	model->AddComponent<MeshRenderer>();
+
 }
 
 void MyScene::InitKeys()
@@ -112,6 +98,13 @@ void MyScene::InitKeys()
 	keys.insert(pair<KEYNAME, Key>(BTN1, Key(BTN1)));
 	//keys.insert
 	//keys.push_back(Key(BTNW));
+}
+
+void MyScene::ModelInit()
+{
+	decltype(auto) modelManager = ModelManager::GetInstance();
+	modelManager.InitModel("OBJ\\Neptune.obj");
+	
 }
 
 void MyScene::Update(float& dt)

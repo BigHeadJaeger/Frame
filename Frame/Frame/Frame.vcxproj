@@ -153,6 +153,7 @@
     <ClCompile Include="Mesh.cpp" />
     <ClCompile Include="MeshReference.cpp" />
     <ClCompile Include="Model.cpp" />
+    <ClCompile Include="ModelManager.cpp" />
     <ClCompile Include="Object.cpp" />
     <ClCompile Include="Program.cpp" />
     <ClCompile Include="Renderer.cpp" />
@@ -174,6 +175,7 @@
     <ClInclude Include="Mesh.h" />
     <ClInclude Include="MeshReference.h" />
     <ClInclude Include="Model.h" />
+    <ClInclude Include="ModelManager.h" />
     <ClInclude Include="Object.h" />
     <ClInclude Include="ObjectManager.h" />
     <ClInclude Include="Program.h" />

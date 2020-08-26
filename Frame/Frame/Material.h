@@ -28,7 +28,7 @@ public:
 public:
     void SetTextureBase(string fileName)
     {
-        auto tool = ShaderDataTool::GetInstance();
+        decltype(auto) tool = ShaderDataTool::GetInstance();
         if (fileName == "")
         {
             tool.InitTextureWithFile(textureBase, "Material\\Default\\BaseColor.png");
@@ -55,7 +55,7 @@ public:
     }
     void Transfer() override
     {
-        auto tool = ShaderDataTool::GetInstance();
+        decltype(auto) tool = ShaderDataTool::GetInstance();
         tool.SetUniform("color", baseColor / vec4(255), shaderProgram);
     }
 };
@@ -81,7 +81,7 @@ public:
 
     void Transfer() override
     {
-        auto tool = ShaderDataTool::GetInstance();
+        decltype(auto) tool = ShaderDataTool::GetInstance();
         tool.SetUniform("baseColor", vec3(baseColor.x, baseColor.y, baseColor.z) / vec3(255), shaderProgram);
         tool.SetUniform("specular", specular / vec3(255), shaderProgram);
         tool.SetUniform("shininess", shininess, shaderProgram);
@@ -106,7 +106,7 @@ public:
 
     void Transfer() override
     {
-        auto tool = ShaderDataTool::GetInstance();
+        decltype(auto) tool = ShaderDataTool::GetInstance();
         tool.SetUniform("material.ambient", ambient / vec3(255), shaderProgram);
         tool.SetUniform("material.diffuse", diffuse / vec3(255), shaderProgram);
         tool.SetUniform("material.specular", specular / vec3(255), shaderProgram);
@@ -137,31 +137,31 @@ public:
     void SetTextureMetallic(string fileName)
     {
         isTextureMetallic = true;
-        auto tool = ShaderDataTool::GetInstance();
+        decltype(auto) tool = ShaderDataTool::GetInstance();
         tool.InitTextureWithFile(textureMetallic, fileName.c_str());
     }
     void SetTextureRoughness(string fileName)
     {
         isTextureRoughness = true;
-        auto tool = ShaderDataTool::GetInstance();
+        decltype(auto) tool = ShaderDataTool::GetInstance();
         tool.InitTextureWithFile(textureRoughness, fileName.c_str());
     }
     void SetTextureAO(string fileName)
     {
         isTextureAO = true;
-        auto tool = ShaderDataTool::GetInstance();
+        decltype(auto) tool = ShaderDataTool::GetInstance();
         tool.InitTextureWithFile(textureAO, fileName.c_str());
     }
     void SetTextureNormal(string fileName)
     {
         isTextureNormal = true;
-        auto tool = ShaderDataTool::GetInstance();
+        decltype(auto) tool = ShaderDataTool::GetInstance();
         tool.InitTextureWithFile(textureNormal, fileName.c_str());
     }
 
     void Transfer() override
     {
-        auto tool = ShaderDataTool::GetInstance();
+        decltype(auto) tool = ShaderDataTool::GetInstance();
         tool.SetUniform("baseColor", vec3(baseColor.x, baseColor.y, baseColor.z) / vec3(255), shaderProgram);
         tool.SetTexture(textureBase, 0, GL_TEXTURE0, "albedoMap", shaderProgram);
 
