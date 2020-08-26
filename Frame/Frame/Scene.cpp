@@ -60,23 +60,28 @@ void MyScene::Init()
 
 	shared_ptr<Object> box(new Object);
 	box->AddComponent<Transform>();
+	box->SetPosition(vec3(-1, 0, 0));
+	box->transform->SetRotation(vec3(0, 60, 0));
 	rootObject->AddChild(box);
 	box->SetName("box1");
-	box->SetPosition(vec3(0, 0, 0));
 	auto meshReference = box->AddComponent<MeshReference>();
 	meshReference->CreateBox(1, 1, 1);
 	auto bR = box->AddComponent<MeshRenderer>();
+
 	//shared_ptr<DefaultSpecularMaterial> specularMaterial(new DefaultSpecularMaterial);
 	//specularMaterial->SetTextureBase("");
 	//specularMaterial->baseColor = vec4(255, 0, 0, 0);
 	//box->GetComponent<MeshRenderer>()->material = specularMaterial;
 
-	//objectManager.InsertObject(box);
-	//objects.insert(make_pair(box->GetName(), box));
+	shared_ptr<Object> box2 = make_shared<Object>();
+	box2->SetName("box2");
+	box2->AddComponent<Transform>();
+	box2->SetPosition(vec3(0.5));
+	box->AddChild(box2);
+	auto box2MeshR = box2->AddComponent<MeshReference>();
+	box2MeshR->CreateBox(0.5, 0.5, 0.5);
+	box2->AddComponent<MeshRenderer>();
 
-	//objectManager.RemoveObject(box);
-
-	//box->RemoveFromParent();
 
 
 	//shared_ptr<Object> model(new Object);

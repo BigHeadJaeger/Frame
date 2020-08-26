@@ -32,7 +32,7 @@ public:
 			return;
 	}
 
-	void CreateBox(int width, int height, int depth)
+	void CreateBox(float width, float height, float depth)
 	{
 		meshChange = true;
 		mesh.InitBox(width, height, depth);

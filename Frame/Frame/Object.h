@@ -104,7 +104,7 @@ public:
 	void AddChild(shared_ptr<Object> obj)
 	{
 		auto self_ptr = shared_from_this();
-		if (!parent.expired())
+		if (!obj->parent.expired())
 		{
 			cout << "the object has been added" << endl;
 			return;

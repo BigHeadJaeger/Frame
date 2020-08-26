@@ -42,6 +42,7 @@ public:
 	{
 		// 每个场景创建一个根节点
 		shared_ptr<Object> root = make_shared<Object>();
+		root->AddComponent<Transform>();
 		rootObject = root;
 		root->SetName("scene");
 		objectManager.InsertObject(root);
