@@ -51,59 +51,56 @@ void MyScene::Init()
 
 
 
-	shared_ptr<Object> dirLight = make_shared<Object>();
-	dirLight->AddComponent<Transform>();
-	dirLight->SetName("DirLight");
-	rootObject->AddChild(dirLight);
-	dirLight->SetPosition(vec3(-3, 1, -2));
-	auto lightComponent = dirLight->AddComponent<LightComponent>();
-	lightComponent->SetLightType(LIGHT_TYPE::POINT_LIGHT);
-	//dynamic_pointer_cast<DirLight>(lightComponent->light)->lightColor = vec3(150);
+	//shared_ptr<Object> dirLight = make_shared<Object>();
+	//dirLight->AddComponent<Transform>();
+	//dirLight->SetName("DirLight");
+	//rootObject->AddChild(dirLight);
+	//dirLight->SetPosition(vec3(-3, 1, -2));
+	//auto lightComponent = dirLight->AddComponent<LightComponent>();
+	//lightComponent->SetLightType(LIGHT_TYPE::POINT_LIGHT);
 
-	shared_ptr<Object> box(new Object);
-	box->AddComponent<Transform>();
-	box->SetPosition(vec3(-1, 0, 0));
-	box->transform->SetRotation(vec3(0, 60, 0));
-	rootObject->AddChild(box);
-	box->SetName("box1");
-	auto meshReference = box->AddComponent<MeshReference>();
-	meshReference->CreateBox(1, 1, 1);
-	auto bR = box->AddComponent<MeshRenderer>();
-	shared_ptr<PBRMaterial> pbrMaterial1 = make_shared<PBRMaterial>();
-	pbrMaterial1->SetTextureBase("Material\\metalgrid\\basecolor.png");
-	pbrMaterial1->SetTextureNormal("Material\\metalgrid\\normal.png");
-	pbrMaterial1->SetTextureMetallic("Material\\metalgrid\\metallic.png");
-	pbrMaterial1->SetTextureAO("Material\\metalgrid\\AO.png");
-	pbrMaterial1->SetTextureRoughness("Material\\metalgrid\\roughness.png");
-	bR->material = pbrMaterial1;
+	//shared_ptr<Object> box(new Object);
+	//box->AddComponent<Transform>();
+	//box->SetPosition(vec3(-1, 0, 0));
+	//box->transform->SetRotation(vec3(0, 60, 0));
+	//rootObject->AddChild(box);
+	//box->SetName("box1");
+	//auto meshReference = box->AddComponent<MeshReference>();
+	//meshReference->CreateBox(1, 1, 1);
+	//auto bR = box->AddComponent<MeshRenderer>();
+	//shared_ptr<PBRMaterial> pbrMaterial1 = make_shared<PBRMaterial>();
+	//pbrMaterial1->SetTextureBase("Material\\metalgrid\\basecolor.png");
+	//pbrMaterial1->SetTextureNormal("Material\\metalgrid\\normal.png");
+	//pbrMaterial1->SetTextureMetallic("Material\\metalgrid\\metallic.png");
+	//pbrMaterial1->SetTextureAO("Material\\metalgrid\\AO.png");
+	//pbrMaterial1->SetTextureRoughness("Material\\metalgrid\\roughness.png");
+	//bR->material = pbrMaterial1;
 
-
-	//shared_ptr<DefaultSpecularMaterial> specularMaterial(new DefaultSpecularMaterial);
-	//specularMaterial->SetTextureBase("");
-	//specularMaterial->baseColor = vec4(255, 0, 0, 0);
-	//box->GetComponent<MeshRenderer>()->material = specularMaterial;
-
-	//shared_ptr<Object> box2 = make_shared<Object>();
-	//box2->SetName("box2");
-	//box2->AddComponent<Transform>();
-	//box2->SetPosition(vec3(0.5));
-	//box->AddChild(box2);
-	//auto box2MeshR = box2->AddComponent<MeshReference>();
-	//box2MeshR->CreateBox(0.5, 0.5, 0.5);
-	//box2->AddComponent<MeshRenderer>();
+	shared_ptr<Object> box2 = make_shared<Object>();
+	box2->SetName("box2");
+	box2->AddComponent<Transform>();
+	box2->SetPosition(vec3(0.5));
+	rootObject->AddChild(box2);
+	auto box2MeshR = box2->AddComponent<MeshReference>();
+	box2MeshR->CreateBox(0.5, 0.5, 0.5);
+	box2->AddComponent<MeshRenderer>();
 
 
 
-	//shared_ptr<Object> model(new Object);
-	//model->SetName("Model1");
-	//auto modelMeshReference = model->AddComponent<MeshReference>();
-	//model->transform->SetScaler(vec3(0.2, 0.2, 0.2));
+	shared_ptr<Object> model = make_shared<Object>();
+	model->AddComponent<Transform>();
+	rootObject->AddChild(model);
+	model->SetName("Model1");
+	auto modelMeshReference = model->AddComponent<MeshReference>();
+	model->transform->SetScaler(vec3(0.2, 0.2, 0.2));
 
-	//Model testModel;
-	//testModel.LoadModel("OBJ\\Neptune.obj");
-	//modelMeshReference->SetMesh(testModel.meshs[0]);
-	//model->AddComponent<MeshRenderer>();
-	//objects.insert(make_pair(model->GetName(), model));
+	Model testModel;
+	testModel.LoadModel("OBJ\\Neptune.obj");
+
+	auto it = testModel.root->children.begin();
+	
+	modelMeshReference->SetMesh((*it)->data[0]);
+	model->AddComponent<MeshRenderer>();
 }
 
 void MyScene::InitKeys()

@@ -12,30 +12,45 @@ void Model::LoadModel(string path)
 	//meshStruct.clean();
 	//meshStruct.request_vertex_texcoords2D();
 
-	ProcessModelNode(scene->mRootNode, scene);
+	ProcessModelNode(scene->mRootNode, scene, root);
 }
 
-void Model::ProcessModelNode(aiNode* rootNode, const aiScene* scene)
+void Model::ProcessModelNode(aiNode* rootNode, const aiScene* scene, shared_ptr<MeshNode> node)
 {
 	// 处理每个子节点下保存的网格索引
+	//if (rootNode->mNumMeshes > 0)
+	//{
+
+	//}
+
+	//shared_ptr<MeshNode> meshNode = make_shared<MeshNode>();
 	for (size_t i = 0; i < rootNode->mNumMeshes; i++)
 	{
 		auto mesh = scene->mMeshes[rootNode->mMeshes[i]];
-		meshs.push_back(ProcessModelMesh(mesh, scene));
+		auto myMesh = ProcessModelMesh(mesh, scene);
+
+		node->data.push_back(myMesh);
+
+		//parent.children.push_back(myMesh);
+		//meshs.push_back(ProcessModelMesh(mesh, scene));
 	}
+
 
 	// 处理子节点
 	for (size_t i = 0; i < rootNode->mNumChildren; i++)
 	{
-		ProcessModelNode(rootNode->mChildren[i], scene);
+		shared_ptr<MeshNode> child = make_shared<MeshNode>();
+		child->parent = node;
+		node->children.push_back(child);
+		ProcessModelNode(rootNode->mChildren[i], scene, child);
 	}
 }
 
 // 网格处理
-Mesh Model::ProcessModelMesh(aiMesh* mesh, const aiScene* scene)
+shared_ptr<Mesh> Model::ProcessModelMesh(aiMesh* mesh, const aiScene* scene)
 {
-	Mesh meshObject;
-	MeshStruct& meshStruct = meshObject.GetMeshStruct();
+	shared_ptr<Mesh> meshObject = make_shared<Mesh>();
+	MeshStruct& meshStruct = meshObject->GetMeshStruct();
 	meshStruct.clean();
 	meshStruct.request_vertex_texcoords2D();
 	meshStruct.request_vertex_normals();
