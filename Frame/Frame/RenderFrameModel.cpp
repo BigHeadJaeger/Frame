@@ -1,7 +1,6 @@
 #include "RenderFrameModel.h"
 #include"Scene.h"
 
-
 shared_ptr<Object> RenderFrameModel::GetSceneRoot()
 {
 	if (!currentScene.expired())
@@ -11,4 +10,9 @@ shared_ptr<Object> RenderFrameModel::GetSceneRoot()
 	}
 	cout << "scene do not exist" << endl;
 	return nullptr;
+}
+
+ObjectManager& RenderFrameModel::GetCurrentObjectManager()
+{
+	return currentScene.lock()->objectManager;
 }

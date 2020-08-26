@@ -12,6 +12,7 @@ class Camera;
 class MyScene;
 class LightComponent;
 class Object;
+class ObjectManager;
 
 class RenderFrameModel : public DataModel
 {
@@ -62,4 +63,6 @@ public:
 	}
 
 	shared_ptr<Object> GetSceneRoot();
+
+	ObjectManager& GetCurrentObjectManager();
 };

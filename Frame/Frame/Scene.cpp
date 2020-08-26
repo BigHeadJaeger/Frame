@@ -46,7 +46,7 @@ void MyScene::Init()
 	auto cameraComponent = mainCamera->AddComponent<Camera>();
 	cameraComponent->Init(vec3(0, 0, 0));
 	RenderFrameModel::GetInstance().SetMainCamera(cameraComponent);
-	objectManager.InsertObject(mainCamera);
+	//objectManager.InsertObject(mainCamera);
 	//objects.insert(make_pair(mainCamera->GetName(), mainCamera));
 
 
@@ -71,8 +71,12 @@ void MyScene::Init()
 	//specularMaterial->baseColor = vec4(255, 0, 0, 0);
 	//box->GetComponent<MeshRenderer>()->material = specularMaterial;
 
-	objectManager.InsertObject(box);
+	//objectManager.InsertObject(box);
 	//objects.insert(make_pair(box->GetName(), box));
+
+	//objectManager.RemoveObject(box);
+
+	//box->RemoveFromParent();
 
 
 	//shared_ptr<Object> model(new Object);
@@ -120,6 +124,7 @@ void MyScene::Update(float& dt)
 
 void MyScene::UpdateObject(shared_ptr<Object> obj, float dt)
 {
+	//if(obj)
 	obj->Update(dt);
 	for (auto it = obj->children.begin(); it != obj->children.end(); it++)
 	{

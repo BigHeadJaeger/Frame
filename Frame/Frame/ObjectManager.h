@@ -1,7 +1,9 @@
 #pragma once
 #include<functional>
 #include"RenderFrameModel.h"
-#include"Object.h"
+//#include"Object.h"
+
+class Object;
 
 class ObjectManager
 {
@@ -27,5 +29,21 @@ public:
 	void InsertObject(shared_ptr<Object> object)
 	{
 		objects.push_back(object);
+	}
+
+	void RemoveObject(shared_ptr<Object> object)
+	{
+		auto it = objects.begin();
+		while (it != objects.end())
+		{
+			if (*it == object)
+			{
+				//it->reset();
+				it = objects.erase(it);
+			}
+				
+			else
+				it++;
+		}
 	}
 };
