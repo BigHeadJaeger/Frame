@@ -37,7 +37,6 @@ void MyScene::Init()
 	//objects.insert(make_pair(mainCamera->GetName(), mainCamera));
 
 
-
 	//shared_ptr<Object> dirLight = make_shared<Object>();
 	//dirLight->AddComponent<Transform>();
 	//dirLight->SetName("DirLight");
@@ -63,37 +62,24 @@ void MyScene::Init()
 	//pbrMaterial1->SetTextureRoughness("Material\\metalgrid\\roughness.png");
 	//bR->material = pbrMaterial1;
 
-	shared_ptr<Object> box2 = make_shared<Object>();
-	box2->SetName("box2");
-	box2->AddComponent<Transform>();
-	box2->SetPosition(vec3(0.5));
-	rootObject->AddChild(box2);
-	auto box2MeshR = box2->AddComponent<MeshReference>();
-	box2MeshR->CreateBox(0.5, 0.5, 0.5);
-	box2->AddComponent<MeshRenderer>();
-
-	decltype(auto) modelGenerator = ModelGenerator::GetInstance();
-	auto testModel = modelGenerator.Create("OBJ\\Neptune.obj");
-	testModel->transform->SetScaler(vec3(0.1));
-
-	rootObject->AddChild(testModel);
+	//shared_ptr<Object> box2 = make_shared<Object>();
+	//box2->SetName("box2");
+	//box2->AddComponent<Transform>();
+	//box2->SetPosition(vec3(0, 0, 0));
+	//rootObject->AddChild(box2);
+	//auto box2MeshR = box2->AddComponent<MeshReference>();
+	//box2MeshR->CreateBox(0.5, 0.5, 0.5);
+	//auto box2MeshRen = box2->AddComponent<MeshRenderer>();
+	//shared_ptr<DefaultSpecularMaterial> specularMa = make_shared<DefaultSpecularMaterial>();
+	//specularMa->SetTextureBase("");
+	//box2MeshRen->material = specularMa;
 
 
+	//decltype(auto) modelGenerator = ModelGenerator::GetInstance();
+	//auto testModel = modelGenerator.Create("OBJ\\Neptune.obj");
+	//testModel->transform->SetScaler(vec3(0.1));
 
-	//shared_ptr<Object> model = make_shared<Object>();
-	//model->AddComponent<Transform>();
-	//rootObject->AddChild(model);
-	//model->SetName("Model1");
-	//auto modelMeshReference = model->AddComponent<MeshReference>();
-	//model->transform->SetScaler(vec3(0.2, 0.2, 0.2));
-
-	//shared_ptr<Model> testModel = ModelManager::GetInstance().GetModel("OBJ\\Neptune.obj");
-
-	//auto it = testModel->root->children.begin();
-	//
-	//modelMeshReference->SetMesh((*it)->data);
-	//model->AddComponent<MeshRenderer>();
-
+	//rootObject->AddChild(testModel);
 }
 
 void MyScene::InitKeys()

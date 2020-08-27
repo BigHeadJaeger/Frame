@@ -6,6 +6,7 @@ using namespace glm;
 #include"Program.h"
 #include"Transform.h"
 #include"ShaderDataTool.h"
+#include"TextureManager.h"
 
 enum class MATERIALTYPE
 {
@@ -19,11 +20,13 @@ enum class MATERIALTYPE
 // 每个物体需要一个Material
 class Material
 {
+protected:
+    TextureManager& texManager = TextureManager::GetInstance();
 public:
     ShaderProgram shaderProgram;
 public:
     vec4 baseColor = vec4(225, 225, 225, 255);      // 基础颜色值
-    GLuint textureBase;                             // 基础贴图
+    shared_ptr<Texture> baseTex;                    // 基础贴图
     MATERIALTYPE type;
 public:
     void SetTextureBase(string fileName)
@@ -31,11 +34,11 @@ public:
         decltype(auto) tool = ShaderDataTool::GetInstance();
         if (fileName == "")
         {
-            tool.InitTextureWithFile(textureBase, "Material\\Default\\BaseColor.png");
+            baseTex = texManager.GetTexture("Material\\Default\\BaseColor.png");
         }
         else
         {
-            tool.InitTextureWithFile(textureBase, fileName.c_str());
+            baseTex = texManager.GetTexture(fileName);
         }
     }
 
@@ -85,7 +88,9 @@ public:
         tool.SetUniform("baseColor", vec3(baseColor.x, baseColor.y, baseColor.z) / vec3(255), shaderProgram);
         tool.SetUniform("specular", specular / vec3(255), shaderProgram);
         tool.SetUniform("shininess", shininess, shaderProgram);
-        tool.SetTexture(textureBase, 0, GL_TEXTURE0, "albedoMap", shaderProgram);
+        if(baseTex)
+            tool.SetTexture(baseTex->id, 0, GL_TEXTURE0, "albedoMap", shaderProgram);
+        
     }
 };
 
@@ -116,17 +121,16 @@ public:
 
 class PBRMaterial :public Material
 {
+
 public:
-    GLuint textureMetallic;
-    bool isTextureMetallic = false;
+    shared_ptr<Texture> metalicTex;
     float numMetallic = 0.5;
-    GLuint textureRoughness;
-    bool isTextureRoughness = false;
+
+    shared_ptr<Texture> roughnessTex;
     float numRoughness = 0.5;
-    GLuint textureAO;
-    bool isTextureAO = false;
-    GLuint textureNormal;
-    bool isTextureNormal = false;
+
+    shared_ptr<Texture> aoTex;
+    shared_ptr<Texture> normalTex;
 public:
     PBRMaterial()
     {
@@ -136,54 +140,65 @@ public:
 
     void SetTextureMetallic(string fileName)
     {
-        isTextureMetallic = true;
-        decltype(auto) tool = ShaderDataTool::GetInstance();
-        tool.InitTextureWithFile(textureMetallic, fileName.c_str());
+        metalicTex = texManager.GetTexture(fileName);
     }
     void SetTextureRoughness(string fileName)
     {
-        isTextureRoughness = true;
-        decltype(auto) tool = ShaderDataTool::GetInstance();
-        tool.InitTextureWithFile(textureRoughness, fileName.c_str());
+        roughnessTex = texManager.GetTexture(fileName);
     }
     void SetTextureAO(string fileName)
     {
-        isTextureAO = true;
-        decltype(auto) tool = ShaderDataTool::GetInstance();
-        tool.InitTextureWithFile(textureAO, fileName.c_str());
+        aoTex = texManager.GetTexture(fileName);
     }
     void SetTextureNormal(string fileName)
     {
-        isTextureNormal = true;
-        decltype(auto) tool = ShaderDataTool::GetInstance();
-        tool.InitTextureWithFile(textureNormal, fileName.c_str());
+        normalTex = texManager.GetTexture(fileName);
     }
 
     void Transfer() override
     {
         decltype(auto) tool = ShaderDataTool::GetInstance();
         tool.SetUniform("baseColor", vec3(baseColor.x, baseColor.y, baseColor.z) / vec3(255), shaderProgram);
-        tool.SetTexture(textureBase, 0, GL_TEXTURE0, "albedoMap", shaderProgram);
+        if (baseTex)
+            tool.SetTexture(baseTex->id, 0, GL_TEXTURE0, "albedoMap", shaderProgram);
 
-        tool.SetUniform("isTextureMetallic", isTextureMetallic, shaderProgram);
-        if (isTextureMetallic)
-            tool.SetTexture(textureMetallic, 1, GL_TEXTURE1, "metallicMap", shaderProgram);
+        if (metalicTex)
+        {
+            tool.SetUniform("isTextureMetallic", true, shaderProgram);
+            tool.SetTexture(metalicTex->id, 1, GL_TEXTURE1, "metallicMap", shaderProgram);
+        }
         else
+        {
+            tool.SetUniform("isTextureMetallic", false, shaderProgram);
             tool.SetUniform("numMetallic", numMetallic, shaderProgram);
+        }
 
-        tool.SetUniform("isTextureRoughness", isTextureRoughness, shaderProgram);
-        if (isTextureRoughness)
-            tool.SetTexture(textureRoughness, 2, GL_TEXTURE2, "roughnessMap", shaderProgram);
+        if (roughnessTex)
+        {
+            tool.SetUniform("isTextureRoughness", true, shaderProgram);
+            tool.SetTexture(roughnessTex->id, 2, GL_TEXTURE2, "roughnessMap", shaderProgram);
+        }
         else
+        {
+            tool.SetUniform("isTextureRoughness", false, shaderProgram);
             tool.SetUniform("numRoughness", numRoughness, shaderProgram);
+        }
 
-        tool.SetUniform("isTextureAO", isTextureAO, shaderProgram);
-        if (isTextureAO)
-            tool.SetTexture(textureAO, 3, GL_TEXTURE3, "aoMap", shaderProgram);
-            
-        tool.SetUniform("isTextureNormal", isTextureNormal, shaderProgram);
-        if (isTextureNormal)
-            tool.SetTexture(textureNormal, 4, GL_TEXTURE4, "normalMap", shaderProgram);
+        if (aoTex)
+        {
+            tool.SetUniform("isTextureAO", true, shaderProgram);
+            tool.SetTexture(aoTex->id, 3, GL_TEXTURE3, "aoMap", shaderProgram);
+        }
+        else
+            tool.SetUniform("isTextureAO", false, shaderProgram);
+
+        if (normalTex)
+        {
+            tool.SetUniform("isTextureNormal", true, shaderProgram);
+            tool.SetTexture(normalTex->id, 4, GL_TEXTURE4, "normalMap", shaderProgram);
+        }
+        else
+            tool.SetUniform("isTextureNormal", false, shaderProgram);
     }
 
 };

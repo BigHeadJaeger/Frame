@@ -29,6 +29,7 @@ shared_ptr<Model> ModelManager::GetModel(string path)
 			cout << "get model failed" << endl;
 			return nullptr;
 		}
+		models.insert(make_pair(path, res));
 		return res;
 	}
 }
