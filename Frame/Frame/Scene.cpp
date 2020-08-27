@@ -7,6 +7,7 @@
 #include"RenderFrameModel.h"
 #include"ModelManager.h"
 #include"ModelGenerator.h"
+#include"MaterialManager.h"
 
 void MyScene::Init()
 {
@@ -20,6 +21,7 @@ void MyScene::Init()
 	}
 
 	ModelInit();
+	MaterialInit();
 
 	drawMode.isLine = false;
 
@@ -37,30 +39,32 @@ void MyScene::Init()
 	//objects.insert(make_pair(mainCamera->GetName(), mainCamera));
 
 
-	//shared_ptr<Object> dirLight = make_shared<Object>();
-	//dirLight->AddComponent<Transform>();
-	//dirLight->SetName("DirLight");
-	//rootObject->AddChild(dirLight);
-	//dirLight->SetPosition(vec3(-3, 1, -2));
-	//auto lightComponent = dirLight->AddComponent<LightComponent>();
-	//lightComponent->SetLightType(LIGHT_TYPE::POINT_LIGHT);
+	shared_ptr<Object> dirLight = make_shared<Object>();
+	dirLight->AddComponent<Transform>();
+	dirLight->SetName("DirLight");
+	rootObject->AddChild(dirLight);
+	dirLight->SetPosition(vec3(-3, 1, -2));
+	auto lightComponent = dirLight->AddComponent<LightComponent>();
+	lightComponent->SetLightType(LIGHT_TYPE::POINT_LIGHT);
 
-	//shared_ptr<Object> box(new Object);
-	//box->AddComponent<Transform>();
-	//box->SetPosition(vec3(-1, 0, 0));
-	//box->transform->SetRotation(vec3(0, 60, 0));
-	//rootObject->AddChild(box);
-	//box->SetName("box1");
-	//auto meshReference = box->AddComponent<MeshReference>();
-	//meshReference->CreateBox(1, 1, 1);
-	//auto bR = box->AddComponent<MeshRenderer>();
+	shared_ptr<Object> box(new Object);
+	box->AddComponent<Transform>();
+	box->SetPosition(vec3(-1, 0, 0));
+	box->transform->SetRotation(vec3(0, 60, 0));
+	rootObject->AddChild(box);
+	box->SetName("box1");
+	auto meshReference = box->AddComponent<MeshReference>();
+	meshReference->CreateBox(1, 1, 1);
+	auto bR = box->AddComponent<MeshRenderer>();
 	//shared_ptr<PBRMaterial> pbrMaterial1 = make_shared<PBRMaterial>();
 	//pbrMaterial1->SetTextureBase("Material\\metalgrid\\basecolor.png");
 	//pbrMaterial1->SetTextureNormal("Material\\metalgrid\\normal.png");
 	//pbrMaterial1->SetTextureMetallic("Material\\metalgrid\\metallic.png");
 	//pbrMaterial1->SetTextureAO("Material\\metalgrid\\AO.png");
 	//pbrMaterial1->SetTextureRoughness("Material\\metalgrid\\roughness.png");
-	//bR->material = pbrMaterial1;
+	auto test = MaterialManager::GetInstance().GetMaterial("metalgrid");
+
+	bR->material = MaterialManager::GetInstance().GetMaterial("metalgrid");
 
 	//shared_ptr<Object> box2 = make_shared<Object>();
 	//box2->SetName("box2");
@@ -96,8 +100,20 @@ void MyScene::InitKeys()
 void MyScene::ModelInit()
 {
 	decltype(auto) modelManager = ModelManager::GetInstance();
-	modelManager.InitModel("OBJ\\Neptune.obj");
-	
+	//modelManager.InitModel("OBJ\\Neptune.obj");
+	modelManager.InitModel("Model\\LoftTableChair\\Loft_Table_and_Chair_OBJ.obj");
+
+}
+
+void MyScene::MaterialInit()
+{
+	decltype(auto) materialManager = MaterialManager::GetInstance();
+	auto material1 = materialManager.CreateMaterial<PBRMaterial>("metalgrid");
+	material1->SetTextureBase("Material\\metalgrid\\basecolor.png");
+	material1->SetTextureNormal("Material\\metalgrid\\normal.png");
+	material1->SetTextureMetallic("Material\\metalgrid\\metallic.png");
+	material1->SetTextureAO("Material\\metalgrid\\AO.png");
+	material1->SetTextureRoughness("Material\\metalgrid\\roughness.png");
 }
 
 void MyScene::Update(float& dt)

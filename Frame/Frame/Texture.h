@@ -20,12 +20,6 @@ class Texture
 public:
 	GLuint id;
 	string filePath;
-	//string type;
 public:
-	//void InitTexture(string _type, string _path)
-	//{
-	//	type = _type;
-	//	LoadTextureFromFile(_path);
-	//}
 	void LoadTextureFromFile(string path);
 };

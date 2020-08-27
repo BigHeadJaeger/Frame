@@ -173,6 +173,7 @@
     <ClInclude Include="Light.h" />
     <ClInclude Include="LightComponent.h" />
     <ClInclude Include="Material.h" />
+    <ClInclude Include="MaterialManager.h" />
     <ClInclude Include="Mesh.h" />
     <ClInclude Include="MeshReference.h" />
     <ClInclude Include="Model.h" />

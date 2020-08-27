@@ -109,10 +109,18 @@ shared_ptr<Mesh> Model::ProcessModelMesh(vector<aiMesh*> meshArray, const aiScen
 		offsetF += mesh->mNumFaces;
 	}
 
-
-
 	// 材质
+	//auto firstMesh = meshArray[0];
+	//if (firstMesh->mMaterialIndex >= 0)
+	//{
+	//	aiMaterial* material = scene->mMaterials[firstMesh->mMaterialIndex];
+	//	
+	//	for (int i = aiTextureType_NONE; i < aiTextureType_UNKNOWN; i++)
+	//	{
 
+	//	}
+	//	material->GetTexture(aiTextureType)
+	//}
 
 	delete[] vHandles;
 	//计算法向量
