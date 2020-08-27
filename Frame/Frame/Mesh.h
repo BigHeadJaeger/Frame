@@ -16,6 +16,7 @@ class Mesh
 {
 public:
 	MeshStruct meshStruct;
+	string name;
 public:
 	void readObjFile(string fileName);
 	void InitBox(float width, float height, float depth);

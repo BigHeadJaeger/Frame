@@ -146,6 +146,9 @@
     <ClInclude Include="ModelManager.h">
       <Filter>头文件</Filter>
     </ClInclude>
+    <ClInclude Include="ModelGenerator.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="SF_VertexColor.v">

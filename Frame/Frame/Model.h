@@ -15,7 +15,7 @@ class MeshNode
 {
 public:
 	// 一个节点下可能有多个网格
-	vector<shared_ptr<Mesh>> data;
+	shared_ptr<Mesh> data;
 	// 孩子节点列表
 	std::list<shared_ptr<MeshNode>> children;
 	// 父节点指针
@@ -54,5 +54,5 @@ public:
 	bool LoadModel(string path);
 private:
 	void ProcessModelNode(aiNode* rootNode, const aiScene* scene, shared_ptr<MeshNode> parent);
-	shared_ptr<Mesh> ProcessModelMesh(aiMesh* mesh, const aiScene* scene);
+	shared_ptr<Mesh> ProcessModelMesh(vector<aiMesh*> meshArray, const aiScene* scene);
 };

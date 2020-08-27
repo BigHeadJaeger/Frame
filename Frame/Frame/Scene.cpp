@@ -6,6 +6,7 @@
 #include<iostream>
 #include"RenderFrameModel.h"
 #include"ModelManager.h"
+#include"ModelGenerator.h"
 
 void MyScene::Init()
 {
@@ -71,21 +72,27 @@ void MyScene::Init()
 	box2MeshR->CreateBox(0.5, 0.5, 0.5);
 	box2->AddComponent<MeshRenderer>();
 
+	decltype(auto) modelGenerator = ModelGenerator::GetInstance();
+	auto testModel = modelGenerator.Create("OBJ\\Neptune.obj");
+	testModel->transform->SetScaler(vec3(0.1));
+
+	rootObject->AddChild(testModel);
 
 
-	shared_ptr<Object> model = make_shared<Object>();
-	model->AddComponent<Transform>();
-	rootObject->AddChild(model);
-	model->SetName("Model1");
-	auto modelMeshReference = model->AddComponent<MeshReference>();
-	model->transform->SetScaler(vec3(0.2, 0.2, 0.2));
 
-	shared_ptr<Model> testModel = ModelManager::GetInstance().GetModel("OBJ\\Neptune.obj");
+	//shared_ptr<Object> model = make_shared<Object>();
+	//model->AddComponent<Transform>();
+	//rootObject->AddChild(model);
+	//model->SetName("Model1");
+	//auto modelMeshReference = model->AddComponent<MeshReference>();
+	//model->transform->SetScaler(vec3(0.2, 0.2, 0.2));
 
-	auto it = testModel->root->children.begin();
-	
-	modelMeshReference->SetMesh((*it)->data[0]);
-	model->AddComponent<MeshRenderer>();
+	//shared_ptr<Model> testModel = ModelManager::GetInstance().GetModel("OBJ\\Neptune.obj");
+
+	//auto it = testModel->root->children.begin();
+	//
+	//modelMeshReference->SetMesh((*it)->data);
+	//model->AddComponent<MeshRenderer>();
 
 }
 
@@ -111,13 +118,6 @@ void MyScene::Update(float& dt)
 {
 	// 从场景中的根节点遍历所有object，进行更新
 	UpdateObject(rootObject, dt);
-
-
-	//// 遍历所有object更新矩阵
-	//for (auto objs_it = objects.begin(); objs_it != objects.end(); objs_it++)
-	//{
-	//	objs_it->second->Update(dt);
-	//}
 
 	// 按键事件带来的变换会在下一帧起效
 	// 遍历所有key，并执行key当前绑定的事件

@@ -175,6 +175,7 @@
     <ClInclude Include="Mesh.h" />
     <ClInclude Include="MeshReference.h" />
     <ClInclude Include="Model.h" />
+    <ClInclude Include="ModelGenerator.h" />
     <ClInclude Include="ModelManager.h" />
     <ClInclude Include="Object.h" />
     <ClInclude Include="ObjectManager.h" />

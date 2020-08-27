@@ -25,16 +25,21 @@ void Model::ProcessModelNode(aiNode* rootNode, const aiScene* scene, shared_ptr<
 	//}
 
 	//shared_ptr<MeshNode> meshNode = make_shared<MeshNode>();
+	// 一个子网格下可能有好几个网格，此处直接合并成一个(一般建模的情况中一个子网格就包含一个网格数据)
+	vector<aiMesh*> meshArray;
 	for (size_t i = 0; i < rootNode->mNumMeshes; i++)
 	{
 		auto mesh = scene->mMeshes[rootNode->mMeshes[i]];
-		auto myMesh = ProcessModelMesh(mesh, scene);
-
-		node->data.push_back(myMesh);
-
-		//parent.children.push_back(myMesh);
-		//meshs.push_back(ProcessModelMesh(mesh, scene));
+		meshArray.push_back(mesh);
 	}
+
+	if (meshArray.size() > 0)
+	{
+		auto myMesh = ProcessModelMesh(meshArray, scene);
+		node->data = myMesh;
+	}
+	else
+		node->data = nullptr;
 
 
 	// 处理子节点
@@ -48,46 +53,63 @@ void Model::ProcessModelNode(aiNode* rootNode, const aiScene* scene, shared_ptr<
 }
 
 // 网格处理
-shared_ptr<Mesh> Model::ProcessModelMesh(aiMesh* mesh, const aiScene* scene)
+shared_ptr<Mesh> Model::ProcessModelMesh(vector<aiMesh*> meshArray, const aiScene* scene)
 {
 	shared_ptr<Mesh> meshObject = make_shared<Mesh>();
+	meshObject->name = meshArray[0]->mName.data;
 	MeshStruct& meshStruct = meshObject->GetMeshStruct();
 	meshStruct.clean();
 	meshStruct.request_vertex_texcoords2D();
 	meshStruct.request_vertex_normals();
 
+	size_t numVertex = 0;
+	for (size_t i = 0; i < meshArray.size(); i++)
+		numVertex += meshArray[i]->mNumVertices;
+
 	MeshStruct::VertexHandle* vHandles;
-	vHandles = new MeshStruct::VertexHandle[mesh->mNumVertices];
+	vHandles = new MeshStruct::VertexHandle[numVertex];
 
-
-	for (size_t i = 0; i < mesh->mNumVertices; i++)
+	size_t offsetV = 0;
+	size_t offsetF = 0;
+	for (size_t k = 0; k < meshArray.size(); k++)
 	{
-		// 位置
-		vHandles[i] = meshStruct.add_vertex(MeshStruct::Point(mesh->mVertices[i].x, mesh->mVertices[i].y, mesh->mVertices[i].z));
-		// 法向量
-		if (mesh->HasNormals())
+		auto mesh = meshArray[k];
+		
+		for (size_t i = offsetV; i < mesh->mNumVertices; i++)
 		{
-			meshStruct.set_normal(vHandles[i], OpenMesh::Vec3f(mesh->mNormals[i].x, mesh->mNormals[i].y, mesh->mNormals[i].z));
+			// 位置
+			vHandles[i] = meshStruct.add_vertex(MeshStruct::Point(mesh->mVertices[i].x, mesh->mVertices[i].y, mesh->mVertices[i].z));
+			// 法向量
+			if (mesh->HasNormals())
+			{
+				meshStruct.set_normal(vHandles[i], OpenMesh::Vec3f(mesh->mNormals[i].x, mesh->mNormals[i].y, mesh->mNormals[i].z));
+			}
+			// 当有纹理坐标的时候
+			if (mesh->mTextureCoords[0])
+			{
+				meshStruct.set_texcoord2D(vHandles[i], OpenMesh::Vec2f(mesh->mTextureCoords[0][i].x, mesh->mTextureCoords[0][i].y));
+			}
+			else
+				meshStruct.set_texcoord2D(vHandles[i], OpenMesh::Vec2f(0));
 		}
-		// 当有纹理坐标的时候
-		if (mesh->mTextureCoords[0])
+
+		offsetV += mesh->mNumVertices;
+
+		// 索引
+		std::vector<MeshStruct::VertexHandle>  face_vhandles;
+		for (size_t i = offsetF; i < mesh->mNumFaces; i++)
 		{
-			meshStruct.set_texcoord2D(vHandles[i], OpenMesh::Vec2f(mesh->mTextureCoords[0][i].x, mesh->mTextureCoords[0][i].y));
+			face_vhandles.clear();
+			auto face = mesh->mFaces[i];
+			for (size_t j = 0; j < face.mNumIndices; j++)
+				face_vhandles.push_back(vHandles[face.mIndices[j]]);
+			meshStruct.add_face(face_vhandles);
 		}
-		else
-			meshStruct.set_texcoord2D(vHandles[i], OpenMesh::Vec2f(0));
+
+		offsetF += mesh->mNumFaces;
 	}
 
-	// 索引
-	std::vector<MeshStruct::VertexHandle>  face_vhandles;
-	for (size_t i = 0; i < mesh->mNumFaces; i++)
-	{
-		face_vhandles.clear();
-		auto face = mesh->mFaces[i];
-		for (size_t j = 0; j < face.mNumIndices; j++)
-			face_vhandles.push_back(vHandles[face.mIndices[j]]);
-		meshStruct.add_face(face_vhandles);
-	}
+
 
 	// 材质
 
