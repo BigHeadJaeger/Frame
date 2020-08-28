@@ -41,22 +41,30 @@ void MyScene::Init()
 
 	shared_ptr<Object> light1 = make_shared<Object>();
 	light1->AddComponent<Transform>();
-	light1->SetName("DirLight");
+	light1->SetName("light1");
 	rootObject->AddChild(light1);
-	light1->SetPosition(vec3(-3, 2, 0.5));
-	auto lightComponent = light1->AddComponent<LightComponent>();
-	lightComponent->SetLightType(LIGHT_TYPE::POINT_LIGHT);
+	light1->SetPosition(vec3(-3, 2, 0));
+	auto light1Component = light1->AddComponent<LightComponent>();
+	light1Component->SetLightType(LIGHT_TYPE::POINT_LIGHT);
 
-	//shared_ptr<Object> box(new Object);
-	//box->AddComponent<Transform>();
-	//box->SetPosition(vec3(-1, 0, 0));
-	//box->transform->SetRotation(vec3(0, 60, 0));
-	//rootObject->AddChild(box);
-	//box->SetName("box1");
-	//auto meshReference = box->AddComponent<MeshReference>();
-	//meshReference->CreateBox(1, 1, 1);
-	//auto bR = box->AddComponent<MeshRenderer>();
-	//bR->material = MaterialManager::GetInstance().GetMaterial("metalgrid");
+	//shared_ptr<Object> light2 = make_shared<Object>();
+	//light2->AddComponent<Transform>();
+	//light2->SetName("light2");
+	//rootObject->AddChild(light2);
+	//light2->SetPosition(vec3(3, 2, 0));
+	//auto light2Component = light2->AddComponent<LightComponent>();
+	//light2Component->SetLightType(LIGHT_TYPE::POINT_LIGHT);
+
+	shared_ptr<Object> box(new Object);
+	box->AddComponent<Transform>();
+	box->SetPosition(vec3(-1, 0, 0));
+	box->transform->SetRotation(vec3(0, 60, 0));
+	rootObject->AddChild(box);
+	box->SetName("box1");
+	auto meshReference = box->AddComponent<MeshReference>();
+	meshReference->CreateBox(1, 1, 1);
+	auto bR = box->AddComponent<MeshRenderer>();
+	bR->material = MaterialManager::GetInstance().GetMaterial("metalgrid");
 
 	//shared_ptr<Object> box2 = make_shared<Object>();
 	//box2->SetName("box2");
@@ -71,11 +79,11 @@ void MyScene::Init()
 	//box2MeshRen->material = specularMa;
 
 
-	decltype(auto) modelGenerator = ModelGenerator::GetInstance();
-	auto testModel = modelGenerator.Create("Model\\nanosuit\\nanosuit.obj");
-	testModel->transform->SetScaler(vec3(0.1));
+	//decltype(auto) modelGenerator = ModelGenerator::GetInstance();
+	//auto testModel = modelGenerator.Create("Model\\nanosuit\\nanosuit.obj");
+	//testModel->transform->SetScaler(vec3(0.1));
 
-	rootObject->AddChild(testModel);
+	//rootObject->AddChild(testModel);
 }
 
 void MyScene::InitKeys()
@@ -93,20 +101,20 @@ void MyScene::ModelInit()
 {
 	decltype(auto) modelManager = ModelManager::GetInstance();
 	//modelManager.InitModel("OBJ\\Neptune.obj");
-	//modelManager.InitModel("Model\\LoftTableChair\\Loft_Table_and_Chair_OBJ.obj");
 	//modelManager.InitModel("Model\\backpack\\backpack.obj");
-	modelManager.InitModel("Model\\nanosuit\\nanosuit.obj");
+	//modelManager.InitModel("Model\\nanosuit\\nanosuit.obj");
+	
 }
 
 void MyScene::MaterialInit()
 {
 	decltype(auto) materialManager = MaterialManager::GetInstance();
-	//auto material1 = materialManager.CreateMaterial<PBRMaterial>("metalgrid");
-	//material1->SetTextureBase("Material\\metalgrid\\basecolor.png");
-	//material1->SetTextureNormal("Material\\metalgrid\\normal.png");
-	//material1->SetTextureMetallic("Material\\metalgrid\\metallic.png");
-	//material1->SetTextureAO("Material\\metalgrid\\AO.png");
-	//material1->SetTextureRoughness("Material\\metalgrid\\roughness.png");
+	auto material1 = materialManager.CreateMaterial<PBRMaterial>("metalgrid");
+	material1->SetTextureBase("Material\\metalgrid\\basecolor.png");
+	material1->SetTextureNormal("Material\\metalgrid\\normal.png");
+	material1->SetTextureMetallic("Material\\metalgrid\\metallic.png");
+	material1->SetTextureAO("Material\\metalgrid\\AO.png");
+	material1->SetTextureRoughness("Material\\metalgrid\\roughness.png");
 
 	materialManager.CreateMaterial<NoneMaterial>("none");
 }

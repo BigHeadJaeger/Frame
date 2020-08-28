@@ -147,7 +147,7 @@ void Model::LoadMaterialTexture(aiMaterial* mat, aiTextureType type, shared_ptr<
 		switch (type)
 		{
 		case aiTextureType_NONE:
-			//material->SetTextureBase("");
+			material->SetTextureBase("");
 			break;
 		case aiTextureType_DIFFUSE:
 			material->SetTextureBase(texture);
@@ -156,7 +156,7 @@ void Model::LoadMaterialTexture(aiMaterial* mat, aiTextureType type, shared_ptr<
 			material->SetTextureMetallic(texture);
 			break;
 		case aiTextureType_AMBIENT:
-			//material->SetTextureAO(texture);
+			material->SetTextureAO(texture);
 			break;
 		case aiTextureType_EMISSIVE:
 			break;
@@ -164,7 +164,7 @@ void Model::LoadMaterialTexture(aiMaterial* mat, aiTextureType type, shared_ptr<
 			material->SetTextureNormal(texture);
 			break;
 		case aiTextureType_NORMALS:
-			//material->SetTextureNormal(texture);
+			material->SetTextureNormal(texture);
 			break;
 		case aiTextureType_SHININESS:
 			break;

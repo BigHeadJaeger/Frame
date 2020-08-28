@@ -125,6 +125,7 @@ void Renderer::SetLight()
 				auto light = dynamic_pointer_cast<DirLight>(lightComponents[i]->light);
 				string preName = "dirLights[" + to_string(dirCount) + "].";
 				dirCount++;
+				tool.SetUniform(preName + "isAble", true, material->shaderProgram);
 				tool.SetUniform((preName + "position"), lightComponents[i]->object.lock()->GetPosition(), material->shaderProgram);
 				tool.SetUniform((preName + "color"), light->lightColor / vec3(255), material->shaderProgram);
 				tool.SetUniform((preName + "dir"), normalize(light->lightDir), material->shaderProgram);
@@ -135,6 +136,7 @@ void Renderer::SetLight()
 				auto light = dynamic_pointer_cast<PointLight>(lightComponents[i]->light);
 				string preName = "pointLights[" + to_string(pointCount) + "].";
 				pointCount++;
+				tool.SetUniform(preName + "isAble", true, material->shaderProgram);
 				tool.SetUniform((preName + "position"), lightComponents[i]->object.lock()->GetPosition(), material->shaderProgram);
 				tool.SetUniform((preName + "color"), light->lightColor / vec3(255), material->shaderProgram);
 				tool.SetUniform((preName + "radius"), light->radius, material->shaderProgram);
