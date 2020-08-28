@@ -92,9 +92,9 @@ void Renderer::SetTransform()
 	shared_ptr<Transform> transform = object.lock()->transform;
 	//auto transform = object.lock()->transform;
 	decltype(auto) tool = ShaderDataTool::GetInstance();
-	tool.SetUniform("worldViewProj", transform->worldViewProj, material->shaderProgram);
-	tool.SetUniform("world", transform->world, material->shaderProgram);
-	tool.SetUniform("worldInvTranspose", transform->worldInvTranspose, material->shaderProgram);
+	tool.SetUniform("worldViewProj", transform->worldViewProj, material->shader);
+	tool.SetUniform("world", transform->world, material->shader);
+	tool.SetUniform("worldInvTranspose", transform->worldInvTranspose, material->shader);
 }
 
 void Renderer::SetCamera()
@@ -103,7 +103,7 @@ void Renderer::SetCamera()
 	auto mainCamera = RenderFrameModel::GetInstance().GetMainCamera();
 	if (mainCamera->isUseable())
 	{
-		tool.SetUniform("eyePos", mainCamera->object.lock()->transform->position, material->shaderProgram);
+		tool.SetUniform("eyePos", mainCamera->object.lock()->transform->position, material->shader);
 	}
 }
 
@@ -125,10 +125,10 @@ void Renderer::SetLight()
 				auto light = dynamic_pointer_cast<DirLight>(lightComponents[i]->light);
 				string preName = "dirLights[" + to_string(dirCount) + "].";
 				dirCount++;
-				tool.SetUniform(preName + "isAble", true, material->shaderProgram);
-				tool.SetUniform((preName + "position"), lightComponents[i]->object.lock()->GetPosition(), material->shaderProgram);
-				tool.SetUniform((preName + "color"), light->lightColor / vec3(255), material->shaderProgram);
-				tool.SetUniform((preName + "dir"), normalize(light->lightDir), material->shaderProgram);
+				tool.SetUniform(preName + "isAble", true, material->shader);
+				tool.SetUniform((preName + "position"), lightComponents[i]->object.lock()->GetPosition(), material->shader);
+				tool.SetUniform((preName + "color"), light->lightColor / vec3(255), material->shader);
+				tool.SetUniform((preName + "dir"), normalize(light->lightDir), material->shader);
 				break;
 			}
 			case LIGHT_TYPE::POINT_LIGHT:
@@ -136,11 +136,11 @@ void Renderer::SetLight()
 				auto light = dynamic_pointer_cast<PointLight>(lightComponents[i]->light);
 				string preName = "pointLights[" + to_string(pointCount) + "].";
 				pointCount++;
-				tool.SetUniform(preName + "isAble", true, material->shaderProgram);
-				tool.SetUniform((preName + "position"), lightComponents[i]->object.lock()->GetPosition(), material->shaderProgram);
-				tool.SetUniform((preName + "color"), light->lightColor / vec3(255), material->shaderProgram);
-				tool.SetUniform((preName + "radius"), light->radius, material->shaderProgram);
-				tool.SetUniform((preName + "attenuation"), light->attenuation, material->shaderProgram);
+				tool.SetUniform(preName + "isAble", true, material->shader);
+				tool.SetUniform((preName + "position"), lightComponents[i]->object.lock()->GetPosition(), material->shader);
+				tool.SetUniform((preName + "color"), light->lightColor / vec3(255), material->shader);
+				tool.SetUniform((preName + "radius"), light->radius, material->shader);
+				tool.SetUniform((preName + "attenuation"), light->attenuation, material->shader);
 				break;
 			}
 			default:
@@ -148,4 +148,19 @@ void Renderer::SetLight()
 			}
 		}
 	}
+}
+
+void MeshRenderer::Render()
+{
+	if (!isUseable())
+		return;
+	glUseProgram(material->shader.lock()->p);
+	glBindVertexArray(VAO);
+	SetCamera();
+	SetTransform();
+	SetLight();
+	material->Transfer();
+	glDrawArrays(drawType, 0, drawUnitNumber);
+	glBindVertexArray(0);
+	glUseProgram(0);
 }

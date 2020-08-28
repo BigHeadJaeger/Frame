@@ -24,10 +24,10 @@ public:
 	// 从文件初始化图片到id中
 	void InitTextureWithFile(GLuint& texID, string texPath);
 	//传texture到shader中
-	void SetTexture(GLuint& texId, int num, GLenum texNum, string samplerName, ShaderProgram& p);
+	void SetTexture(GLuint& texId, int num, GLenum texNum, string samplerName, weak_ptr<ShaderProgram> p);
 	//根据不同类型的值用重载的方式传入shader中
-	void SetUniform(string&& valueName, mat4x4 value, ShaderProgram& p);
-	void SetUniform(string&& valueName, vec4 value, ShaderProgram& p);
-	void SetUniform(string&& valueName, vec3 value, ShaderProgram& p);
-	void SetUniform(string&& valueName, float value, ShaderProgram& p);
+	void SetUniform(string&& valueName, mat4x4 value, weak_ptr<ShaderProgram> p);
+	void SetUniform(string&& valueName, vec4 value, weak_ptr<ShaderProgram> p);
+	void SetUniform(string&& valueName, vec3 value, weak_ptr<ShaderProgram> p);
+	void SetUniform(string&& valueName, float value, weak_ptr<ShaderProgram> p);
 };

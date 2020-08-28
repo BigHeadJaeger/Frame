@@ -4,7 +4,7 @@ layout(location=0) in vec3 positionL;
 layout(location=1) in vec3 normalL;
 
 out vec3 positionW;					// 光照计算需要物体的世界坐标
-out vec3 normalW;				// 顶点法向量的世界坐标
+out vec3 normalW;					// 顶点法向量的世界坐标
 
 uniform mat4 world;
 uniform mat4 worldViewProj;

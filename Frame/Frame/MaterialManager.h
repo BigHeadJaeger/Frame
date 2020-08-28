@@ -34,13 +34,5 @@ public:
 		return material;
 	}
 
-	shared_ptr<Material> GetMaterial(string name)
-	{
-		auto it = materialMap.find(name);
-		if (it != materialMap.end())
-			return it->second;
-
-		cout << "the specify material not exist" << endl;
-		return nullptr;
-	}
+	shared_ptr<Material> GetMaterial(string name);
 };

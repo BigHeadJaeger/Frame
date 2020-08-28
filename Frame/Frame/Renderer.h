@@ -79,19 +79,6 @@ public:
 		UpdateMeshData();
 	}
 
-	void Render() override
-	{
-		if (!isUseable())
-			return;
-		glUseProgram(material->shaderProgram.p);
-		glBindVertexArray(VAO);
-		SetCamera();
-		SetTransform();
-		SetLight();
-		material->Transfer();
-		glDrawArrays(drawType, 0, drawUnitNumber);
-		glBindVertexArray(0);
-		glUseProgram(0);
-	}
+	void Render() override;
 };
 
