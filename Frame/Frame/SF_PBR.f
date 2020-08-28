@@ -174,7 +174,7 @@ void main()
 
 
 	float distance = length(pointLights[0].position - posW);
-	float attenuation=1.0/(distance*distance);			//º∆À„À•ºı
+	float attenuation = 1.0/(distance*distance) * pointLights[0].attenuation;			//º∆À„À•ºı
 	//float attenuation=1.0;
 	vec3 radiance=lightColor*attenuation;
 

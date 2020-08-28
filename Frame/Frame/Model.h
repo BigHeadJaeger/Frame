@@ -9,6 +9,8 @@
 #include<assimp/scene.h>
 
 #include"Mesh.h"
+#include"TextureManager.h"
+#include"MaterialManager.h"
 
 // 用树形结构保存model下的所有子网格
 class MeshNode
@@ -41,6 +43,8 @@ class Model
 public:
 	// 一个模型的所有子网格
 	//vector<Mesh> meshs;
+	string name;
+	string path;
 
 	shared_ptr<MeshNode> root;
 
@@ -55,4 +59,5 @@ public:
 private:
 	void ProcessModelNode(aiNode* rootNode, const aiScene* scene, shared_ptr<MeshNode> parent);
 	shared_ptr<Mesh> ProcessModelMesh(vector<aiMesh*> meshArray, const aiScene* scene);
+	void LoadMaterialTexture(aiMaterial* mat, aiTextureType type, shared_ptr<PBRMaterial> material);
 };

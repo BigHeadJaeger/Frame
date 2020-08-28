@@ -37,6 +37,7 @@ public:
 	}
 
 private:
+	// 按照模型的网格文件递归生成树形object
 	void ProcessModelNode(shared_ptr<MeshNode> meshNode, shared_ptr<Object> obj)
 	{
 		obj->AddComponent<Transform>();
@@ -45,7 +46,10 @@ private:
 			obj->SetName(meshNode->data->name);
 			auto reference = obj->AddComponent<MeshReference>();
 			reference->SetMesh(meshNode->data);
-			obj->AddComponent<MeshRenderer>();
+			auto meshRender = obj->AddComponent<MeshRenderer>();
+			// 如果网格有自带的材质则直接使用
+			if (!meshNode->data->material.expired())
+				meshRender->material = meshNode->data->material.lock();
 		}
 		else
 			obj->SetName("Model");

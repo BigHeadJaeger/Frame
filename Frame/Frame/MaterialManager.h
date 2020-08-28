@@ -29,6 +29,7 @@ public:
 		}
 
 		auto material = make_shared<TYPE>();
+		material->name = name;
 		materialMap.insert(make_pair(name, material));
 		return material;
 	}

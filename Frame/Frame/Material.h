@@ -8,6 +8,7 @@ using namespace glm;
 #include"ShaderDataTool.h"
 #include"TextureManager.h"
 
+
 enum class MATERIALTYPE
 {
     MATERIAL_DEFAULT_DIFFUSE,
@@ -25,6 +26,7 @@ protected:
 public:
     ShaderProgram shaderProgram;
 public:
+    string name;
     vec4 baseColor = vec4(225, 225, 225, 255);      // 基础颜色值
     shared_ptr<Texture> baseTex;                    // 基础贴图
     MATERIALTYPE type;
@@ -40,6 +42,12 @@ public:
         {
             baseTex = texManager.GetTexture(fileName);
         }
+    }
+
+    void SetTextureBase(shared_ptr<Texture> tex)
+    {
+        baseTex = tex;
+
     }
 
     // 每个材质有自己的方法将数据传输到shader中
@@ -138,22 +146,18 @@ public:
         type = MATERIALTYPE::MATERIAL_PBR;
     }
 
-    void SetTextureMetallic(string fileName)
-    {
-        metalicTex = texManager.GetTexture(fileName);
-    }
-    void SetTextureRoughness(string fileName)
-    {
-        roughnessTex = texManager.GetTexture(fileName);
-    }
-    void SetTextureAO(string fileName)
-    {
-        aoTex = texManager.GetTexture(fileName);
-    }
-    void SetTextureNormal(string fileName)
-    {
-        normalTex = texManager.GetTexture(fileName);
-    }
+    void SetTextureMetallic(string fileName) { metalicTex = texManager.GetTexture(fileName); }
+    void SetTextureMetallic(shared_ptr<Texture> tex) { metalicTex = tex; }
+
+    void SetTextureRoughness(string fileName) { roughnessTex = texManager.GetTexture(fileName); }
+    void SetTextureRoughness(shared_ptr<Texture> tex) { roughnessTex = tex; }
+
+    void SetTextureAO(string fileName) { aoTex = texManager.GetTexture(fileName); }
+    void SetTextureAO(shared_ptr<Texture> tex) { aoTex = tex; }
+
+
+    void SetTextureNormal(string fileName) { normalTex = texManager.GetTexture(fileName); }
+    void SetTextureNormal(shared_ptr<Texture> tex) { normalTex = tex;  }
 
     void Transfer() override
     {

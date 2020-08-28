@@ -1,7 +1,12 @@
 #include "Model.h"
 
-bool Model::LoadModel(string path)
+bool Model::LoadModel(string _path)
 {
+	path = _path;
+	auto index = path.find_last_of('\\');
+	auto fullName = path.substr(index + 1);
+	name = fullName.substr(0, fullName.find_last_of('.'));
+
 	Assimp::Importer importer;
 	auto scene = importer.ReadFile(path, aiProcess_Triangulate | aiProcess_FlipUVs);
 	if (!scene || scene->mFlags & AI_SCENE_FLAGS_INCOMPLETE || !scene->mRootNode)
@@ -9,8 +14,6 @@ bool Model::LoadModel(string path)
 		cout << "ERROR::ASSIMP::" << importer.GetErrorString() << endl;
 		return false;
 	}
-	//meshStruct.clean();
-	//meshStruct.request_vertex_texcoords2D();
 
 	ProcessModelNode(scene->mRootNode, scene, root);
 	return true;
@@ -18,13 +21,6 @@ bool Model::LoadModel(string path)
 
 void Model::ProcessModelNode(aiNode* rootNode, const aiScene* scene, shared_ptr<MeshNode> node)
 {
-	// 处理每个子节点下保存的网格索引
-	//if (rootNode->mNumMeshes > 0)
-	//{
-
-	//}
-
-	//shared_ptr<MeshNode> meshNode = make_shared<MeshNode>();
 	// 一个子网格下可能有好几个网格，此处直接合并成一个(一般建模的情况中一个子网格就包含一个网格数据)
 	vector<aiMesh*> meshArray;
 	for (size_t i = 0; i < rootNode->mNumMeshes; i++)
@@ -56,7 +52,8 @@ void Model::ProcessModelNode(aiNode* rootNode, const aiScene* scene, shared_ptr<
 shared_ptr<Mesh> Model::ProcessModelMesh(vector<aiMesh*> meshArray, const aiScene* scene)
 {
 	shared_ptr<Mesh> meshObject = make_shared<Mesh>();
-	meshObject->name = meshArray[0]->mName.data;
+	string meshName = meshArray[0]->mName.data;
+	meshObject->name = meshName;
 	MeshStruct& meshStruct = meshObject->GetMeshStruct();
 	meshStruct.clean();
 	meshStruct.request_vertex_texcoords2D();
@@ -110,17 +107,19 @@ shared_ptr<Mesh> Model::ProcessModelMesh(vector<aiMesh*> meshArray, const aiScen
 	}
 
 	// 材质
-	//auto firstMesh = meshArray[0];
-	//if (firstMesh->mMaterialIndex >= 0)
-	//{
-	//	aiMaterial* material = scene->mMaterials[firstMesh->mMaterialIndex];
-	//	
-	//	for (int i = aiTextureType_NONE; i < aiTextureType_UNKNOWN; i++)
-	//	{
+	auto firstMesh = meshArray[0];
+	if (firstMesh->mMaterialIndex >= 0)
+	{
+		aiMaterial* meshMaterial = scene->mMaterials[firstMesh->mMaterialIndex];
+		auto material = MaterialManager::GetInstance().CreateMaterial<PBRMaterial>(name + "_" + meshName);
 
-	//	}
-	//	material->GetTexture(aiTextureType)
-	//}
+		for (int i = 0; i < aiTextureType::aiTextureType_UNKNOWN; i++)
+		{
+			LoadMaterialTexture(meshMaterial, (aiTextureType)i, material);
+		}
+
+		meshObject->material = material;
+	}
 
 	delete[] vHandles;
 	//计算法向量
@@ -130,4 +129,75 @@ shared_ptr<Mesh> Model::ProcessModelMesh(vector<aiMesh*> meshArray, const aiScen
 	//meshStruct.release_face_normals();
 
 	return meshObject;
+}
+
+void Model::LoadMaterialTexture(aiMaterial* mat, aiTextureType type, shared_ptr<PBRMaterial> material)
+{
+	if (mat->GetTextureCount(type) > 0)
+	{
+		decltype(auto) textureManager = TextureManager::GetInstance();
+		aiString str;
+		mat->GetTexture(type, 0, &str);
+
+		string prefix = path.substr(0, path.find_last_of('\\'));
+		string absolutePath = prefix +"\\" + str.C_Str();
+
+		auto texture = textureManager.GetTexture(absolutePath);
+		//return;
+		switch (type)
+		{
+		case aiTextureType_NONE:
+			//material->SetTextureBase("");
+			break;
+		case aiTextureType_DIFFUSE:
+			material->SetTextureBase(texture);
+			break;
+		case aiTextureType_SPECULAR:
+			material->SetTextureMetallic(texture);
+			break;
+		case aiTextureType_AMBIENT:
+			//material->SetTextureAO(texture);
+			break;
+		case aiTextureType_EMISSIVE:
+			break;
+		case aiTextureType_HEIGHT:
+			material->SetTextureNormal(texture);
+			break;
+		case aiTextureType_NORMALS:
+			//material->SetTextureNormal(texture);
+			break;
+		case aiTextureType_SHININESS:
+			break;
+		case aiTextureType_OPACITY:
+			break;
+		case aiTextureType_DISPLACEMENT:
+			break;
+		case aiTextureType_LIGHTMAP:
+			break;
+		case aiTextureType_REFLECTION:
+			break;
+		case aiTextureType_BASE_COLOR:
+			material->SetTextureBase(texture);
+			break;
+		case aiTextureType_NORMAL_CAMERA:
+			material->SetTextureNormal(texture);
+			break;
+		case aiTextureType_EMISSION_COLOR:
+			break;
+		case aiTextureType_METALNESS:
+			material->SetTextureMetallic(texture);
+			break;
+		case aiTextureType_DIFFUSE_ROUGHNESS:
+			material->SetTextureRoughness(texture);
+			break;
+		case aiTextureType_AMBIENT_OCCLUSION:
+			material->SetTextureAO(texture);
+			break;
+		case aiTextureType_UNKNOWN:
+			break;
+		default:
+			break;
+		}
+
+	}
 }
