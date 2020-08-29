@@ -2,6 +2,7 @@
 #pragma once
 #include<glm.hpp>
 #include<vector>
+#include<list>
 using namespace glm;
 #include"Component.h"
 #include"ShaderDataTool.h"
@@ -24,7 +25,6 @@ private:
 
 
 public:
-
 	//构造函数
 	Transform(vec3 _pos = vec3(0), vec3 _scaler = vec3(1.0), vec3 _rotation = vec3(0)) :position(_pos), scaler(_scaler), rotation(_rotation)
 	{
@@ -41,20 +41,10 @@ public:
 	
 	void SetScaler(vec3 _scaler);
 
-	void UpdateMatrix()
-	{
-		world = translate(mat4(1.0), position);
-		world = scale(world, scaler);
-		if (rotation.x != 0)
-			world = rotate(world, rotation.x, vec3(1.0, 0.0, 0.0));
-		if (rotation.y != 0)
-			world = rotate(world, rotation.y, vec3(0.0, 1.0, 0.0));
-		if (rotation.z != 0)
-			world = rotate(world, rotation.z, vec3(0.0, 0.0, 1.0));
-		worldInvTranspose = transpose(inverse(world));
-		auto mainCamera = RenderFrameModel::GetInstance().GetMainCamera();
-		worldViewProj = mainCamera->pro * mainCamera->view * world;
-	}
+	// 递归父节点计算世界坐标
+	vec3 RecursionGetWorldPos(shared_ptr<Object> obj, vec3& pos);
+
+	void UpdateMatrix();
 
 	void Update(float dt) override
 	{

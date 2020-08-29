@@ -4,9 +4,11 @@
 #include<map>
 #include<glad/glad.h>
 #include<iostream>
+#include<list>
 using namespace std;
 #include"Renderer.h"
 #include"LightComponent.h"
+#include"ObjectManager.h"
 //#include"MarchingCube.h"
 //#include"DistributeFun.h"
 //#include"Component.h"
@@ -20,7 +22,7 @@ enum class TAG
 };
 
 //基类Object（目前只包含用于渲染的物体，类似gameobject）
-class Object
+class Object : public std::enable_shared_from_this<Object>
 {
 public:
 	string name;									//object名称
@@ -28,13 +30,17 @@ public:
 	bool isActive = true;
 	// 组件数组可通过名称查询
 	map<string, shared_ptr<Component>> components;
-
 	shared_ptr<Transform> transform;
+
+	//Object* parent;
+	//list<Object*> children;
+	weak_ptr<Object> parent;
+	list<weak_ptr<Object>> children;
 public:
 	Object()
 	{
-		// 每个物体默认有坐标组件
-		AddComponent<Transform>();
+		//// 每个物体默认有坐标组件
+		//AddComponent<Transform>();
 	}
 
 	~Object()
@@ -72,7 +78,7 @@ public:
 		}
 
 		auto component = make_shared<TYPE>();
-		component->object = this;
+		component->object = shared_from_this();
 		if (typeName == "class Transform")
 			transform = dynamic_pointer_cast<Transform>(component);
 		else if (typeName == "class LightComponent")
@@ -85,7 +91,6 @@ public:
 		return component;
 	}
 
-
 	template<typename TYPE>
 	bool isComponent()
 	{
@@ -96,13 +101,52 @@ public:
 			return false;
 	}
 
+	void AddChild(shared_ptr<Object> obj)
+	{
+		auto self_ptr = shared_from_this();
+		if (!obj->parent.expired())
+		{
+			cout << "the object has been added" << endl;
+			return;
+		}
+		children.push_back(obj);
+		obj->parent = self_ptr;
+		
+		// 讲一个物体加入树形结构中时则将其保存在manager中
+		decltype(auto) manager = RenderFrameModel::GetInstance().GetCurrentObjectManager();
+		manager.InsertObject(obj);
+	}
+
+	// 自身从父节点上移除
+	void RemoveFromParent()
+	{
+		if (parent.expired())
+		{
+			cout << "This object has no parent" << endl;
+			return;
+		}
+
+		auto it = parent.lock()->children.begin();
+		while (it != parent.lock()->children.end())
+		{
+			if (it->lock() == shared_from_this())
+			{
+				it = parent.lock()->children.erase(it);
+				decltype(auto) manager = RenderFrameModel::GetInstance().GetCurrentObjectManager();
+				manager.RemoveObject(shared_from_this());
+			}
+			else
+				it++;
+		}
+
+		parent.reset();
+	}
 public:
 	//Set
 	void SetName(string _name)
 	{
 		name = _name;
 	}
-
 
 	void SetPosition(vec3&& pos)
 	{
@@ -116,6 +160,8 @@ public:
 public:
 	//Get
 	string GetName() { return name; }
+
+	bool IsActive() { return isActive; }
 
 	const vec3& GetPosition()
 	{

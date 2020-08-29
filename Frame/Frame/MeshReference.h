@@ -7,7 +7,8 @@
 class MeshReference: public Component
 {
 public:
-	Mesh mesh;
+	shared_ptr<Mesh> mesh;
+	//Mesh mesh;
 	VertexData vertexData;
 	GLint drawType;
 	size_t drawUnitNumber;		// 绘制顶点的数量
@@ -32,31 +33,34 @@ public:
 			return;
 	}
 
-	void CreateBox(int width, int height, int depth)
+	void CreateBox(float width, float height, float depth)
 	{
+		mesh = make_shared<Mesh>();
 		meshChange = true;
-		mesh.InitBox(width, height, depth);
+		mesh->InitBox(width, height, depth);
 		ConvertMeshData();
 	}
 
 	void CreateSphere(float radius, int slice = 20, int stack = 20)
 	{
+		mesh = make_shared<Mesh>();
 		meshChange = true;
-		mesh.InitSphere(radius, slice, stack);
+		mesh->InitSphere(radius, slice, stack);
 		ConvertMeshData();
 	}
 
 	void CreateGrid(float width, float height, int m = 10, int n = 10)
 	{
+		mesh = make_shared<Mesh>();
 		meshChange = true;
-		mesh.InitGrid(width, height, m, n);
+		mesh->InitGrid(width, height, m, n);
 		ConvertMeshData();
 	}
 
-	void LoadMesh(string path)
+	void SetMesh(shared_ptr<Mesh> _mesh)
 	{
 		meshChange = true;
-		mesh.LoadModel(path);
+		mesh = _mesh;
 		ConvertMeshData();
 	}
 };

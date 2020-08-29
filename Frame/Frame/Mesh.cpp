@@ -25,7 +25,6 @@ void Mesh::readObjFile(string fileName)
 void Mesh::InitBox(float width, float height, float depth)
 {
 	meshStruct.clean();
-	//providedTex = true;
 	meshStruct.request_vertex_texcoords2D();
 	float halfW = width * 0.5f;
 	float halfH = height * 0.5f;
@@ -325,20 +324,45 @@ void Mesh::InitGrid(float width, float height, int m, int n)
 
 }
 
-void Mesh::LoadModel(string path)
-{
-	Assimp::Importer importer;
-	const aiScene* scene = importer.ReadFile("OBJ\\cow.obj", aiProcess_Triangulate | aiProcess_FlipUVs);
-	if (!scene || scene->mFlags & AI_SCENE_FLAGS_INCOMPLETE || !scene->mRootNode)
-	{
-		cout << "ERROR::ASSIMP::" << importer.GetErrorString() << endl;
-		return;
-	}
-
-
-}
-
-void Mesh::ProcessModelNode(aiNode* rootNode, const aiScene* scene)
-{
-
-}
+//void Mesh::LoadModel(string path)
+//{
+//	Assimp::Importer importer;
+//	const aiScene* scene = importer.ReadFile(path, aiProcess_Triangulate | aiProcess_FlipUVs);
+//	if (!scene || scene->mFlags & AI_SCENE_FLAGS_INCOMPLETE || !scene->mRootNode)
+//	{
+//		cout << "ERROR::ASSIMP::" << importer.GetErrorString() << endl;
+//		return;
+//	}
+//	//aiTextureType::
+//	meshStruct.clean();
+//	meshStruct.request_vertex_texcoords2D();
+//
+//	ProcessModelNode(scene->mRootNode, scene);
+//}
+//
+//void Mesh::ProcessModelNode(aiNode* rootNode, const aiScene* scene)
+//{
+//	// 处理每个子节点下保存的网格索引
+//	for (size_t i = 0; i < rootNode->mNumMeshes; i++)
+//	{
+//		aiMesh* mesh = scene->mMeshes[rootNode->mMeshes[i]];
+//		ProcessModelMesh(mesh, scene);
+//	}
+//
+//	// 处理子节点
+//	for (size_t i = 0; i < rootNode->mNumChildren; i++)
+//	{
+//		ProcessModelNode(rootNode->mChildren[i], scene);
+//	}
+//}
+//
+//void Mesh::ProcessModelMesh(aiMesh* mesh, const aiScene* scene)
+//{
+//	MeshStruct::VertexHandle* vHandles;
+//	vHandles = new MeshStruct::VertexHandle[mesh->mNumVertices];
+//
+//	for (size_t i = 0; i < mesh->mNumVertices; i++)
+//	{
+//
+//	}
+//}

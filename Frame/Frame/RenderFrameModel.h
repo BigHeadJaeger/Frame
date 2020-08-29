@@ -2,6 +2,8 @@
 #include<iostream>
 #include<glm.hpp>
 #include<vector>
+#include<memory>
+using namespace std;
 using namespace glm;
 
 #include"DataModel.h"
@@ -9,6 +11,8 @@ using namespace glm;
 class Camera;
 class MyScene;
 class LightComponent;
+class Object;
+class ObjectManager;
 
 class RenderFrameModel : public DataModel
 {
@@ -57,4 +61,8 @@ public:
 	{
 		return lightList;
 	}
+
+	shared_ptr<Object> GetSceneRoot();
+
+	ObjectManager& GetCurrentObjectManager();
 };

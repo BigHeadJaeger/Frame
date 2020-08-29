@@ -60,6 +60,24 @@
     <ClCompile Include="Component.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
+    <ClCompile Include="Model.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="RenderFrameModel.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="ModelManager.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="Texture.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="TextureManager.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="MaterialManager.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Scene.h">
@@ -122,6 +140,30 @@
     <ClInclude Include="LightComponent.h">
       <Filter>头文件</Filter>
     </ClInclude>
+    <ClInclude Include="Model.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="Texture.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="TextureManager.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="ObjectManager.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="ModelManager.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="ModelGenerator.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="MaterialManager.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="ShaderManager.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="SF_VertexColor.v">
@@ -152,6 +194,12 @@
       <Filter>Shader</Filter>
     </None>
     <None Include="SF_DefaultSpecular.f">
+      <Filter>Shader</Filter>
+    </None>
+    <None Include="SF_Outline.v">
+      <Filter>Shader</Filter>
+    </None>
+    <None Include="SF_Outline.f">
       <Filter>Shader</Filter>
     </None>
   </ItemGroup>

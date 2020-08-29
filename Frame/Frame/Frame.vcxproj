@@ -150,13 +150,19 @@
     <ClCompile Include="Interaction.cpp" />
     <ClCompile Include="Main.cpp" />
     <ClCompile Include="Material.cpp" />
+    <ClCompile Include="MaterialManager.cpp" />
     <ClCompile Include="Mesh.cpp" />
     <ClCompile Include="MeshReference.cpp" />
+    <ClCompile Include="Model.cpp" />
+    <ClCompile Include="ModelManager.cpp" />
     <ClCompile Include="Object.cpp" />
     <ClCompile Include="Program.cpp" />
     <ClCompile Include="Renderer.cpp" />
+    <ClCompile Include="RenderFrameModel.cpp" />
     <ClCompile Include="Scene.cpp" />
     <ClCompile Include="ShaderDataTool.cpp" />
+    <ClCompile Include="Texture.cpp" />
+    <ClCompile Include="TextureManager.cpp" />
     <ClCompile Include="Transform.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -169,21 +175,31 @@
     <ClInclude Include="Light.h" />
     <ClInclude Include="LightComponent.h" />
     <ClInclude Include="Material.h" />
+    <ClInclude Include="MaterialManager.h" />
     <ClInclude Include="Mesh.h" />
     <ClInclude Include="MeshReference.h" />
+    <ClInclude Include="Model.h" />
+    <ClInclude Include="ModelGenerator.h" />
+    <ClInclude Include="ModelManager.h" />
     <ClInclude Include="Object.h" />
+    <ClInclude Include="ObjectManager.h" />
     <ClInclude Include="Program.h" />
     <ClInclude Include="PublicStruct.h" />
     <ClInclude Include="Renderer.h" />
     <ClInclude Include="RenderFrameModel.h" />
     <ClInclude Include="Scene.h" />
     <ClInclude Include="ShaderDataTool.h" />
+    <ClInclude Include="ShaderManager.h" />
+    <ClInclude Include="Texture.h" />
+    <ClInclude Include="TextureManager.h" />
     <ClInclude Include="Transform.h" />
     <ClInclude Include="VertexData.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="SF_DefaultSpecular.f" />
     <None Include="SF_DefaultSpecular.v" />
+    <None Include="SF_Outline.f" />
+    <None Include="SF_Outline.v" />
     <None Include="SF_PBR.f" />
     <None Include="SF_PBR.v" />
     <None Include="SF_Phong.f" />

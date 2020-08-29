@@ -1,7 +1,7 @@
 #pragma once
 #include"ShaderDataTool.h"
 #include"Component.h"
-#include"Material.h"
+#include"MaterialManager.h"
 #include"MeshReference.h"
 #include"RenderFrameModel.h"
 #include"Camera.h"
@@ -63,7 +63,7 @@ public:
 	MeshRenderer()
 	{
 		// Ä¬ÈÏÎÆÀí
-		material = make_shared<NoneMaterial>();
+		material = MaterialManager::GetInstance().GetMaterial("none");
 		type = COMPONENT_MESHRENDER;
 		drawType = GL_TRIANGLES;
 	}
@@ -79,19 +79,6 @@ public:
 		UpdateMeshData();
 	}
 
-	void Render() override
-	{
-		if (!isUseable())
-			return;
-		glUseProgram(material->shaderProgram.p);
-		glBindVertexArray(VAO);
-		SetCamera();
-		SetTransform();
-		SetLight();
-		material->Transfer();
-		glDrawArrays(drawType, 0, drawUnitNumber);
-		glBindVertexArray(0);
-		glUseProgram(0);
-	}
+	void Render() override;
 };
 
