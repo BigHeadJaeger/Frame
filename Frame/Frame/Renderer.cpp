@@ -87,27 +87,27 @@ void MeshRenderer::UpdateMeshData()
 	}
 }
 
-void Renderer::SetTransform()
+void Renderer::SetTransform(shared_ptr<ShaderProgram> shader)
 {
 	shared_ptr<Transform> transform = object.lock()->transform;
 	//auto transform = object.lock()->transform;
 	decltype(auto) tool = ShaderDataTool::GetInstance();
-	tool.SetUniform("worldViewProj", transform->worldViewProj, material->shader);
-	tool.SetUniform("world", transform->world, material->shader);
-	tool.SetUniform("worldInvTranspose", transform->worldInvTranspose, material->shader);
+	tool.SetUniform("worldViewProj", transform->worldViewProj, shader);
+	tool.SetUniform("world", transform->world, shader);
+	tool.SetUniform("worldInvTranspose", transform->worldInvTranspose, shader);
 }
 
-void Renderer::SetCamera()
+void Renderer::SetCamera(shared_ptr<ShaderProgram> shader)
 {
 	decltype(auto) tool = ShaderDataTool::GetInstance();
 	auto mainCamera = RenderFrameModel::GetInstance().GetMainCamera();
 	if (mainCamera->isUseable())
 	{
-		tool.SetUniform("eyePos", mainCamera->object.lock()->transform->position, material->shader);
+		tool.SetUniform("eyePos", mainCamera->object.lock()->transform->position, shader);
 	}
 }
 
-void Renderer::SetLight()
+void Renderer::SetLight(shared_ptr<ShaderProgram> shader)
 {
 	decltype(auto) tool = ShaderDataTool::GetInstance();
 	auto lightComponents = RenderFrameModel::GetInstance().GetLightList();
@@ -125,10 +125,10 @@ void Renderer::SetLight()
 				auto light = dynamic_pointer_cast<DirLight>(lightComponents[i]->light);
 				string preName = "dirLights[" + to_string(dirCount) + "].";
 				dirCount++;
-				tool.SetUniform(preName + "isAble", true, material->shader);
-				tool.SetUniform((preName + "position"), lightComponents[i]->object.lock()->GetPosition(), material->shader);
-				tool.SetUniform((preName + "color"), light->lightColor / vec3(255), material->shader);
-				tool.SetUniform((preName + "dir"), normalize(light->lightDir), material->shader);
+				tool.SetUniform(preName + "isAble", true, shader);
+				tool.SetUniform((preName + "position"), lightComponents[i]->object.lock()->GetPosition(), shader);
+				tool.SetUniform((preName + "color"), light->lightColor / vec3(255), shader);
+				tool.SetUniform((preName + "dir"), normalize(light->lightDir), shader);
 				break;
 			}
 			case LIGHT_TYPE::POINT_LIGHT:
@@ -136,11 +136,11 @@ void Renderer::SetLight()
 				auto light = dynamic_pointer_cast<PointLight>(lightComponents[i]->light);
 				string preName = "pointLights[" + to_string(pointCount) + "].";
 				pointCount++;
-				tool.SetUniform(preName + "isAble", true, material->shader);
-				tool.SetUniform((preName + "position"), lightComponents[i]->object.lock()->GetPosition(), material->shader);
-				tool.SetUniform((preName + "color"), light->lightColor / vec3(255), material->shader);
-				tool.SetUniform((preName + "radius"), light->radius, material->shader);
-				tool.SetUniform((preName + "attenuation"), light->attenuation, material->shader);
+				tool.SetUniform(preName + "isAble", true, shader);
+				tool.SetUniform((preName + "position"), lightComponents[i]->object.lock()->GetPosition(), shader);
+				tool.SetUniform((preName + "color"), light->lightColor / vec3(255), shader);
+				tool.SetUniform((preName + "radius"), light->radius, shader);
+				tool.SetUniform((preName + "attenuation"), light->attenuation, shader);
 				break;
 			}
 			default:
@@ -150,17 +150,52 @@ void Renderer::SetLight()
 	}
 }
 
-void MeshRenderer::Render()
+void MeshRenderer::DrawObject()
 {
-	if (!isUseable())
-		return;
-	glUseProgram(material->shader.lock()->p);
+	auto shader = material->shader.lock();
+	glUseProgram(shader->p);
 	glBindVertexArray(VAO);
-	SetCamera();
-	SetTransform();
-	SetLight();
+	SetCamera(shader);
+	SetTransform(shader);
+	SetLight(shader);
 	material->Transfer();
 	glDrawArrays(drawType, 0, drawUnitNumber);
 	glBindVertexArray(0);
 	glUseProgram(0);
+}
+
+void MeshRenderer::Render()
+{
+	if (!isUseable())
+		return;
+	auto objPtr = object.lock();
+
+	if (objPtr->isSelect)
+	{
+		
+		glStencilFunc(GL_ALWAYS, 1, 0xFF);
+		glStencilMask(0xFF);
+		DrawObject();
+
+		glStencilFunc(GL_NOTEQUAL, 1, 0xFF);
+		glStencilMask(0x00);
+		// 将物体放大1.02倍进行绘制
+		auto orScaler = objPtr->transform->scaler;
+		objPtr->transform->SetScaler(orScaler * 1.02f);
+		objPtr->transform->UpdateMatrix();
+		auto shader = ShaderManager::GetInstance().GetShader("SF_Outline");
+		glUseProgram(shader->p);
+		glBindVertexArray(VAO);
+		SetCamera(shader);
+		SetTransform(shader);
+		glDrawArrays(drawType, 0, drawUnitNumber);
+		glBindVertexArray(0);
+		glUseProgram(0);
+		objPtr->transform->SetScaler(orScaler);
+		glStencilMask(0xFF);		// 开启写入，否则无法进行清理
+	}
+	else
+	{
+		DrawObject();
+	}
 }
