@@ -7,6 +7,11 @@ class Object;
 
 class ObjectManager
 {
+private:
+	size_t boxCount = 0;
+	size_t sphereCount = 0;
+	size_t gridCount = 0;
+
 public:
 	//shared_ptr<Object> root;
 	vector<shared_ptr<Object>> objects;
@@ -30,6 +35,9 @@ public:
 	{
 		objects.push_back(object);
 	}
+
+	shared_ptr<Object> GridObject(float width = 1, float height = 1, int m = 10, int n = 10);
+	shared_ptr<Object> BoxObject(float width = 1, float height = 1, float depth = 1);
 
 	//void RemoveObject(shared_ptr<Object> object)
 	//{

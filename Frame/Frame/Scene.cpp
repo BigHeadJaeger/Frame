@@ -67,41 +67,36 @@ void MyScene::Init()
 	//box->isSelect = true;
 	//bR->material = MaterialManager::GetInstance().GetMaterial("metalgrid");
 
-	shared_ptr<Object> box2 = make_shared<Object>();
-	box2->SetName("box2");
-	box2->AddComponent<Transform>();
-	box2->SetPosition(vec3(0, 0, 0));
-	//rootObject->AddChild(box2);
-	auto box2MeshR = box2->AddComponent<MeshReference>();
-	box2MeshR->CreateBox(1,1,1);
-	auto box2MeshRen = box2->AddComponent<MeshRenderer>();
-	//box2->isSelect = true;
+
 	shared_ptr<DefaultSpecularMaterial> specularMa = make_shared<DefaultSpecularMaterial>();
 	//specularMa->SetTextureBase("Material\\btn_sz.png");
 	specularMa->SetTextureBase("Material\\blending_transparent_window.png");
 	//specularMa->SetTextureBase("Material\\oakfloor\\basecolor.png");
-	box2MeshRen->material = specularMa;
 
-	shared_ptr<Object> grid2 = make_shared<Object>();
-	grid2->SetName("grid2");
-	grid2->AddComponent<Transform>();
-	grid2->SetPosition(vec3(0, -0.5, 0));
-	auto grid2MR = grid2->AddComponent<MeshReference>();
-	grid2MR->CreateGrid(1, 1, 10, 10);
-	auto grid2MRE = grid2->AddComponent<MeshRenderer>();
+
+	//shared_ptr<Object> grid2 = make_shared<Object>();
+	//grid2->SetName("grid2");
+	//grid2->AddComponent<Transform>();
+	//grid2->SetPosition(vec3(0, -0.5, 0));
+	//auto grid2MR = grid2->AddComponent<MeshReference>();
+	//grid2MR->CreateGrid(1, 1, 10, 10);
+	//auto grid2MRE = grid2->AddComponent<MeshRenderer>();
+	//rootObject->AddChild(grid2);
+	//grid2MRE->material = MaterialManager::GetInstance().GetMaterial("defaultSpecular");
+
+	auto box = objectManager.BoxObject();
+	rootObject->AddChild(box);
+	box->SetPosition(vec3(1, 0, 0));
+
+	auto grid2 = objectManager.GridObject(1, 1);
 	rootObject->AddChild(grid2);
-	grid2MRE->material = MaterialManager::GetInstance().GetMaterial("defaultSpecular");
+	grid2->SetPosition(vec3(0, -0.5, 0));
+	grid2->GetComponent<MeshRenderer>()->material = MaterialManager::GetInstance().GetMaterial("TransparentSpecular");
 
-	shared_ptr<Object> grid1 = make_shared<Object>();
-	grid1->SetName("grid1");
-	grid1->AddComponent<Transform>();
-	grid1->SetPosition(vec3(0, -1, 0));
-	auto grid1MR = grid1->AddComponent<MeshReference>();
-	grid1MR->CreateGrid(10, 10, 10, 10);
-	auto grid1MRE = grid1->AddComponent<MeshRenderer>();
+	auto grid1 = objectManager.GridObject(10, 10);
 	rootObject->AddChild(grid1);
-	grid1MRE->material = MaterialManager::GetInstance().GetMaterial("metalgrid");
-
+	grid1->SetPosition(vec3(0, -1, 0));
+	grid1->GetComponent<MeshRenderer>()->material = MaterialManager::GetInstance().GetMaterial("metalgrid");
 
 	//grid2MRE->material = specularMa;
 	
@@ -143,9 +138,13 @@ void MyScene::MaterialInit()
 	material1->SetTextureRoughness("Material\\metalgrid\\roughness.png");
 
 	materialManager.CreateMaterial<NoneMaterial>("none");
-	auto material2 = materialManager.CreateMaterial<PBRMaterial>("defaultSpecular");
+
+	auto material2 = materialManager.CreateMaterial<PBRMaterial>("TransparentSpecular");
 	material2->SetTextureBase("Material\\blending_transparent_window.png");
 	material2->SetRenderMode(RenderMode::Transparent);
+
+	auto material3 = materialManager.CreateMaterial<DefaultSpecularMaterial>("DefaultSpecular");
+	material3->SetTextureBase("");
 }
 
 void MyScene::Update(float& dt)
