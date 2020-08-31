@@ -8,15 +8,12 @@ using namespace glm;
 #include"ShaderDataTool.h"
 #include"TextureManager.h"
 
-
-
-enum class MATERIALTYPE
+enum RenderMode
 {
-    MATERIAL_DEFAULT_DIFFUSE,
-    MATERIAL_DEFAULT_SPECULAR,
-    MATERIAL_PHONG,
-    MATERIAL_PBR,
-    MATERIAL_SIMPLE_COLOR
+    Opaque,
+    Cutout,
+    Fade,
+    Transparent
 };
 
 // 每个物体需要一个Material
@@ -25,13 +22,13 @@ class Material
 protected:
     TextureManager& texManager = TextureManager::GetInstance();
 public:
+    RenderMode renderMode;
     weak_ptr<ShaderProgram> shader;
     //ShaderProgram shaderProgram;
 public:
     string name;
     vec4 baseColor = vec4(225, 225, 225, 255);      // 基础颜色值
     shared_ptr<Texture> baseTex;                    // 基础贴图
-    MATERIALTYPE type;
 public:
     void SetTextureBase(string fileName)
     {
@@ -63,7 +60,6 @@ public:
     {
         baseColor = vec4(238, 130, 238, 255);
         shader = ShaderManager::GetInstance().GetShader("SF_SimpleColor");
-        type = MATERIALTYPE::MATERIAL_SIMPLE_COLOR;
     }
     void Transfer() override
     {
@@ -87,6 +83,7 @@ public:
 public:
     DefaultSpecularMaterial()
     {
+        renderMode = RenderMode::Opaque;
         specular = vec3(baseColor.x, baseColor.y, baseColor.z);
         shader = ShaderManager::GetInstance().GetShader("SF_DefaultSpecular");
         SetTextureBase("");
@@ -117,7 +114,6 @@ public:
     PhongMaterial() 
     {
         shader = ShaderManager::GetInstance().GetShader("SF_Phong");
-        type = MATERIALTYPE::MATERIAL_PHONG;
     }
 
     void Transfer() override
@@ -130,18 +126,12 @@ public:
     }
 };
 
-enum RenderMode
-{
-    Opaque,
-    Cutout,
-    Fade,
-    Transparent
-}; 
+
 
 class PBRMaterial :public Material
 {
 public:
-    RenderMode renderMode;
+    
 
     shared_ptr<Texture> metalicTex;
     float numMetallic = 0.5;
@@ -156,7 +146,6 @@ public:
     {
         renderMode = RenderMode::Opaque;
         shader = ShaderManager::GetInstance().GetShader("SF_PBR");
-        type = MATERIALTYPE::MATERIAL_PBR;
         SetTextureBase("");
     }
 

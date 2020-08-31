@@ -82,16 +82,6 @@ void MyScene::Init()
 	//specularMa->SetTextureBase("Material\\oakfloor\\basecolor.png");
 	box2MeshRen->material = specularMa;
 
-	shared_ptr<Object> grid1 = make_shared<Object>();
-	grid1->SetName("grid1");
-	grid1->AddComponent<Transform>();
-	grid1->SetPosition(vec3(0, -1, 0));
-	auto grid1MR = grid1->AddComponent<MeshReference>();
-	grid1MR->CreateGrid(10, 10, 10, 10);
-	auto grid1MRE = grid1->AddComponent<MeshRenderer>();
-	//rootObject->AddChild(grid1);
-	grid1MRE->material = MaterialManager::GetInstance().GetMaterial("metalgrid");
-
 	shared_ptr<Object> grid2 = make_shared<Object>();
 	grid2->SetName("grid2");
 	grid2->AddComponent<Transform>();
@@ -101,6 +91,18 @@ void MyScene::Init()
 	auto grid2MRE = grid2->AddComponent<MeshRenderer>();
 	rootObject->AddChild(grid2);
 	grid2MRE->material = MaterialManager::GetInstance().GetMaterial("defaultSpecular");
+
+	shared_ptr<Object> grid1 = make_shared<Object>();
+	grid1->SetName("grid1");
+	grid1->AddComponent<Transform>();
+	grid1->SetPosition(vec3(0, -1, 0));
+	auto grid1MR = grid1->AddComponent<MeshReference>();
+	grid1MR->CreateGrid(10, 10, 10, 10);
+	auto grid1MRE = grid1->AddComponent<MeshRenderer>();
+	rootObject->AddChild(grid1);
+	grid1MRE->material = MaterialManager::GetInstance().GetMaterial("metalgrid");
+
+
 	//grid2MRE->material = specularMa;
 	
 	//decltype(auto) modelGenerator = ModelGenerator::GetInstance();
@@ -205,15 +207,17 @@ void MyScene::Draw()
 		glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
 	}
 
-	RenderObject(rootObject);
+	renderQueue.Render(rootObject);
+
+	//RenderObject(rootObject);
 }
 
-void MyScene::RenderObject(shared_ptr<Object> obj)
-{
-	obj->Draw();
-	for (auto it = obj->children.begin(); it != obj->children.end(); it++)
-	{
-		if (*it)
-			RenderObject(*it);
-	}
-}
+//void MyScene::RenderObject(shared_ptr<Object> obj)
+//{
+//	obj->Draw();
+//	for (auto it = obj->children.begin(); it != obj->children.end(); it++)
+//	{
+//		if (*it)
+//			RenderObject(*it);
+//	}
+//}

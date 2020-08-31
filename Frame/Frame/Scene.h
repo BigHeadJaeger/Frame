@@ -2,11 +2,9 @@
 #include<map>
 using namespace std;
 #include"ObjectManager.h"
-#include"Object.h"
 #include"RenderFrameModel.h"
-//#include"ParticleGroup.h"
-//#include"MPSWaterParticleGroup.h"
 #include"Interaction.h"
+#include"RenderQueue.h"
 
 struct DrawMode
 {
@@ -20,7 +18,7 @@ private:
 	//map<string, map<string, shared_ptr<Object>>> objectManager;
 	
 	//map<string, shared_ptr<Object>> objects;
-
+	RenderQueue renderQueue;
 	
 public:
 	map<KEYNAME, Key> keys;
@@ -65,7 +63,7 @@ public:
 	}
 
 	void UpdateObject(shared_ptr<Object> obj, float dt);
-	void RenderObject(shared_ptr<Object> obj);
+	//void RenderObject(shared_ptr<Object> obj);
 
 	void Init();			//初始化各种信息
 	void InitKeys();

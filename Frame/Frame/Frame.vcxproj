@@ -159,6 +159,7 @@
     <ClCompile Include="Program.cpp" />
     <ClCompile Include="Renderer.cpp" />
     <ClCompile Include="RenderFrameModel.cpp" />
+    <ClCompile Include="RenderQueue.cpp" />
     <ClCompile Include="Scene.cpp" />
     <ClCompile Include="ShaderDataTool.cpp" />
     <ClCompile Include="Texture.cpp" />
@@ -187,6 +188,7 @@
     <ClInclude Include="PublicStruct.h" />
     <ClInclude Include="Renderer.h" />
     <ClInclude Include="RenderFrameModel.h" />
+    <ClInclude Include="RenderQueue.h" />
     <ClInclude Include="Scene.h" />
     <ClInclude Include="ShaderDataTool.h" />
     <ClInclude Include="ShaderManager.h" />

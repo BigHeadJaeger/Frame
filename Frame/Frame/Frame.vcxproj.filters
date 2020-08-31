@@ -78,6 +78,9 @@
     <ClCompile Include="MaterialManager.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
+    <ClCompile Include="RenderQueue.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Scene.h">
@@ -162,6 +165,9 @@
       <Filter>头文件</Filter>
     </ClInclude>
     <ClInclude Include="ShaderManager.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="RenderQueue.h">
       <Filter>头文件</Filter>
     </ClInclude>
   </ItemGroup>
