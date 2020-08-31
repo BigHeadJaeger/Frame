@@ -64,7 +64,8 @@ void MyScene::Init()
 	auto meshReference = box->AddComponent<MeshReference>();
 	meshReference->CreateBox(1, 1, 1);
 	auto bR = box->AddComponent<MeshRenderer>();
-	bR->material = MaterialManager::GetInstance().GetMaterial("metalgrid");
+	box->isSelect = true;
+	//bR->material = MaterialManager::GetInstance().GetMaterial("metalgrid");
 
 	//shared_ptr<Object> box2 = make_shared<Object>();
 	//box2->SetName("box2");
@@ -109,12 +110,12 @@ void MyScene::ModelInit()
 void MyScene::MaterialInit()
 {
 	decltype(auto) materialManager = MaterialManager::GetInstance();
-	auto material1 = materialManager.CreateMaterial<PBRMaterial>("metalgrid");
-	material1->SetTextureBase("Material\\metalgrid\\basecolor.png");
-	material1->SetTextureNormal("Material\\metalgrid\\normal.png");
-	material1->SetTextureMetallic("Material\\metalgrid\\metallic.png");
-	material1->SetTextureAO("Material\\metalgrid\\AO.png");
-	material1->SetTextureRoughness("Material\\metalgrid\\roughness.png");
+	//auto material1 = materialManager.CreateMaterial<PBRMaterial>("metalgrid");
+	//material1->SetTextureBase("Material\\metalgrid\\basecolor.png");
+	//material1->SetTextureNormal("Material\\metalgrid\\normal.png");
+	//material1->SetTextureMetallic("Material\\metalgrid\\metallic.png");
+	//material1->SetTextureAO("Material\\metalgrid\\AO.png");
+	//material1->SetTextureRoughness("Material\\metalgrid\\roughness.png");
 
 	materialManager.CreateMaterial<NoneMaterial>("none");
 }
@@ -155,7 +156,9 @@ void MyScene::Draw()
 
 	//绘制,包含缓冲区的清空，各种效果的开启（blend、 cull之类的）
 	glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
-	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+	glEnable(GL_STENCIL_TEST);
+	glStencilOp(GL_KEEP, GL_KEEP, GL_REPLACE);
+	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);
 	glEnable(GL_DEPTH_TEST);
 	glEnable(GL_CULL_FACE);					//三维物体要开启背面剔除
 

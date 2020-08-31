@@ -21,11 +21,11 @@ public:
 private:
 
 public:
-	void SetTransform();
+	void SetTransform(shared_ptr<ShaderProgram> shader);
 
-	void SetCamera();
+	void SetCamera(shared_ptr<ShaderProgram> shader);
 
-	void SetLight();
+	void SetLight(shared_ptr<ShaderProgram> shader);
 
 	virtual void Render() = 0;
 
@@ -70,14 +70,15 @@ public:
 
 	void UpdateMeshData();
 
-
-
 	void Update(float dt) override
 	{
 		if (!isUseable())
 			return;
 		UpdateMeshData();
 	}
+
+	// 对物体的绘制，Render中有可能还含有一些其他的渲染设置
+	void DrawObject();
 
 	void Render() override;
 };

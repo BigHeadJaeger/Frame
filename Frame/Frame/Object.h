@@ -32,13 +32,14 @@ public:
 	map<string, shared_ptr<Component>> components;
 	shared_ptr<Transform> transform;
 
-	//Object* parent;
-	//list<Object*> children;
 	weak_ptr<Object> parent;
 	list<weak_ptr<Object>> children;
+
+	bool isSelect;
 public:
 	Object()
 	{
+		isSelect = false;
 		//// 每个物体默认有坐标组件
 		//AddComponent<Transform>();
 	}
