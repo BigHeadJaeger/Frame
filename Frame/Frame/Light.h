@@ -45,7 +45,10 @@ class PointLight :public Light
 {
 public:
 	float radius = 1.f;
-	float attenuation = 1.f;
+	// Ë¥¼õÏµÊý
+	float constant = 1.f;
+	float linear = 0.09f;
+	float quadratic = 0.032f;
 public:
 	PointLight()
 	{

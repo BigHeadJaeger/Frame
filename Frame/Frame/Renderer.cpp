@@ -140,7 +140,9 @@ void Renderer::SetLight(shared_ptr<ShaderProgram> shader)
 				tool.SetUniform((preName + "position"), lightComponents[i]->object.lock()->GetPosition(), shader);
 				tool.SetUniform((preName + "color"), light->lightColor / vec3(255), shader);
 				tool.SetUniform((preName + "radius"), light->radius, shader);
-				tool.SetUniform((preName + "attenuation"), light->attenuation, shader);
+				tool.SetUniform((preName + "constant"), light->constant, shader);
+				tool.SetUniform((preName + "linear"), light->linear, shader);
+				tool.SetUniform((preName + "quadratic"), light->quadratic, shader);
 				break;
 			}
 			default:
@@ -192,10 +194,13 @@ void MeshRenderer::Render()
 		glBindVertexArray(0);
 		glUseProgram(0);
 		objPtr->transform->SetScaler(orScaler);
-		glStencilMask(0xFF);		// 开启写入，否则无法进行清理
 	}
 	else
 	{
 		DrawObject();
 	}
+
+	// 一些状态的复位
+	glStencilMask(0xFF);		// 开启写入，否则无法进行清理
+	glDisable(GL_BLEND);
 }

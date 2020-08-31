@@ -21,7 +21,9 @@ struct PointLight
 	vec3 position;
 	vec3 color;
 	float radius;
-	float attenuation;
+	float constant;
+	float linear;
+	float quadratic;
 };
 
 //阴影贴图纹理采样器
@@ -47,6 +49,8 @@ uniform float numRoughness;
 
 uniform sampler2D aoMap;
 uniform bool isTextureAO;
+
+uniform int renderMode;
 
 //光照信息
 #define DIR_LIGHT_NUM 10
@@ -115,10 +119,10 @@ void main()
 	{
 		if(pointLights[i].isAble)
 		{
-			vec3 lightColor = pointLights[i].color * vec3(255);
+			vec3 lightColor = pointLights[i].color;
 			vec3 lightDir = normalize(pointLights[i].position - posW);
 			float distance = length(pointLights[i].position - posW);
-			float attenuation = 1.0 / (distance * distance) * pointLights[i].attenuation;			//计算衰减
+			float attenuation = 1.0 / (pointLights[i].constant + pointLights[i].linear * distance + (distance * distance) * pointLights[i].quadratic);
 			vec3 radiance = lightColor * attenuation;
 			color += CalculateBRDF(lightDir, radiance, albedo, N, roughness, ao, metallic);
 		}
@@ -128,7 +132,7 @@ void main()
 	{
 		if(dirLights[i].isAble)
 		{
-			vec3 lightColor = dirLights[i].color * vec3(255);
+			vec3 lightColor = dirLights[i].color;
 			vec3 lightDir = normalize(-dirLights[i].dir);
 			vec3 radiance = lightColor;
 			color += CalculateBRDF(lightDir, radiance, albedo, N, roughness, ao, metallic);
@@ -151,7 +155,11 @@ void main()
 	}*/
 	color*=visibility;
 
-    FragColor = vec4(color, 1.0); 
+	// 如果是完全透明且渲染模式是镂空，则舍弃像素
+	if(texture(albedoMap, TexCoord).a < 0.05)
+		discard;
+	
+    FragColor = vec4(color, texture(albedoMap, TexCoord).a); 
 } 
 
 //正态分布函数

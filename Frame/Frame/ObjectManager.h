@@ -31,19 +31,19 @@ public:
 		objects.push_back(object);
 	}
 
-	void RemoveObject(shared_ptr<Object> object)
-	{
-		auto it = objects.begin();
-		while (it != objects.end())
-		{
-			if (*it == object)
-			{
-				//it->reset();
-				it = objects.erase(it);
-			}
-				
-			else
-				it++;
-		}
-	}
+	//void RemoveObject(shared_ptr<Object> object)
+	//{
+	//	auto it = objects.begin();
+	//	while (it != objects.end())
+	//	{
+	//		if (*it == object)
+	//		{
+	//			//it->reset();
+	//			it = objects.erase(it);
+	//		}
+	//			
+	//		else
+	//			it++;
+	//	}
+	//}
 };

@@ -49,7 +49,6 @@ public:
     void SetTextureBase(shared_ptr<Texture> tex)
     {
         baseTex = tex;
-
     }
 
     // 每个材质有自己的方法将数据传输到shader中
@@ -90,16 +89,18 @@ public:
     {
         specular = vec3(baseColor.x, baseColor.y, baseColor.z);
         shader = ShaderManager::GetInstance().GetShader("SF_DefaultSpecular");
+        SetTextureBase("");
     }
 
     void Transfer() override
     {
         decltype(auto) tool = ShaderDataTool::GetInstance();
-        tool.SetUniform("baseColor", vec3(baseColor.x, baseColor.y, baseColor.z) / vec3(255), shader);
+        tool.SetUniform("baseColor", baseColor / vec4(255), shader);
         tool.SetUniform("specular", specular / vec3(255), shader);
         tool.SetUniform("shininess", shininess, shader);
         if(baseTex)
             tool.SetTexture(baseTex->id, 0, GL_TEXTURE0, "albedoMap", shader);
+
         
     }
 };
@@ -129,10 +130,19 @@ public:
     }
 };
 
+enum RenderMode
+{
+    Opaque,
+    Cutout,
+    Fade,
+    Transparent
+}; 
+
 class PBRMaterial :public Material
 {
-
 public:
+    RenderMode renderMode;
+
     shared_ptr<Texture> metalicTex;
     float numMetallic = 0.5;
 
@@ -144,8 +154,10 @@ public:
 public:
     PBRMaterial()
     {
+        renderMode = RenderMode::Opaque;
         shader = ShaderManager::GetInstance().GetShader("SF_PBR");
         type = MATERIALTYPE::MATERIAL_PBR;
+        SetTextureBase("");
     }
 
     void SetTextureMetallic(string fileName) { metalicTex = texManager.GetTexture(fileName); }
@@ -161,9 +173,37 @@ public:
     void SetTextureNormal(string fileName) { normalTex = texManager.GetTexture(fileName); }
     void SetTextureNormal(shared_ptr<Texture> tex) { normalTex = tex;  }
 
+    void SetRenderMode(RenderMode mode) { renderMode = mode; }
+
     void Transfer() override
     {
         decltype(auto) tool = ShaderDataTool::GetInstance();
+
+        // 绘制顺序是由远到近
+        glEnable(GL_BLEND);
+        switch (renderMode)
+        {
+        case RenderMode::Opaque:
+            // 保留源，舍弃目标
+            glBlendFunc(GL_ONE, GL_ZERO);
+            break;
+        case RenderMode::Cutout:
+            glBlendFunc(GL_ONE, GL_ZERO);
+            break;
+        case RenderMode::Fade:
+            // Cs* Fs + Ct * (1 - Fs)
+            glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+            break;
+        case RenderMode::Transparent:
+            // Cs* 1 + Ct * (1 - Fs) 保留自身的颜色完整，且和后面的混合
+            glBlendFunc(GL_ONE, GL_ONE_MINUS_SRC_ALPHA);
+            break;
+        default:
+            break;
+        }
+
+        tool.SetUniform("renderMode", renderMode, shader);
+        
         tool.SetUniform("baseColor", vec3(baseColor.x, baseColor.y, baseColor.z) / vec3(255), shader);
         if (baseTex)
             tool.SetTexture(baseTex->id, 0, GL_TEXTURE0, "albedoMap", shader);
@@ -206,5 +246,4 @@ public:
         else
             tool.SetUniform("isTextureNormal", false, shader);
     }
-
 };
