@@ -8,6 +8,7 @@
 #include"ModelManager.h"
 #include"ModelGenerator.h"
 #include"MaterialManager.h"
+#include"FileInterface.h"
 
 void MyScene::Init()
 {
@@ -67,10 +68,9 @@ void MyScene::Init()
 	//box->isSelect = true;
 	//bR->material = MaterialManager::GetInstance().GetMaterial("metalgrid");
 
-
 	shared_ptr<DefaultSpecularMaterial> specularMa = make_shared<DefaultSpecularMaterial>();
 	//specularMa->SetTextureBase("Material\\btn_sz.png");
-	specularMa->SetTextureBase("Material\\blending_transparent_window.png");
+	specularMa->SetTextureBase(file::GetResPath("Material/blending_transparent_window.png"));
 	//specularMa->SetTextureBase("Material\\oakfloor\\basecolor.png");
 
 
@@ -100,11 +100,11 @@ void MyScene::Init()
 
 	//grid2MRE->material = specularMa;
 	
-	//decltype(auto) modelGenerator = ModelGenerator::GetInstance();
-	//auto testModel = modelGenerator.Create("Model\\nanosuit\\nanosuit.obj");
-	//testModel->transform->SetScaler(vec3(0.1));
+	decltype(auto) modelGenerator = ModelGenerator::GetInstance();
+	auto testModel = modelGenerator.Create(file::GetResPath("Model/nanosuit/nanosuit.obj"));
+	testModel->transform->SetScaler(vec3(0.1));
 
-	//rootObject->AddChild(testModel);
+	rootObject->AddChild(testModel);
 }
 
 void MyScene::InitKeys()
@@ -123,7 +123,7 @@ void MyScene::ModelInit()
 	decltype(auto) modelManager = ModelManager::GetInstance();
 	//modelManager.InitModel("OBJ\\Neptune.obj");
 	//modelManager.InitModel("Model\\backpack\\backpack.obj");
-	//modelManager.InitModel("Model\\nanosuit\\nanosuit.obj");
+	modelManager.InitModel(file::GetResPath("Model/nanosuit/nanosuit.obj"));
 	
 }
 
@@ -131,16 +131,16 @@ void MyScene::MaterialInit()
 {
 	decltype(auto) materialManager = MaterialManager::GetInstance();
 	auto material1 = materialManager.CreateMaterial<PBRMaterial>("metalgrid");
-	material1->SetTextureBase("Material\\metalgrid\\basecolor.png");
-	material1->SetTextureNormal("Material\\metalgrid\\normal.png");
-	material1->SetTextureMetallic("Material\\metalgrid\\metallic.png");
-	material1->SetTextureAO("Material\\metalgrid\\AO.png");
-	material1->SetTextureRoughness("Material\\metalgrid\\roughness.png");
+	material1->SetTextureBase(file::GetResPath("Material/metalgrid/basecolor.png"));
+	material1->SetTextureNormal(file::GetResPath("Material/metalgrid/normal.png"));
+	material1->SetTextureMetallic(file::GetResPath("Material/metalgrid/metallic.png"));
+	material1->SetTextureAO(file::GetResPath("Material/metalgrid/AO.png"));
+	material1->SetTextureRoughness(file::GetResPath("Material/metalgrid/roughness.png"));
 
 	materialManager.CreateMaterial<NoneMaterial>("none");
 
 	auto material2 = materialManager.CreateMaterial<PBRMaterial>("TransparentSpecular");
-	material2->SetTextureBase("Material\\blending_transparent_window.png");
+	material2->SetTextureBase(file::GetResPath("Material/blending_transparent_window.png"));
 	material2->SetRenderMode(RenderMode::Transparent);
 
 	auto material3 = materialManager.CreateMaterial<DefaultSpecularMaterial>("DefaultSpecular");
@@ -191,8 +191,7 @@ void MyScene::Draw()
 	// 源在上， 目标在下， 混合公式Cs * Fs + Ct * (1 - Fs)
 	//glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
-	//glEnable(GL_DEPTH_TEST);
-	glDisable(GL_DEPTH_TEST);
+	glEnable(GL_DEPTH_TEST);
 	glEnable(GL_CULL_FACE);					//三维物体要开启背面剔除
 
 	if (drawMode.isLine)
@@ -211,12 +210,12 @@ void MyScene::Draw()
 	//RenderObject(rootObject);
 }
 
-//void MyScene::RenderObject(shared_ptr<Object> obj)
-//{
-//	obj->Draw();
-//	for (auto it = obj->children.begin(); it != obj->children.end(); it++)
-//	{
-//		if (*it)
-//			RenderObject(*it);
-//	}
-//}
+void MyScene::RenderObject(shared_ptr<Object> obj)
+{
+	obj->Draw();
+	for (auto it = obj->children.begin(); it != obj->children.end(); it++)
+	{
+		if (*it)
+			RenderObject(*it);
+	}
+}

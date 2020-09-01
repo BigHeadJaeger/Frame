@@ -30,4 +30,5 @@ public:
 	void SetUniform(string&& valueName, vec4 value, weak_ptr<ShaderProgram> p);
 	void SetUniform(string&& valueName, vec3 value, weak_ptr<ShaderProgram> p);
 	void SetUniform(string&& valueName, float value, weak_ptr<ShaderProgram> p);
+	void SetUniform(string&& valueName, int value, weak_ptr<ShaderProgram> p);
 };

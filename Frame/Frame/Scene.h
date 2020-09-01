@@ -63,7 +63,7 @@ public:
 	}
 
 	void UpdateObject(shared_ptr<Object> obj, float dt);
-	//void RenderObject(shared_ptr<Object> obj);
+	void RenderObject(shared_ptr<Object> obj);
 
 	void Init();			//初始化各种信息
 	void InitKeys();

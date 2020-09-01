@@ -8,7 +8,7 @@
 class RenderQueue
 {
 private:
-	float offset = 0.0000001;
+	float offset = 0.00001;
 public:
 	queue<weak_ptr<Object>> geometyQueue;
 	// 物体距离和物体的map，用来保存透明物体的顺序

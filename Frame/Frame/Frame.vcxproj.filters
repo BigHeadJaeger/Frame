@@ -84,6 +84,9 @@
     <ClCompile Include="ObjectManager.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
+    <ClCompile Include="FileInterface.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Scene.h">
@@ -173,42 +176,48 @@
     <ClInclude Include="RenderQueue.h">
       <Filter>头文件</Filter>
     </ClInclude>
+    <ClInclude Include="FileInterface.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <None Include="SF_VertexColor.v">
+    <None Include="shader\SF_DefaultSpecular.f">
       <Filter>Shader</Filter>
     </None>
-    <None Include="SF_VertexColor.f">
+    <None Include="shader\SF_DefaultSpecular.v">
       <Filter>Shader</Filter>
     </None>
-    <None Include="SF_PBR.v">
+    <None Include="shader\SF_Outline.f">
       <Filter>Shader</Filter>
     </None>
-    <None Include="SF_PBR.f">
+    <None Include="shader\SF_Outline.v">
       <Filter>Shader</Filter>
     </None>
-    <None Include="SF_Phong.v">
+    <None Include="shader\SF_PBR.f">
       <Filter>Shader</Filter>
     </None>
-    <None Include="SF_Phong.f">
+    <None Include="shader\SF_PBR.v">
       <Filter>Shader</Filter>
     </None>
-    <None Include="SF_SimpleColor.f">
+    <None Include="shader\SF_Phong.f">
       <Filter>Shader</Filter>
     </None>
-    <None Include="SF_SimpleColor.v">
+    <None Include="shader\SF_Phong.v">
       <Filter>Shader</Filter>
     </None>
-    <None Include="SF_DefaultSpecular.v">
+    <None Include="shader\SF_SimpleColor.f">
       <Filter>Shader</Filter>
     </None>
-    <None Include="SF_DefaultSpecular.f">
+    <None Include="shader\SF_SimpleColor.v">
       <Filter>Shader</Filter>
     </None>
-    <None Include="SF_Outline.v">
+    <None Include="shader\SF_VertexColor.f">
       <Filter>Shader</Filter>
     </None>
-    <None Include="SF_Outline.f">
+    <None Include="shader\SF_VertexColor.frag">
+      <Filter>Shader</Filter>
+    </None>
+    <None Include="shader\SF_VertexColor.v">
       <Filter>Shader</Filter>
     </None>
   </ItemGroup>

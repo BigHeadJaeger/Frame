@@ -30,23 +30,8 @@ public:
     vec4 baseColor = vec4(225, 225, 225, 255);      // 基础颜色值
     shared_ptr<Texture> baseTex;                    // 基础贴图
 public:
-    void SetTextureBase(string fileName)
-    {
-        decltype(auto) tool = ShaderDataTool::GetInstance();
-        if (fileName == "")
-        {
-            baseTex = texManager.GetTexture("Material\\Default\\BaseColor.png");
-        }
-        else
-        {
-            baseTex = texManager.GetTexture(fileName);
-        }
-    }
-
-    void SetTextureBase(shared_ptr<Texture> tex)
-    {
-        baseTex = tex;
-    }
+    void SetTextureBase(string fileName);
+    void SetTextureBase(shared_ptr<Texture> tex) { baseTex = tex; }
 
     // 每个材质有自己的方法将数据传输到shader中
     virtual void Transfer() = 0;

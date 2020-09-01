@@ -5,6 +5,7 @@
 #include<iostream>
 #include<memory>
 #include"Program.h"
+#include"FileInterface.h"
 
 class ShaderManager
 {
@@ -15,7 +16,7 @@ private:
 	std::shared_ptr<ShaderProgram> CreateShader(std::string name)
 	{
 		auto shader = std::make_shared<ShaderProgram>();
-		shader->SetShader((name + ".v").c_str(), (name + ".f").c_str());
+		shader->SetShader(file::GetShaderPath((name + ".v")).c_str(), file::GetShaderPath((name + ".f")).c_str());
 		shadersMap.insert(std::make_pair(name, shader));
 		return shader;
 	}

@@ -57,3 +57,12 @@ void ShaderDataTool::SetUniform(string&& valueName, float value, weak_ptr<Shader
 	location = glGetUniformLocation(p.lock()->p, valueName.c_str());
 	glUniform1f(location, value);
 }
+
+void ShaderDataTool::SetUniform(string&& valueName, int value, weak_ptr<ShaderProgram> p)
+{
+	GLuint location;
+	location = glGetUniformLocation(p.lock()->p, valueName.c_str());
+	glUniform1i(location, value);
+}
+
+

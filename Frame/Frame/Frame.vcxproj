@@ -146,6 +146,7 @@
   <ItemGroup>
     <ClCompile Include="Camera.cpp" />
     <ClCompile Include="Component.cpp" />
+    <ClCompile Include="FileInterface.cpp" />
     <ClCompile Include="glad.c" />
     <ClCompile Include="Interaction.cpp" />
     <ClCompile Include="Main.cpp" />
@@ -173,6 +174,7 @@
     <ClInclude Include="Const.h" />
     <ClInclude Include="DataModel.h" />
     <ClInclude Include="DistributeFun.h" />
+    <ClInclude Include="FileInterface.h" />
     <ClInclude Include="Interaction.h" />
     <ClInclude Include="Light.h" />
     <ClInclude Include="LightComponent.h" />
@@ -199,18 +201,19 @@
     <ClInclude Include="VertexData.h" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="SF_DefaultSpecular.f" />
-    <None Include="SF_DefaultSpecular.v" />
-    <None Include="SF_Outline.f" />
-    <None Include="SF_Outline.v" />
-    <None Include="SF_PBR.f" />
-    <None Include="SF_PBR.v" />
-    <None Include="SF_Phong.f" />
-    <None Include="SF_Phong.v" />
-    <None Include="SF_VertexColor.f" />
-    <None Include="SF_VertexColor.v" />
-    <None Include="SF_SimpleColor.f" />
-    <None Include="SF_SimpleColor.v" />
+    <None Include="shader\SF_DefaultSpecular.f" />
+    <None Include="shader\SF_DefaultSpecular.v" />
+    <None Include="shader\SF_Outline.f" />
+    <None Include="shader\SF_Outline.v" />
+    <None Include="shader\SF_PBR.f" />
+    <None Include="shader\SF_PBR.v" />
+    <None Include="shader\SF_Phong.f" />
+    <None Include="shader\SF_Phong.v" />
+    <None Include="shader\SF_SimpleColor.f" />
+    <None Include="shader\SF_SimpleColor.v" />
+    <None Include="shader\SF_VertexColor.f" />
+    <None Include="shader\SF_VertexColor.frag" />
+    <None Include="shader\SF_VertexColor.v" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

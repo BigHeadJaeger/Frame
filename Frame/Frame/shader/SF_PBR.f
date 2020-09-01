@@ -156,7 +156,7 @@ void main()
 	color*=visibility;
 
 	// 如果是完全透明且渲染模式是镂空，则舍弃像素
-	if(texture(albedoMap, TexCoord).a < 0.05)
+	if(renderMode != 0 && texture(albedoMap, TexCoord).a < 0.1)
 		discard;
 	
     FragColor = vec4(color, texture(albedoMap, TexCoord).a); 
