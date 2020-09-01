@@ -144,14 +144,8 @@ public:
 		name = _name;
 	}
 
-	void SetPosition(vec3&& pos)
-	{
-		transform->SetPosition(pos);
-	}
-	void SetPosition(vec3& pos)
-	{
-		transform->SetPosition(pos);
-	}
+	void SetPosition(vec3&& pos) { transform->SetPosition(pos); }
+	void SetPosition(vec3& pos) { transform->SetPosition(pos); }
 
 public:
 	//Get

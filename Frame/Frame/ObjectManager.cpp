@@ -4,7 +4,7 @@
 shared_ptr<Object> ObjectManager::GridObject(float width, float height, int m, int n)
 {
 	shared_ptr<Object> grid = make_shared<Object>();
-	grid->SetName("grid" + gridCount);
+	grid->SetName("grid" + to_string(gridCount));
 	gridCount++;
 	grid->AddComponent<Transform>();
 	auto gridMR = grid->AddComponent<MeshReference>();
@@ -17,7 +17,7 @@ shared_ptr<Object> ObjectManager::GridObject(float width, float height, int m, i
 shared_ptr<Object> ObjectManager::BoxObject(float width, float height, float depth)
 {
 	shared_ptr<Object> box = make_shared<Object>();
-	box->SetName("box" + boxCount);
+	box->SetName("box" + to_string(boxCount));
 	boxCount++;
 	box->AddComponent<Transform>();
 	auto meshReference = box->AddComponent<MeshReference>();

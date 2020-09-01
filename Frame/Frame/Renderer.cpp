@@ -174,7 +174,8 @@ void MeshRenderer::Render()
 
 	if (objPtr->isSelect)
 	{
-		
+		glEnable(GL_STENCIL_TEST);
+		glStencilOp(GL_KEEP, GL_KEEP, GL_REPLACE);
 		glStencilFunc(GL_ALWAYS, 1, 0xFF);
 		glStencilMask(0xFF);
 		DrawObject();
@@ -194,6 +195,9 @@ void MeshRenderer::Render()
 		glBindVertexArray(0);
 		glUseProgram(0);
 		objPtr->transform->SetScaler(orScaler);
+		glStencilMask(0xFF);			// 开启写入，否则无法进行清理
+		glClear(GL_STENCIL_BUFFER_BIT);	// 清理模板值，这样可以使每个物体有一个独立的选中框
+		glDisable(GL_STENCIL_TEST);		// 关闭模板测试
 	}
 	else
 	{
@@ -201,6 +205,5 @@ void MeshRenderer::Render()
 	}
 
 	// 一些状态的复位
-	glStencilMask(0xFF);		// 开启写入，否则无法进行清理
 	glDisable(GL_BLEND);
 }

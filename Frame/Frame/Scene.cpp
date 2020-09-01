@@ -87,11 +87,20 @@ void MyScene::Init()
 	auto box = objectManager.BoxObject();
 	rootObject->AddChild(box);
 	box->SetPosition(vec3(1, 0, 0));
+	box->isSelect = true;
 
 	auto grid2 = objectManager.GridObject(1, 1);
 	rootObject->AddChild(grid2);
-	grid2->SetPosition(vec3(0, -0.5, 0));
+	grid2->SetPosition(vec3(-1, -0.5, 0));
+	grid2->transform->SetRotation(vec3(90, 0, 0));
 	grid2->GetComponent<MeshRenderer>()->material = MaterialManager::GetInstance().GetMaterial("TransparentSpecular");
+
+	auto grid3 = objectManager.GridObject(1, 1);
+	rootObject->AddChild(grid3);
+	grid3->SetPosition(vec3(0, -0.5, 1));
+	grid3->transform->SetRotation(vec3(90, 0, 0));
+	grid3->GetComponent<MeshRenderer>()->material = MaterialManager::GetInstance().GetMaterial("TransparentSpecular");
+	grid3->isSelect = true;
 
 	auto grid1 = objectManager.GridObject(10, 10);
 	rootObject->AddChild(grid1);
@@ -100,11 +109,11 @@ void MyScene::Init()
 
 	//grid2MRE->material = specularMa;
 	
-	decltype(auto) modelGenerator = ModelGenerator::GetInstance();
-	auto testModel = modelGenerator.Create(file::GetResPath("Model/nanosuit/nanosuit.obj"));
-	testModel->transform->SetScaler(vec3(0.1));
+	//decltype(auto) modelGenerator = ModelGenerator::GetInstance();
+	//auto testModel = modelGenerator.Create(file::GetResPath("Model/nanosuit/nanosuit.obj"));
+	//testModel->transform->SetScaler(vec3(0.1));
 
-	rootObject->AddChild(testModel);
+	//rootObject->AddChild(testModel);
 }
 
 void MyScene::InitKeys()
@@ -123,7 +132,7 @@ void MyScene::ModelInit()
 	decltype(auto) modelManager = ModelManager::GetInstance();
 	//modelManager.InitModel("OBJ\\Neptune.obj");
 	//modelManager.InitModel("Model\\backpack\\backpack.obj");
-	modelManager.InitModel(file::GetResPath("Model/nanosuit/nanosuit.obj"));
+	//modelManager.InitModel(file::GetResPath("Model/nanosuit/nanosuit.obj"));
 	
 }
 
@@ -183,8 +192,7 @@ void MyScene::Draw()
 	//绘制,包含缓冲区的清空，各种效果的开启（blend、 cull之类的）
 	glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
 
-	glEnable(GL_STENCIL_TEST);
-	glStencilOp(GL_KEEP, GL_KEEP, GL_REPLACE);
+
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);
 
 	//glEnable(GL_BLEND);
