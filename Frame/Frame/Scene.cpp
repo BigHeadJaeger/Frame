@@ -166,9 +166,6 @@ void MyScene::MaterialInit()
 void MyScene::ScreenRenderInit()
 {
 	screenRender.InitDefaultFrameBuffer();
-	//screenRender.isOpen = true;
-	//screenRender.SetScreenType(SCREEN_RENDER_TYPE::KERNEL);
-	//screenRender.SetBlurKernel();
 }
 
 void MyScene::Update(float& dt)
@@ -211,8 +208,11 @@ void MyScene::Draw()
 		DrawScene();
 	}
 
-	
-	
+	GLuint tex;
+	glGenTextures(1, &tex);
+	glBindTexture(GL_TEXTURE_CUBE_MAP, tex);
+
+	//glTexImage2D(GL_TEXTURE_CUBE_MAP_POSITIVE_X)
 }
 
 void MyScene::DrawScene()
