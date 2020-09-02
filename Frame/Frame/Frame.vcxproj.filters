@@ -179,6 +179,9 @@
     <ClInclude Include="FileInterface.h">
       <Filter>头文件</Filter>
     </ClInclude>
+    <ClInclude Include="ScreenRender.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="shader\SF_DefaultSpecular.f">
@@ -218,6 +221,12 @@
       <Filter>Shader</Filter>
     </None>
     <None Include="shader\SF_VertexColor.v">
+      <Filter>Shader</Filter>
+    </None>
+    <None Include="shader\SF_ScreenRender.f">
+      <Filter>Shader</Filter>
+    </None>
+    <None Include="shader\SF_ScreenRender.v">
       <Filter>Shader</Filter>
     </None>
   </ItemGroup>

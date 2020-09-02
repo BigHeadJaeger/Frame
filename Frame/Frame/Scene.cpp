@@ -23,10 +23,9 @@ void MyScene::Init()
 
 	ModelInit();
 	MaterialInit();
+	ScreenRenderInit();
 
 	drawMode.isLine = false;
-
-
 
 	shared_ptr<Object> mainCamera = make_shared<Object>();
 	mainCamera->AddComponent<Transform>();
@@ -87,20 +86,21 @@ void MyScene::Init()
 	auto box = objectManager.BoxObject();
 	rootObject->AddChild(box);
 	box->SetPosition(vec3(1, 0, 0));
-	box->isSelect = true;
+	box->GetComponent<MeshRenderer>()->material = MaterialManager::GetInstance().GetMaterial("oakfloor");
+	//box->isSelect = true;
 
-	auto grid2 = objectManager.GridObject(1, 1);
-	rootObject->AddChild(grid2);
-	grid2->SetPosition(vec3(-1, -0.5, 0));
-	grid2->transform->SetRotation(vec3(90, 0, 0));
-	grid2->GetComponent<MeshRenderer>()->material = MaterialManager::GetInstance().GetMaterial("TransparentSpecular");
+	//auto grid2 = objectManager.GridObject(1, 1);
+	//rootObject->AddChild(grid2);
+	//grid2->SetPosition(vec3(-1, -0.5, 0));
+	//grid2->transform->SetRotation(vec3(90, 0, 0));
+	//grid2->GetComponent<MeshRenderer>()->material = MaterialManager::GetInstance().GetMaterial("TransparentSpecular");
 
-	auto grid3 = objectManager.GridObject(1, 1);
-	rootObject->AddChild(grid3);
-	grid3->SetPosition(vec3(0, -0.5, 1));
-	grid3->transform->SetRotation(vec3(90, 0, 0));
-	grid3->GetComponent<MeshRenderer>()->material = MaterialManager::GetInstance().GetMaterial("TransparentSpecular");
-	grid3->isSelect = true;
+	//auto grid3 = objectManager.GridObject(1, 1);
+	//rootObject->AddChild(grid3);
+	//grid3->SetPosition(vec3(0, -0.5, 1));
+	//grid3->transform->SetRotation(vec3(90, 0, 0));
+	//grid3->GetComponent<MeshRenderer>()->material = MaterialManager::GetInstance().GetMaterial("TransparentSpecular");
+	//grid3->isSelect = true;
 
 	auto grid1 = objectManager.GridObject(10, 10);
 	rootObject->AddChild(grid1);
@@ -123,6 +123,9 @@ void MyScene::InitKeys()
 	keys.insert(pair<KEYNAME, Key>(BTNS, Key(BTNS)));
 	keys.insert(pair<KEYNAME, Key>(BTND, Key(BTND)));
 	keys.insert(pair<KEYNAME, Key>(BTN1, Key(BTN1)));
+	//keys.insert(pair<KEYNAME, Key>(BTN2, Key(BTN2)));
+	//keys.insert(pair<KEYNAME, Key>(BTN3, Key(BTN3)));
+	//keys.insert(pair<KEYNAME, Key>(BTN4, Key(BTN4)));
 	//keys.insert
 	//keys.push_back(Key(BTNW));
 }
@@ -139,6 +142,9 @@ void MyScene::ModelInit()
 void MyScene::MaterialInit()
 {
 	decltype(auto) materialManager = MaterialManager::GetInstance();
+
+	materialManager.CreateMaterial<NoneMaterial>("none");
+
 	auto material1 = materialManager.CreateMaterial<PBRMaterial>("metalgrid");
 	material1->SetTextureBase(file::GetResPath("Material/metalgrid/basecolor.png"));
 	material1->SetTextureNormal(file::GetResPath("Material/metalgrid/normal.png"));
@@ -146,14 +152,23 @@ void MyScene::MaterialInit()
 	material1->SetTextureAO(file::GetResPath("Material/metalgrid/AO.png"));
 	material1->SetTextureRoughness(file::GetResPath("Material/metalgrid/roughness.png"));
 
-	materialManager.CreateMaterial<NoneMaterial>("none");
-
 	auto material2 = materialManager.CreateMaterial<PBRMaterial>("TransparentSpecular");
 	material2->SetTextureBase(file::GetResPath("Material/blending_transparent_window.png"));
 	material2->SetRenderMode(RenderMode::Transparent);
 
 	auto material3 = materialManager.CreateMaterial<DefaultSpecularMaterial>("DefaultSpecular");
 	material3->SetTextureBase("");
+
+	auto material4 = materialManager.CreateMaterial<PBRMaterial>("oakfloor");
+	material4->SetTextureBase(file::GetResPath("Material/oakfloor/basecolor.png"));
+}
+
+void MyScene::ScreenRenderInit()
+{
+	screenRender.InitDefaultFrameBuffer();
+	//screenRender.isOpen = true;
+	//screenRender.SetScreenType(SCREEN_RENDER_TYPE::KERNEL);
+	//screenRender.SetBlurKernel();
 }
 
 void MyScene::Update(float& dt)
@@ -184,15 +199,26 @@ void MyScene::UpdateObject(shared_ptr<Object> obj, float dt)
 
 void MyScene::Draw()
 {
+	if (screenRender.isOpen)
+	{
+		screenRender.RenderToFBO([&]() {
+			DrawScene();
+			});
+		screenRender.Render();
+	}
+	else
+	{
+		DrawScene();
+	}
 
-	//NormalShadowMap();
+	
+	
+}
 
-	//绘制每一个物体时，先将类中的该物体的所有相关矩阵，材质等信息传入shader中
-
+void MyScene::DrawScene()
+{
 	//绘制,包含缓冲区的清空，各种效果的开启（blend、 cull之类的）
 	glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
-
-
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);
 
 	//glEnable(GL_BLEND);
@@ -214,8 +240,8 @@ void MyScene::Draw()
 	}
 
 	renderQueue.Render(rootObject);
-
 	//RenderObject(rootObject);
+
 }
 
 void MyScene::RenderObject(shared_ptr<Object> obj)

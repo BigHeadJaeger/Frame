@@ -36,6 +36,7 @@ public:
 	vector<vec3> normal;
 	vector<vec2> texcoord;
 	vector<vec4> color;
+
 	map<StateType, StateInfo> propertyState;
 
 	size_t totalVertex;

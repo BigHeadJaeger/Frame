@@ -2,7 +2,7 @@
 
 in vec3 positionW;
 in vec3 normalW;
-in vec2 texCoordF;
+in vec2 texcoordF;
 
 out vec4 FragColor;
 
@@ -40,7 +40,7 @@ uniform PointLight pointLights[POINT_LIGHT_NUM];
 vec4 CalDirLight(DirLight dirLight, vec3 normal, vec3 viewDir)
 {
 	// 环境光（镜面反射只能在特定角度才能看见）
-	vec4 texColor = texture(albedoMap, texCoordF);
+	vec4 texColor = texture(albedoMap, texcoordF);
 	vec4 ambient = vec4(dirLight.color, 1.0) * baseColor * texColor;
 	vec3 lightDir = - dirLight.dir;
 
@@ -56,7 +56,7 @@ vec4 CalDirLight(DirLight dirLight, vec3 normal, vec3 viewDir)
 vec4 CalPointLight(PointLight light, vec3 normal, vec3 viewDir, vec3 posW)
 {
 	// 环境光（镜面反射只能在特定角度才能看见）
-	vec4 texColor = texture(albedoMap, texCoordF);
+	vec4 texColor = texture(albedoMap, texcoordF);
 	vec4 ambient = vec4(light.color, 1.0) * baseColor * texColor;
 	vec3 lightDir = normalize(light.position - posW);
 	// 镜面反射

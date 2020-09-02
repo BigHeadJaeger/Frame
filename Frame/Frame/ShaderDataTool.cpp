@@ -37,6 +37,13 @@ void ShaderDataTool::SetUniform(string&& valueName, mat4x4 value, weak_ptr<Shade
 	glUniformMatrix4fv(location, 1, GL_FALSE, value_ptr(value));
 }
 
+void ShaderDataTool::SetUniform(string&& valueName, mat3x3 value, weak_ptr<ShaderProgram> p)
+{
+	GLuint location;
+	location = glGetUniformLocation(p.lock()->p, valueName.c_str());
+	glUniformMatrix3fv(location, 1, GL_FALSE, value_ptr(value));
+}
+
 void ShaderDataTool::SetUniform(string&& valueName, vec4 value, weak_ptr<ShaderProgram> p)
 {
 	GLuint location;
