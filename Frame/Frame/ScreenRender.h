@@ -24,8 +24,8 @@ public:
 	GLuint DSRenderBuffer;		// 深度和模板的RBO
 
 	// 屏幕顶点
-	GLuint VAO;
-	GLuint VBO;
+	//GLuint VAO;
+	//GLuint VBO;
 
 	VertexData planeData;
 
@@ -90,7 +90,7 @@ public:
 	void InitDefaultVertexBuffer()
 	{
 		CreatePlane();
-		ShaderDataTool::GetInstance().InitVertexBuffer(planeData, VAO, VBO);
+		ShaderDataTool::GetInstance().InitVertexBuffer(planeData, planeData.VAO, planeData.VBO);
 	}
 
 	void SetScreenType(SCREEN_RENDER_TYPE _type)
@@ -145,7 +145,7 @@ public:
 
 		auto shader = ShaderManager::GetInstance().GetShader("SF_ScreenRender");
 		glUseProgram(shader->p);
-		glBindVertexArray(VAO);
+		glBindVertexArray(planeData.VAO);
 		tool.SetUniform("screenType", (int)type, shader);
 		tool.SetTexture(texColorBuffer, 0, GL_TEXTURE0, "screenTexture", shader);
 		if (type == SCREEN_RENDER_TYPE::KERNEL)

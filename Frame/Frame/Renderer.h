@@ -47,13 +47,13 @@ public:
 class MeshRenderer :public Renderer
 {
 private:
-	//物体的VAO、VBO编号
-	GLuint VAO;
-	GLuint VBO;
-	GLuint IndexBuffer;
+	////物体的VAO、VBO编号
+	//GLuint VAO;
+	//GLuint VBO;
+	//GLuint IndexBuffer;
 
-	GLint drawType;					//顶点buffer的绘制方式
-	GLint drawUnitNumber;			//绘制单元的数量
+	//GLint drawType;					//顶点buffer的绘制方式
+	//GLint drawUnitNumber;			//绘制单元的数量
 
 	bool isLighting;				// 是否接受光照
 	bool isShadow;					// 是否接受阴影
@@ -65,7 +65,7 @@ public:
 		// 默认纹理
 		material = MaterialManager::GetInstance().GetMaterial("none");
 		type = COMPONENT_MESHRENDER;
-		drawType = GL_TRIANGLES;
+		//drawType = GL_TRIANGLES;
 	}
 
 	void UpdateMeshData();

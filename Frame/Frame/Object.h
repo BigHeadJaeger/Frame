@@ -8,7 +8,7 @@
 using namespace std;
 #include"Renderer.h"
 #include"LightComponent.h"
-#include"ObjectManager.h"
+//#include"ObjectManager.h"
 //#include"MarchingCube.h"
 //#include"DistributeFun.h"
 //#include"Component.h"

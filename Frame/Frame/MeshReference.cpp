@@ -2,7 +2,6 @@
 
 void MeshReference::ConvertMeshData()
 {
-	drawUnitNumber = mesh->meshStruct.n_faces() * 3;
 	vertexData.Clear();
 	vertexData.totalVertex = mesh->meshStruct.n_faces() * 3;
 	vertexData.initMemory(vertexData.totalVertex);

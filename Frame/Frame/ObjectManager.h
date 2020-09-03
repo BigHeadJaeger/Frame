@@ -1,7 +1,7 @@
 #pragma once
 #include<functional>
 #include"RenderFrameModel.h"
-//#include"Object.h"
+#include"Object.h"
 
 class Object;
 

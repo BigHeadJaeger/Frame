@@ -10,8 +10,6 @@ public:
 	shared_ptr<Mesh> mesh;
 	//Mesh mesh;
 	VertexData vertexData;
-	GLint drawType;
-	size_t drawUnitNumber;		// 绘制顶点的数量
 	bool meshChange;			// 标志网格数据发生变化
 private:
 	// 将mesh结构体中的数据改为opengl中通用的数据存储方式

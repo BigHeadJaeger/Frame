@@ -6,6 +6,7 @@ using namespace std;
 #include"Interaction.h"
 #include"RenderQueue.h"
 #include"ScreenRender.h"
+#include"SkyBox.h"
 
 struct DrawMode
 {
@@ -28,6 +29,7 @@ public:
 
 	ScreenRender screenRender;
 
+	SkyBox skyBox;
 private:
 
 public:
@@ -59,6 +61,7 @@ public:
 	void InitKeys();
 	void ModelInit();
 	void MaterialInit();
+	void SkyBoxInit();
 	// ≥ı ºªØ∆¡ƒª‰÷»æ
 	void ScreenRenderInit();
 

@@ -3,76 +3,6 @@
 #include"Light.h"
 #include"LightComponent.h"
 
-void MeshRenderer::InitVertexBuffer(VertexData& vertexData)
-{
-	glDeleteVertexArrays(1, &VAO);
-	glGenVertexArrays(1, &VAO);
-	glBindVertexArray(VAO);
-
-	//创建顶点buffer
-	glDeleteBuffers(1, &VBO);
-	glGenBuffers(1, &VBO);
-	glBindBuffer(GL_ARRAY_BUFFER, VBO);					//先绑定，在用VAO传值时，就传送的是当前绑定的buffer
-
-	GLsizeiptr sumSize = vertexData.position.size() * sizeof(vec3) + vertexData.normal.size() * sizeof(vec3) + vertexData.texcoord.size() * sizeof(vec2) + vertexData.color.size() * sizeof(vec4);
-	//开辟空间
-	glBufferData(GL_ARRAY_BUFFER, sumSize, NULL, GL_STATIC_DRAW);
-
-	GLintptr offset = 0;
-
-	for (auto state_it = vertexData.propertyState.begin(); state_it != vertexData.propertyState.end(); state_it++)
-	{
-		if ((*state_it).second.isEnable)
-		{
-			GLintptr size = 0;
-			switch ((*state_it).first)
-			{
-			case STATE_TYPE_POSITION:
-				size = vertexData.position.size() * sizeof(vec3);
-				glBufferSubData(GL_ARRAY_BUFFER, offset, size, &vertexData.position[0]);
-
-				glEnableVertexAttribArray((*state_it).second.location);
-				glVertexAttribPointer((*state_it).second.location, 3, GL_FLOAT, GL_FALSE, 0, (void*)offset);
-
-				offset += size;
-				break;
-			case STATE_TYPE_NORMAL:
-				size = vertexData.normal.size() * sizeof(vec3);
-				glBufferSubData(GL_ARRAY_BUFFER, offset, size, &vertexData.normal[0]);
-
-				glEnableVertexAttribArray((*state_it).second.location);
-				glVertexAttribPointer((*state_it).second.location, 3, GL_FLOAT, GL_FALSE, 0, (void*)offset);
-
-				offset += size;
-				break;
-			case STATE_TYPE_TEXCOORD:
-				size = vertexData.texcoord.size() * sizeof(vec2);
-				glBufferSubData(GL_ARRAY_BUFFER, offset, size, &vertexData.texcoord[0]);
-
-				glEnableVertexAttribArray((*state_it).second.location);
-				glVertexAttribPointer((*state_it).second.location, 2, GL_FLOAT, GL_FALSE, 0, (void*)offset);
-
-				offset += size;
-				break;
-			case STATE_TYPE_COLOR:
-				size = vertexData.color.size() * sizeof(vec4);
-				glBufferSubData(GL_ARRAY_BUFFER, offset, size, &vertexData.color[0]);
-
-				glEnableVertexAttribArray((*state_it).second.location);
-				glVertexAttribPointer((*state_it).second.location, 4, GL_FLOAT, GL_FALSE, 0, (void*)offset);
-
-				offset += size;
-				break;
-			default:
-				break;
-			}
-		}
-	}
-	glBindBuffer(GL_ARRAY_BUFFER, 0);
-	glBindVertexArray(0);
-
-}
-
 void MeshRenderer::UpdateMeshData()
 {
 	auto meshReference = object.lock()->GetComponent<MeshReference>();
@@ -81,8 +11,7 @@ void MeshRenderer::UpdateMeshData()
 		if (meshReference->meshChange)
 		{
 			meshReference->meshChange = false;
-			InitVertexBuffer(meshReference->vertexData);
-			drawUnitNumber = meshReference->vertexData.totalVertex;
+			ShaderDataTool::GetInstance().InitVertexBuffer(meshReference->vertexData, meshReference->vertexData.VAO, meshReference->vertexData.VBO);
 		}
 	}
 }
@@ -155,13 +84,18 @@ void Renderer::SetLight(shared_ptr<ShaderProgram> shader)
 void MeshRenderer::DrawObject()
 {
 	auto shader = material->shader.lock();
+
 	glUseProgram(shader->p);
-	glBindVertexArray(VAO);
+	auto meshReference = object.lock()->GetComponent<MeshReference>();
+	if (!meshReference)
+		return;
+
+	glBindVertexArray(meshReference->vertexData.VAO);
 	SetCamera(shader);
 	SetTransform(shader);
 	SetLight(shader);
 	material->Transfer();
-	glDrawArrays(drawType, 0, drawUnitNumber);
+	glDrawArrays(meshReference->vertexData.drawType, 0, meshReference->vertexData.totalVertex);
 	glBindVertexArray(0);
 	glUseProgram(0);
 }
@@ -188,10 +122,15 @@ void MeshRenderer::Render()
 		objPtr->transform->UpdateMatrix();
 		auto shader = ShaderManager::GetInstance().GetShader("SF_Outline");
 		glUseProgram(shader->p);
-		glBindVertexArray(VAO);
+		auto meshReference = object.lock()->GetComponent<MeshReference>();
+		if (!meshReference)
+			return;
+		glBindVertexArray(meshReference->vertexData.VAO);
+		//glBindVertexArray(VAO);
 		SetCamera(shader);
 		SetTransform(shader);
-		glDrawArrays(drawType, 0, drawUnitNumber);
+		//glDrawArrays(drawType, 0, drawUnitNumber);
+		glDrawArrays(meshReference->vertexData.drawType, 0, meshReference->vertexData.totalVertex);
 		glBindVertexArray(0);
 		glUseProgram(0);
 		objPtr->transform->SetScaler(orScaler);

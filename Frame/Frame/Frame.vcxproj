@@ -155,6 +155,7 @@
     <ClCompile Include="Mesh.cpp" />
     <ClCompile Include="MeshReference.cpp" />
     <ClCompile Include="Model.cpp" />
+    <ClCompile Include="ModelGenerator.cpp" />
     <ClCompile Include="ModelManager.cpp" />
     <ClCompile Include="Object.cpp" />
     <ClCompile Include="ObjectManager.cpp" />
@@ -196,6 +197,7 @@
     <ClInclude Include="ScreenRender.h" />
     <ClInclude Include="ShaderDataTool.h" />
     <ClInclude Include="ShaderManager.h" />
+    <ClInclude Include="SkyBox.h" />
     <ClInclude Include="Texture.h" />
     <ClInclude Include="TextureManager.h" />
     <ClInclude Include="Transform.h" />
@@ -214,6 +216,8 @@
     <None Include="shader\SF_ScreenRender.v" />
     <None Include="shader\SF_SimpleColor.f" />
     <None Include="shader\SF_SimpleColor.v" />
+    <None Include="shader\SF_SkyBox.f" />
+    <None Include="shader\SF_SkyBox.v" />
     <None Include="shader\SF_VertexColor.f" />
     <None Include="shader\SF_VertexColor.frag" />
     <None Include="shader\SF_VertexColor.v" />

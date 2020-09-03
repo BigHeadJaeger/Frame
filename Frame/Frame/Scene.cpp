@@ -24,6 +24,7 @@ void MyScene::Init()
 	ModelInit();
 	MaterialInit();
 	ScreenRenderInit();
+	SkyBoxInit();
 
 	drawMode.isLine = false;
 
@@ -85,7 +86,7 @@ void MyScene::Init()
 
 	auto box = objectManager.BoxObject();
 	rootObject->AddChild(box);
-	box->SetPosition(vec3(1, 0, 0));
+	box->SetPosition(vec3(0, 0, 0));
 	box->GetComponent<MeshRenderer>()->material = MaterialManager::GetInstance().GetMaterial("oakfloor");
 	//box->isSelect = true;
 
@@ -152,15 +153,24 @@ void MyScene::MaterialInit()
 	material1->SetTextureAO(file::GetResPath("Material/metalgrid/AO.png"));
 	material1->SetTextureRoughness(file::GetResPath("Material/metalgrid/roughness.png"));
 
-	auto material2 = materialManager.CreateMaterial<PBRMaterial>("TransparentSpecular");
-	material2->SetTextureBase(file::GetResPath("Material/blending_transparent_window.png"));
-	material2->SetRenderMode(RenderMode::Transparent);
+	//auto material2 = materialManager.CreateMaterial<PBRMaterial>("TransparentSpecular");
+	//material2->SetTextureBase(file::GetResPath("Material/blending_transparent_window.png"));
+	//material2->SetRenderMode(RenderMode::Transparent);
 
 	auto material3 = materialManager.CreateMaterial<DefaultSpecularMaterial>("DefaultSpecular");
 	material3->SetTextureBase("");
 
 	auto material4 = materialManager.CreateMaterial<PBRMaterial>("oakfloor");
 	material4->SetTextureBase(file::GetResPath("Material/oakfloor/basecolor.png"));
+}
+
+void MyScene::SkyBoxInit()
+{
+	decltype(auto) materialManager = MaterialManager::GetInstance();
+	auto skyBoxMaterial = materialManager.CreateMaterial<SkyBoxMaterial>("SkyBox1");
+	skyBoxMaterial->InitSkyBox(file::GetResPath("Skybox/skybox1/skybox1"));
+
+	skyBox.InitSkyBox(skyBoxMaterial);
 }
 
 void MyScene::ScreenRenderInit()
@@ -196,6 +206,8 @@ void MyScene::UpdateObject(shared_ptr<Object> obj, float dt)
 
 void MyScene::Draw()
 {
+	
+
 	if (screenRender.isOpen)
 	{
 		screenRender.RenderToFBO([&]() {
@@ -207,12 +219,6 @@ void MyScene::Draw()
 	{
 		DrawScene();
 	}
-
-	GLuint tex;
-	glGenTextures(1, &tex);
-	glBindTexture(GL_TEXTURE_CUBE_MAP, tex);
-
-	//glTexImage2D(GL_TEXTURE_CUBE_MAP_POSITIVE_X)
 }
 
 void MyScene::DrawScene()
@@ -238,6 +244,8 @@ void MyScene::DrawScene()
 		glEnable(GL_CULL_FACE);
 		glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
 	}
+
+	skyBox.Render();
 
 	renderQueue.Render(rootObject);
 	//RenderObject(rootObject);
