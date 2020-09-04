@@ -1,103 +1,87 @@
 #pragma once
-#include<glm.hpp>
-#include<gtc\matrix_transform.hpp>
-#include<gtc\type_ptr.hpp>
-using namespace glm;
-using namespace std;
-#include"Program.h"
-#include"ShaderData.h"
+#include"ShaderDataTool.h"
+#include"Component.h"
+#include"MaterialManager.h"
+#include"MeshReference.h"
+#include"RenderFrameModel.h"
+#include"Camera.h"
 
-enum RENDERERTYPE
+enum class RENDERERTYPE
 {
-	UE4,
+	DEFAULT,
 	SIMPLE,
 	VERTEXCOLOR,
 	MPS,
 };
 
-class Renderer
+class Renderer : public Component
 {
-protected:
-	ShaderProgram shaderProgram;
 public:
-	void InitProgram(string vt, string ft);
-
-	virtual void Render(ShaderData* shaderData) = 0;
-
-	//传texture到shader中
-	void SetTexture(GLuint& texId, int num, GLenum texNum, string samplerName, ShaderProgram& p);
-	//根据不同类型的值用重载的方式传入shader中
-	void SetUniform(string valueName, mat4x4& value, ShaderProgram& p);
-	void SetUniform(string valueName, vec4& value, ShaderProgram& p);
-	void SetUniform(string valueName, vec3& value, ShaderProgram& p);
-	void SetUniform(string valueName, float value, ShaderProgram& p);
-};
-
-class SimpleRenderer :public Renderer
-{
+	shared_ptr<Material> material;
 private:
-	static SimpleRenderer* instance;
-	SimpleRenderer() {}
+
 public:
-	static SimpleRenderer* GetRenderer()
+	void SetTransform(shared_ptr<ShaderProgram> shader);
+
+	void SetCamera(shared_ptr<ShaderProgram> shader);
+
+	void SetLight(shared_ptr<ShaderProgram> shader);
+
+	virtual void Render() = 0;
+
+	void SetMaterial(shared_ptr<Material> _material)
 	{
-		if (instance == NULL)
+		if (_material == nullptr)
 		{
-			instance = new SimpleRenderer();
+			material.reset();
+			material = make_shared<NoneMaterial>();
 		}
-		return instance;
-	}
-
-	void Render(ShaderData* shaderData)override;
-};
-
-//不同的渲染器只需要一个，所以都设为单例
-class UE4Renderer :public Renderer
-{
-private:
-	static UE4Renderer* instance;
-	UE4Renderer() {}
-public:
-	static UE4Renderer* GetRenderer()
-	{
-		if (instance == NULL)
+		else
 		{
-			instance = new UE4Renderer();
+			material.reset();
+			material = _material;
 		}
-		return instance;
 	}
-	void Render(ShaderData* shaderData) override;
 };
 
-class VertexColorRender :public Renderer
+class MeshRenderer :public Renderer
 {
 private:
-	static VertexColorRender* instance;
-	VertexColorRender() {}
+	////物体的VAO、VBO编号
+	//GLuint VAO;
+	//GLuint VBO;
+	//GLuint IndexBuffer;
+
+	//GLint drawType;					//顶点buffer的绘制方式
+	//GLint drawUnitNumber;			//绘制单元的数量
+
+	bool isLighting;				// 是否接受光照
+	bool isShadow;					// 是否接受阴影
+
+	
+private:
+	//void InitVertexBuffer(VertexData& vertexData);
 public:
-	static VertexColorRender* GetRenderer()
+	MeshRenderer()
 	{
-		if (instance == NULL)
-			instance = new VertexColorRender();
-		return instance;
+		// 默认纹理
+		material = MaterialManager::GetInstance().GetMaterial("none");
+		type = COMPONENT_MESHRENDER;
+		//drawType = GL_TRIANGLES;
 	}
 
-	void Render(ShaderData* shaderData) override;
+	void UpdateMeshData();
+
+	void Update(float dt) override
+	{
+		if (!isUseable())
+			return;
+		UpdateMeshData();
+	}
+
+	// 对物体的绘制，Render中有可能还含有一些其他的渲染设置
+	void DrawObject();
+
+	void Render() override;
 };
 
-//class MPSRenderer:public Renderer
-//{
-//private:
-//	static MPSRenderer* instance;
-//	MPSRenderer() {}
-//public:
-//	static MPSRenderer* GetRenderer()
-//	{
-//		if (instance == NULL)
-//		{
-//			instance = new MPSRenderer();
-//		}
-//		return instance;
-//	}
-//	void Render(ShaderData* shaderData) override;
-//};

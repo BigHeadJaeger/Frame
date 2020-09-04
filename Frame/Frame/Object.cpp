@@ -1,30 +1,5 @@
 #include "Object.h"
 
-void Object::SetRenderer(RENDERERTYPE type)
-{
-	switch (type)
-	{
-	case UE4:
-		renderer = UE4Renderer::GetRenderer();
-		delete shaderData;
-		shaderData = new UE4ShaderData();
-		break;
-	case SIMPLE:
-		renderer = SimpleRenderer::GetRenderer();
-		delete shaderData;
-		shaderData = new SimpleShaderData();
-		break;
-	case VERTEXCOLOR:
-		renderer = VertexColorRender::GetRenderer();
-		delete shaderData;
-		shaderData = new VertexShaderData();
-		break;
-	case MPS:
-		break;
-	default:
-		break;
-	}
-}
 
 //void Metaball::SetSourcePoints(vec3 firstPos, int w, int h, int d)
 //{

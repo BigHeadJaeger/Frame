@@ -1,92 +1,132 @@
 #pragma once
 #include "Scene.h"
-#include"MeshObject.h"
+//#include"MeshObject.h"
+//#include"Object.h"
 #include<GLFW\glfw3.h>
+#include<iostream>
+#include"RenderFrameModel.h"
+#include"ModelManager.h"
+#include"ModelGenerator.h"
+#include"MaterialManager.h"
+#include"FileInterface.h"
 
 void MyScene::Init()
 {
 
-	glGetString(GL_RENDERER);
+	//glGetString(GL_RENDERER);
 	//初始化glew
-	//gladLoadGLLoader((GLADloadproc)glfwGetProcAddress);
-	glewInit();
-	//初始化Renderer中的program
-	//UE4Renderer::GetRenderer()->InitProgram("UE4ShaderFile.v", "UE4ShaderFile.f");
-	//SimpleRenderer::GetRenderer()->InitProgram("SF_SimpleColor.v", "SF_SimpleColor.f");
-	//SimpleRenderer::GetRenderer()->InitProgram("SF_VertexColor.v", "SF_VertexColor.f");
-	VertexColorRender::GetRenderer()->InitProgram("SF_VertexColor.v", "SF_VertexColor.f");
+	if (!gladLoadGLLoader((GLADloadproc)glfwGetProcAddress))
+	{
+		std::cout << "initialize glad failed" << std::endl;
+		return;
+	}
 
-	//pShadowTex.SetShader("shadowTex.v", "shadowTex.f");WQ
+	ModelInit();
+	MaterialInit();
+	ScreenRenderInit();
+	SkyBoxInit();
 
-
-	////指定光源参数
-	//lightPos = vec3(-3, 5, 3);
-	//lightColor = vec3(400.f, 400.f, 400.f);
-
-	//初始化主相机
-	//mainCamera = new Camera();
-	MainCamera::GetInstance()->Init(vec3(0, 2, 3), vec3(0, 0, 0));
-
-	//SetDrawMode(drawMode.isLine, false);
 	drawMode.isLine = false;
 
-	//指定物体PBR材质
-	//MeshObject* cow = new MeshObject();
-	//cow->SetName("cow");
-	//cow->readObjFile("Resource\\OBJ\\cow.obj");
-	//cow->SetRenderer(SIMPLE);
-	//cow->InitBufferData();
-	//cow->GetTransform().SetPosition(vec3(0, 0, 0));
-	//cow->GetTransform().SetScaler(vec3(2.0));
-	//dynamic_cast<SimpleShaderData*>(cow->GetShaderData())->SetColor(vec3(255, 0, 0));
-	//objects.insert(pair<string, Object*>(cow->GetName(), cow));
-
-	MeshObject* cow = new MeshObject();
-	cow->SetName("cow");
-	cow->readObjFile("OBJ\\cow.obj");
-	cow->SetRenderer(VERTEXCOLOR);
-	cow->InitBufferData();
-	cow->GetTransform().SetPosition(vec3(0, 0, 0));
-	cow->GetTransform().SetScaler(vec3(2.0));
-	//dynamic_cast<VertexShaderData*>(cow->GetShaderData())->SetColor(vec3(255, 0, 0));
-	objects.insert(pair<string, Object*>(cow->GetName(), cow));
-
-	//MPSWaterParticleGroup* water = new MPSWaterParticleGroup();
-	//water->SetName("water");
-	//water->SetRenderer(SIMPLERENDER);
-	//water->GetTransform().SetPosition(vec3(0.5));
-	//water->SetDiameter(0.01);
-	//water->SetViscosity(0.000001);
-	//water->InitParticles();
-	//dynamic_cast<SimpleShaderData*>(water->GetShaderData())->SetColor(vec3(0, 0, 200));
-	//objects.insert(pair<string, Object*>(water->GetName(), water));
+	shared_ptr<Object> mainCamera = make_shared<Object>();
+	mainCamera->AddComponent<Transform>();
+	rootObject->AddChild(mainCamera);
+	mainCamera->SetName("MainCamera");
+	mainCamera->SetPosition(vec3(0, 2, 3));
+	auto cameraComponent = mainCamera->AddComponent<Camera>();
+	cameraComponent->Init(vec3(0, 0, 0));
+	RenderFrameModel::GetInstance().SetMainCamera(cameraComponent);
+	//objectManager.InsertObject(mainCamera);
+	//objects.insert(make_pair(mainCamera->GetName(), mainCamera));
 
 
-	//Metaball* balls = new Metaball();
-	//balls->SetName("Metaball");
-	//balls->SetRenderer(SIMPLERENDER);
-	//balls->GetTransform().SetPosition(vec3(-0, -0, 0));
-	//balls->SetSourcePoints(vec3(0.1), 2, 1, 2);
-	//balls->SetRadius(0.005);
-	////balls->GetTransform().SetScaler(vec3(3.0));
-	//dynamic_cast<SimpleShaderData*>(balls->GetShaderData())->SetColor(vec3(0, 0, 255));
-	//objects.insert(pair<string, Object*>(balls->GetName(), balls));
+	shared_ptr<Object> light1 = make_shared<Object>();
+	light1->AddComponent<Transform>();
+	light1->SetName("light1");
+	rootObject->AddChild(light1);
+	light1->SetPosition(vec3(-3, 3, 0));
+	auto light1Component = light1->AddComponent<LightComponent>();
+	//light1Component->SetLightType(LIGHT_TYPE::POINT_LIGHT);
+
+	//shared_ptr<Object> light2 = make_shared<Object>();
+	//light2->AddComponent<Transform>();
+	//light2->SetName("light2");
+	//rootObject->AddChild(light2);
+	//light2->SetPosition(vec3(1, 2, 0));
+	//auto light2Component = light2->AddComponent<LightComponent>();
+	//light2Component->SetLightType(LIGHT_TYPE::POINT_LIGHT);
+
+	//shared_ptr<Object> box(new Object);
+	//box->AddComponent<Transform>();
+	//box->SetPosition(vec3(-1, 0, 0));
+	//box->transform->SetRotation(vec3(0, 60, 0));
+	//rootObject->AddChild(box);
+	//box->SetName("box1");
+	//auto meshReference = box->AddComponent<MeshReference>();
+	//meshReference->CreateBox(1, 1, 1);
+	//auto bR = box->AddComponent<MeshRenderer>();
+	//box->isSelect = true;
+	//bR->material = MaterialManager::GetInstance().GetMaterial("metalgrid");
+
+	shared_ptr<DefaultSpecularMaterial> specularMa = make_shared<DefaultSpecularMaterial>();
+	//specularMa->SetTextureBase("Material\\btn_sz.png");
+	specularMa->SetTextureBase(file::GetResPath("Material/blending_transparent_window.png"));
+	//specularMa->SetTextureBase("Material\\oakfloor\\basecolor.png");
 
 
-	//myBox.InitDirectBox(1, 1, 1);					//顶点、索引信息初始化
-	//myBox.InitBuffers();							//缓冲初始化
-	//myBox.CoorDataInit(vec3(-0.5, 0.5, 1.0)/*, vec3(3.0, 0.1, 3.0)*/);
-	//myBox.TextureUseInfo(true, true, true, true, true, true);				//纹理使用信息初始化
-	//myBox.InitTexture(myBox.TAlbedo, "Material\\metalgrid2-dx\\metalgrid2_basecolor.png");		//生成需要的纹理
-	//myBox.InitTexture(myBox.TNormal, "Material\\metalgrid2-dx\\metalgrid2_normal-dx.png");
-	//myBox.InitTexture(myBox.TAo, "Material\\metalgrid2-dx\\metalgrid2_AO.png");
-	//myBox.InitTexture(myBox.TRoughness, "Material\\metalgrid2-dx\\metalgrid2_roughness.png");
-	//myBox.InitTexture(myBox.TMetallic, "Material\\metalgrid2-dx\\metalgrid2_metallic.png");
-	//myBox.LightUseInfo(true);						//设置是否接收光照
-	//myBox.InitMaterial(vec4(0.5f, 0.5f, 0.5f, 1.0f), vec4(0.5, 0.5, 0.5, 1.0f), vec4(0.7f, 0.7f, 0.7f, 1.0f), 7.0f);
+	//shared_ptr<Object> grid2 = make_shared<Object>();
+	//grid2->SetName("grid2");
+	//grid2->AddComponent<Transform>();
+	//grid2->SetPosition(vec3(0, -0.5, 0));
+	//auto grid2MR = grid2->AddComponent<MeshReference>();
+	//grid2MR->CreateGrid(1, 1, 10, 10);
+	//auto grid2MRE = grid2->AddComponent<MeshRenderer>();
+	//rootObject->AddChild(grid2);
+	//grid2MRE->material = MaterialManager::GetInstance().GetMaterial("defaultSpecular");
 
+	//auto box = objectManager.BoxObject();
+	//rootObject->AddChild(box);
+	//box->SetPosition(vec3(0, 0, 0));
+	//box->GetComponent<MeshRenderer>()->material = MaterialManager::GetInstance().GetMaterial("environment");
+	//box->isSelect = true;
 
-	//STInit();
+	auto sphere = objectManager.SphereObject();
+	rootObject->AddChild(sphere);
+	sphere->GetComponent<MeshRenderer>()->material = MaterialManager::GetInstance().GetMaterial("none");
+
+	//sphere->GetComponent<MeshReference>()->vertexData.drawType = GL_POINTS;
+
+	//auto box2 = objectManager.BoxObject();
+	//rootObject->AddChild(box2);
+	//box2->SetPosition(vec3(-2, 0, 0));
+	//box2->GetComponent<MeshRenderer>()->material = MaterialManager::GetInstance().GetMaterial("metalgrid");
+
+	//auto grid2 = objectManager.GridObject(1, 1);
+	//rootObject->AddChild(grid2);
+	//grid2->SetPosition(vec3(-1, -0.5, 0));
+	//grid2->transform->SetRotation(vec3(90, 0, 0));
+	//grid2->GetComponent<MeshRenderer>()->material = MaterialManager::GetInstance().GetMaterial("TransparentSpecular");
+
+	//auto grid3 = objectManager.GridObject(1, 1);
+	//rootObject->AddChild(grid3);
+	//grid3->SetPosition(vec3(0, -0.5, 1));
+	//grid3->transform->SetRotation(vec3(90, 0, 0));
+	//grid3->GetComponent<MeshRenderer>()->material = MaterialManager::GetInstance().GetMaterial("TransparentSpecular");
+	//grid3->isSelect = true;
+
+	//auto grid1 = objectManager.GridObject(10, 10);
+	//rootObject->AddChild(1grid1);
+	//grid1->SetPosition(vec3(0, -1, 0));
+	//grid1->GetComponent<MeshRenderer>()->material = MaterialManager::GetInstance().GetMaterial("metalgrid");
+
+	//grid2MRE->material = specularMa;
+	
+	//decltype(auto) modelGenerator = ModelGenerator::GetInstance();
+	//auto testModel = modelGenerator.Create(file::GetResPath("Model/nanosuit/nanosuit.obj"));
+	//testModel->transform->SetScaler(vec3(0.1));
+	//testModel->SetPosition(vec3(2, 0, 0));
+	//testModel->transform->SetRotation(vec3(0, -90, 0));
+	//rootObject->AddChild(testModel);
 }
 
 void MyScene::InitKeys()
@@ -96,50 +136,122 @@ void MyScene::InitKeys()
 	keys.insert(pair<KEYNAME, Key>(BTNS, Key(BTNS)));
 	keys.insert(pair<KEYNAME, Key>(BTND, Key(BTND)));
 	keys.insert(pair<KEYNAME, Key>(BTN1, Key(BTN1)));
+	//keys.insert(pair<KEYNAME, Key>(BTN2, Key(BTN2)));
+	//keys.insert(pair<KEYNAME, Key>(BTN3, Key(BTN3)));
+	//keys.insert(pair<KEYNAME, Key>(BTN4, Key(BTN4)));
+	//keys.insert
 	//keys.push_back(Key(BTNW));
 }
 
-void MyScene::Update(float dt)
+void MyScene::ModelInit()
 {
+	decltype(auto) modelManager = ModelManager::GetInstance();
+	//modelManager.InitModel("OBJ\\Neptune.obj");
+	//modelManager.InitModel("Model\\backpack\\backpack.obj");
+	//modelManager.InitModel(file::GetResPath("Model/nanosuit/nanosuit.obj"));
+	
+}
 
-	//计算视角矩阵
-	MainCamera::GetInstance()->SetView();
-	//计算投影矩阵
-	MainCamera::GetInstance()->SetPro();
+void MyScene::MaterialInit()
+{
+	decltype(auto) materialManager = MaterialManager::GetInstance();
 
-	//遍历所有object更新矩阵
-	map<string, Object*>::iterator objs_it;
-	for (objs_it = objects.begin(); objs_it != objects.end(); objs_it++)
-	{
-		(*objs_it).second->Update(dt);
-	}
+	materialManager.CreateMaterial<NoneMaterial>("none");
 
-	//cow.UpdateMatrix(mainCamera);
-	//myBox.SetObjMat(camera.view, camera.pro);
-	//myBucket.SetObjMat(camera.view, camera.pro);
-	//myGrid.SetObjMat(camera.view, camera.pro);
+	auto material1 = materialManager.CreateMaterial<PBRMaterial>("metalgrid");
+	material1->SetTextureBase(file::GetResPath("Material/metalgrid/basecolor.png"));
+	material1->SetTextureNormal(file::GetResPath("Material/metalgrid/normal.png"));
+	material1->SetTextureMetallic(file::GetResPath("Material/metalgrid/metalic.png"));
+	material1->SetTextureAO(file::GetResPath("Material/metalgrid/AO.png"));
+	material1->SetTextureRoughness(file::GetResPath("Material/metalgrid/roughness.png"));
 
-	//遍历所有key，并执行key当前绑定的事件
-	map<KEYNAME, Key>::iterator keys_it;
-	for (keys_it = keys.begin(); keys_it != keys.end(); keys_it++)
+	//auto material2 = materialManager.CreateMaterial<PBRMaterial>("TransparentSpecular");
+	//material2->SetTextureBase(file::GetResPath("Material/blending_transparent_window.png"));
+	//material2->SetRenderMode(RenderMode::Transparent);
+
+	auto material3 = materialManager.CreateMaterial<DefaultSpecularMaterial>("DefaultSpecular");
+	material3->SetTextureBase("");
+
+	auto material4 = materialManager.CreateMaterial<PBRMaterial>("oakfloor");
+	material4->SetTextureBase(file::GetResPath("Material/oakfloor/basecolor.png"));
+
+	auto material5 = materialManager.CreateMaterial<EnvironmentMapping>("environment");
+	material5->SetMode(0);
+	material5->SetTextureBase(file::GetResPath("Material/metalsheet/basecolor.png"));
+	material5->SetTextureAO(file::GetResPath("Material/metalsheet/AO.png"));
+}
+
+void MyScene::SkyBoxInit()
+{
+	decltype(auto) materialManager = MaterialManager::GetInstance();
+	auto skyBoxMaterial = materialManager.CreateMaterial<SkyBoxMaterial>("SkyBox1");
+	skyBoxMaterial->InitSkyBox(file::GetResPath("Skybox/skybox1/skybox1"));
+
+	RenderFrameModel::GetInstance().SetSkyBoxMaterial(skyBoxMaterial);
+
+	skyBox.InitSkyBox(skyBoxMaterial);
+}
+
+void MyScene::ScreenRenderInit()
+{
+	screenRender.InitDefaultFrameBuffer();
+}
+
+void MyScene::Update(float& dt)
+{
+	// 从场景中的根节点遍历所有object，进行更新
+	UpdateObject(rootObject, dt);
+
+	// 按键事件带来的变换会在下一帧起效
+	// 遍历所有key，并执行key当前绑定的事件
+	for (auto keys_it = keys.begin(); keys_it != keys.end(); keys_it++)
 	{
 		keys_it->second.Execute();
 	}
 }
 
+void MyScene::UpdateObject(shared_ptr<Object> obj, float dt)
+{
+	//if(obj)
+	obj->Update(dt);
+	for (auto it = obj->children.begin(); it != obj->children.end(); it++)
+	{
+		if(*it)
+			UpdateObject(*it, dt);
+	}
+}
+
+
+
 void MyScene::Draw()
 {
+	if (screenRender.isOpen)
+	{
+		screenRender.RenderToFBO([&]() {
+			DrawScene();
+			});
+		screenRender.Render();
+	}
+	else
+	{
+		DrawScene();
+	}
+}
 
-	//NormalShadowMap();
-
-	//绘制每一个物体时，先将类中的该物体的所有相关矩阵，材质等信息传入shader中
-
-
+void MyScene::DrawScene()
+{
 	//绘制,包含缓冲区的清空，各种效果的开启（blend、 cull之类的）
 	glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
-	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);
+
+	//glEnable(GL_BLEND);
+	// 源在上， 目标在下， 混合公式Cs * Fs + Ct * (1 - Fs)
+	//glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+
 	glEnable(GL_DEPTH_TEST);
 	glEnable(GL_CULL_FACE);					//三维物体要开启背面剔除
+
+	glEnable(GL_PROGRAM_POINT_SIZE);
 
 	if (drawMode.isLine)
 	{
@@ -152,15 +264,19 @@ void MyScene::Draw()
 		glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
 	}
 
-	//glFrontFace(GL_CW);
-	//glCullFace(GL_FRONT);
+	renderQueue.Render(rootObject);
 
-	//glUseProgram(p1.p);						//启用着色器程序
+	skyBox.Render();
+	//RenderObject(rootObject);
 
-	map<string, Object*>::iterator objs_it;
-	for (objs_it = objects.begin(); objs_it != objects.end(); objs_it++)
+}
+
+void MyScene::RenderObject(shared_ptr<Object> obj)
+{
+	obj->Draw();
+	for (auto it = obj->children.begin(); it != obj->children.end(); it++)
 	{
-		(*objs_it).second->Draw();
+		if (*it)
+			RenderObject(*it);
 	}
-
 }
