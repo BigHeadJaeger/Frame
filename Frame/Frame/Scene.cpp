@@ -92,7 +92,9 @@ void MyScene::Init()
 
 	auto sphere = objectManager.SphereObject();
 	rootObject->AddChild(sphere);
-	sphere->GetComponent<MeshRenderer>()->material = MaterialManager::GetInstance().GetMaterial("metalgrid");
+	sphere->GetComponent<MeshRenderer>()->material = MaterialManager::GetInstance().GetMaterial("none");
+
+	//sphere->GetComponent<MeshReference>()->vertexData.drawType = GL_POINTS;
 
 	//auto box2 = objectManager.BoxObject();
 	//rootObject->AddChild(box2);
@@ -248,6 +250,8 @@ void MyScene::DrawScene()
 
 	glEnable(GL_DEPTH_TEST);
 	glEnable(GL_CULL_FACE);					//三维物体要开启背面剔除
+
+	glEnable(GL_PROGRAM_POINT_SIZE);
 
 	if (drawMode.isLine)
 	{
