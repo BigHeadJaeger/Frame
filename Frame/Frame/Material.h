@@ -130,18 +130,49 @@ public:
         SetTextureBase("");
     }
 
-    void SetTextureMetallic(string fileName) { metalicTex = texManager.GetTexture(fileName); }
-    void SetTextureMetallic(shared_ptr<Texture> tex) { metalicTex = tex; }
+    void SetTextureMetallic(string fileName) 
+    {
+        metalicTex = texManager.GetTexture(fileName);
+        metalicTex->SettingTexture();
+    }
+    void SetTextureMetallic(shared_ptr<Texture> tex)
+    {
+        metalicTex = tex;
+        metalicTex->SettingTexture();
+    }
 
-    void SetTextureRoughness(string fileName) { roughnessTex = texManager.GetTexture(fileName); }
-    void SetTextureRoughness(shared_ptr<Texture> tex) { roughnessTex = tex; }
+    void SetTextureRoughness(string fileName)
+    {
+        roughnessTex = texManager.GetTexture(fileName);
+        roughnessTex->SettingTexture();
+    }
+    void SetTextureRoughness(shared_ptr<Texture> tex) 
+    {
+        roughnessTex = tex; 
+        roughnessTex->SettingTexture();
+    }
 
-    void SetTextureAO(string fileName) { aoTex = texManager.GetTexture(fileName); }
-    void SetTextureAO(shared_ptr<Texture> tex) { aoTex = tex; }
+    void SetTextureAO(string fileName)
+    {
+        aoTex = texManager.GetTexture(fileName); 
+        aoTex->SettingTexture();
+    }
+    void SetTextureAO(shared_ptr<Texture> tex) 
+    {
+        aoTex = tex; 
+        aoTex->SettingTexture();
+    }
 
-
-    void SetTextureNormal(string fileName) { normalTex = texManager.GetTexture(fileName); }
-    void SetTextureNormal(shared_ptr<Texture> tex) { normalTex = tex;  }
+    void SetTextureNormal(string fileName) 
+    {
+        normalTex = texManager.GetTexture(fileName);
+        normalTex->SettingTexture();
+    }
+    void SetTextureNormal(shared_ptr<Texture> tex) 
+    {
+        normalTex = tex;  
+        normalTex->SettingTexture();
+    }
 
     void SetRenderMode(RenderMode mode) { renderMode = mode; }
 

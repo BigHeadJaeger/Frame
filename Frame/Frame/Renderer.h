@@ -58,7 +58,7 @@ private:
 	bool isLighting;				// 是否接受光照
 	bool isShadow;					// 是否接受阴影
 private:
-	void InitVertexBuffer(VertexData& vertexData);
+	//void InitVertexBuffer(VertexData& vertexData);
 public:
 	MeshRenderer()
 	{

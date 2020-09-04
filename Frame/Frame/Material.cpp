@@ -12,4 +12,6 @@ void Material::SetTextureBase(string fileName)
     {
         baseTex = texManager.GetTexture(fileName);
     }
+    // 材质绑定的时候再设置纹理属性
+    baseTex->SettingTexture();
 }

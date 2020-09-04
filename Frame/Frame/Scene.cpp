@@ -90,6 +90,11 @@ void MyScene::Init()
 	box->GetComponent<MeshRenderer>()->material = MaterialManager::GetInstance().GetMaterial("oakfloor");
 	//box->isSelect = true;
 
+	auto box2 = objectManager.BoxObject();
+	rootObject->AddChild(box2);
+	box2->SetPosition(vec3(-2, 0, 0));
+	box2->GetComponent<MeshRenderer>()->material = MaterialManager::GetInstance().GetMaterial("metalgrid");
+
 	//auto grid2 = objectManager.GridObject(1, 1);
 	//rootObject->AddChild(grid2);
 	//grid2->SetPosition(vec3(-1, -0.5, 0));
@@ -206,8 +211,6 @@ void MyScene::UpdateObject(shared_ptr<Object> obj, float dt)
 
 void MyScene::Draw()
 {
-	
-
 	if (screenRender.isOpen)
 	{
 		screenRender.RenderToFBO([&]() {

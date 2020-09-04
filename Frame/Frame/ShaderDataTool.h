@@ -10,6 +10,7 @@ using namespace std;
 
 #include"Program.h"
 #include"VertexData.h"
+#include"Texture.h"
 
 class ShaderDataTool
 {
@@ -26,6 +27,7 @@ public:
 	void InitTextureWithFile(GLuint& texID, string texPath);
 	//传texture到shader中
 	void SetTexture(GLuint& texId, int num, GLenum texNum, string samplerName, weak_ptr<ShaderProgram> p);
+	//void SetTexture(shared_ptr<Texture> texture, int num, GLenum texNum, string samplerName, weak_ptr<ShaderProgram> p);
 	//根据不同类型的值用重载的方式传入shader中
 	void SetUniform(string&& valueName, mat4x4 value, weak_ptr<ShaderProgram> p);
 	void SetUniform(string&& valueName, mat3x3 value, weak_ptr<ShaderProgram> p);

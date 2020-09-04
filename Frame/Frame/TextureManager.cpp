@@ -3,7 +3,7 @@
 shared_ptr<Texture> TextureManager::InitTexture(string path)
 {
 	shared_ptr<Texture> texture = make_shared<Texture>();
-	texture->LoadTextureFromFile(path);
+	texture->LoadTexture(path);
 	textureMap.insert(make_pair(path, texture));
 	return texture;
 }
