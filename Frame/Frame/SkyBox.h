@@ -33,9 +33,11 @@ public:
 	// 绘制天空盒
 	void Render()
 	{
+		// 优化，最后再渲染天空盒，且只有在完全没有进行深度写入的地方进行天空盒的绘制
 		decltype(auto) tool = ShaderDataTool::GetInstance();
 		auto mainCamera = RenderFrameModel::GetInstance().GetMainCamera();
-		glDepthMask(GL_FALSE);
+		//glDepthMask(GL_FALSE);
+		glDepthFunc(GL_LEQUAL);
 		glDisable(GL_CULL_FACE);
 		auto shader = ShaderManager::GetInstance().GetShader("SF_SkyBox");
 		glUseProgram(shader->p);
@@ -52,7 +54,8 @@ public:
 		glDrawArrays(vertexData.drawType, 0, vertexData.totalVertex);
 		glBindVertexArray(0);
 		glUseProgram(0);
-		glDepthMask(GL_TRUE);
+		//glDepthMask(GL_TRUE);
+		glDepthFunc(GL_LESS);
 	}
 private:
 	// 将网格数据转化为openg使用的顶点数据

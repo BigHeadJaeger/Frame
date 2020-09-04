@@ -29,9 +29,15 @@ public:
     string name;
     vec4 baseColor = vec4(225, 225, 225, 255);      // 基础颜色值
     shared_ptr<Texture> baseTex;                    // 基础贴图
+
+    bool isSkyBox;
 public:
     void SetTextureBase(string fileName);
-    void SetTextureBase(shared_ptr<Texture> tex) { baseTex = tex; }
+    void SetTextureBase(shared_ptr<Texture> tex)
+    { 
+        baseTex = tex; 
+        baseTex->SettingTexture();
+    }
 
     // 每个材质有自己的方法将数据传输到shader中
     virtual void Transfer() = 0;
@@ -111,6 +117,68 @@ public:
     }
 };
 
+class SkyBoxMaterial : public Material
+{
+public:
+    GLuint texBoxID;
+public:
+    SkyBoxMaterial()
+    {
+        shader = ShaderManager::GetInstance().GetShader("SF_SkyBox");
+        glGenTextures(1, &texBoxID);
+    }
+    // 初始化六张图片（根据前缀自动按照1~6， 右左上下后前的顺序初始化， 文件名为 pathPreix + _1,2...）
+    void InitSkyBox(string pathPreix)
+    {
+        glBindTexture(GL_TEXTURE_CUBE_MAP, texBoxID);
+        int width, height, numChannels;
+        unsigned char* pResult;
+        for (size_t i = 0; i < 6; i++)
+        {
+            string imgPath = pathPreix + "_" + to_string(i + 1) + ".jpg";
+            pResult = SOIL_load_image(imgPath.c_str(), &width, &height, &numChannels, SOIL_LOAD_RGB);
+            if (pResult)
+            {
+                glTexImage2D(GL_TEXTURE_CUBE_MAP_POSITIVE_X + i, 0, GL_RGB, width, height, 0, GL_RGB, GL_UNSIGNED_BYTE, pResult);
+                SOIL_free_image_data(pResult);
+            }
+            else
+            {
+                cout << "the " + imgPath + " cubemap load failed" << endl;
+                SOIL_free_image_data(pResult);
+            }
+        }
+
+        glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+        glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+        glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
+        glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
+        glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_WRAP_R, GL_CLAMP_TO_EDGE);
+
+        glBindTexture(GL_TEXTURE_CUBE_MAP, 0);
+    }
+
+    // 分别初始化每一个面的值
+    void InitSkyBoxPostiveX(string path);
+    void InitSkyBoxNegativeX(string path);
+    void InitSkyBoxPostiveY(string path);
+    void InitSkyBoxNegativeY(string path);
+    void InitSkyBoxPostiveZ(string path);
+    void InitSkyBoxNegativeZ(string path);
+
+    void Transfer() override
+    {
+        decltype(auto) tool = ShaderDataTool::GetInstance();
+        //GLuint texLocation;
+        //glActiveTexture(0);							//激活纹理单元(纹理位置)。
+        //glBindTexture(GL_TEXTURE_CUBE_MAP, texBoxID);				//将纹理对象绑定到当前激活的纹理单元处
+        ////接下来指定采样器对应哪个纹理单元
+        //texLocation = glGetUniformLocation(shader.lock()->p, "cubemap");	//获取采样器的location
+        //glUniform1i(texLocation, 0);									//指定采样器对应当前绑定的纹理单元0
+        tool.SetTextureCube(texBoxID, 0, GL_TEXTURE0, "cubemap", shader);
+    }
+};
+
 class PBRMaterial :public Material
 {
 public:
@@ -125,6 +193,7 @@ public:
 public:
     PBRMaterial()
     {
+        isSkyBox = true;
         renderMode = RenderMode::Opaque;
         shader = ShaderManager::GetInstance().GetShader("SF_PBR");
         SetTextureBase("");
@@ -246,68 +315,74 @@ public:
         }
         else
             tool.SetUniform("isTextureNormal", false, shader);
+
+        if (!isSkyBox)
+        {
+            tool.SetUniform("isSkyBox", false, shader);
+            return;
+        }
+        auto skyBox = RenderFrameModel::GetInstance().GetSkyBoxMaterial();
+        if (skyBox)
+        {
+            tool.SetUniform("isSkyBox", true, shader);
+            tool.SetTextureCube(skyBox->texBoxID, 10, GL_TEXTURE10, "skyBoxMap", shader);
+        }
+        else
+        {
+            tool.SetUniform("isSkyBox", false, shader);
+        }
     }
 };
 
-class SkyBoxMaterial : public Material
+
+
+class EnvironmentMapping : public Material
 {
-private:
-    GLuint texBoxID;
-
 public:
-    SkyBoxMaterial()
-    {
-        shader = ShaderManager::GetInstance().GetShader("SF_SkyBox");
-        glGenTextures(1, &texBoxID);
-    }
-    // 初始化六张图片（根据前缀自动按照1~6， 右左上下后前的顺序初始化， 文件名为 pathPreix + _1,2...）
-    void InitSkyBox(string pathPreix)
-    {
-        glBindTexture(GL_TEXTURE_CUBE_MAP, texBoxID);
-        int width, height, numChannels;
-        unsigned char* pResult;
-        for (size_t i = 0; i < 6; i++)
-        {
-            string imgPath = pathPreix + "_" + to_string(i + 1) + ".jpg";
-            pResult = SOIL_load_image(imgPath.c_str(), &width, &height, &numChannels, SOIL_LOAD_RGB);
-            if (pResult)
-            {
-                glTexImage2D(GL_TEXTURE_CUBE_MAP_POSITIVE_X + i, 0, GL_RGB, width, height, 0, GL_RGB, GL_UNSIGNED_BYTE, pResult);
-                SOIL_free_image_data(pResult);
-            }
-            else
-            {
-                cout << "the " + imgPath + " cubemap load failed" << endl;
-                SOIL_free_image_data(pResult);
-            }
-        }
+    float ratio = 1.f / 1.52f;
+    int mode = 0;
 
-        glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-        glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-        glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
-        glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
-        glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_WRAP_R, GL_CLAMP_TO_EDGE);
-
-        glBindTexture(GL_TEXTURE_CUBE_MAP, 0);
+    shared_ptr<Texture> aoTex;
+public:
+    EnvironmentMapping()
+    {
+        isSkyBox = true;
+        shader = ShaderManager::GetInstance().GetShader("SF_ReflectAndRefract");
     }
 
-    // 分别初始化每一个面的值
-    void InitSkyBoxPostiveX(string path);
-    void InitSkyBoxNegativeX(string path);
-    void InitSkyBoxPostiveY(string path);
-    void InitSkyBoxNegativeY(string path);
-    void InitSkyBoxPostiveZ(string path);
-    void InitSkyBoxNegativeZ(string path);
+    void SetMode(int _mode)
+    {
+        mode = _mode;
+    }
+
+    void SetTextureAO(string fileName)
+    {
+        aoTex = texManager.GetTexture(fileName);
+        aoTex->SettingTexture();
+    }
 
     void Transfer() override
     {
         decltype(auto) tool = ShaderDataTool::GetInstance();
-        GLuint texLocation;
-        glActiveTexture(0);							//激活纹理单元(纹理位置)。
-        glBindTexture(GL_TEXTURE_CUBE_MAP, texBoxID);				//将纹理对象绑定到当前激活的纹理单元处
-        //接下来指定采样器对应哪个纹理单元
-        texLocation = glGetUniformLocation(shader.lock()->p, "cubemap");	//获取采样器的location
-        glUniform1i(texLocation, 0);									//指定采样器对应当前绑定的纹理单元0
-        //tool.SetTexture(texBoxID, 0, GL_TEXTURE0, "cubemap", shader);
+        tool.SetUniform("mode", mode, shader);
+        tool.SetUniform("ratio", ratio, shader);
+        tool.SetTexture(baseTex->id, 0, GL_TEXTURE0, "baseColorMap", shader);
+        tool.SetTexture(aoTex->id, 1, GL_TEXTURE1, "AOMap", shader);
+
+        if (!isSkyBox)
+        {
+            tool.SetUniform("isSkyBox", false, shader);
+            return;
+        }
+        auto skyBox = RenderFrameModel::GetInstance().GetSkyBoxMaterial();
+        if (skyBox)
+        {
+            tool.SetUniform("isSkyBox", true, shader);
+            tool.SetTextureCube(skyBox->texBoxID, 10, GL_TEXTURE10, "skyBoxMap", shader);
+        }
+        else
+        {
+            tool.SetUniform("isSkyBox", false, shader);
+        }
     }
 };

@@ -14,7 +14,7 @@ void main()
 	vec4 pos = projection * view * vec4(positionL, 1.0);
 	//pos.w = 1.0;
 	//pos = projection * pos;
-	gl_Position = pos;
-	//gl_Position = vec4(0.5,0,0, 1.0);
+	gl_Position = pos.xyww;			// 让天空盒的深度始终为1（透视除法在顶点着色器之后进行）
+	//gl_Position = vec4(0.5, 0, 0, 1.0);
 	texcoordF = positionL;			// 顶点位置直接作为三维的纹理坐标
 }

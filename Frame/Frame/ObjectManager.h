@@ -38,6 +38,7 @@ public:
 
 	shared_ptr<Object> GridObject(float width = 1, float height = 1, int m = 10, int n = 10);
 	shared_ptr<Object> BoxObject(float width = 1, float height = 1, float depth = 1);
+	shared_ptr<Object> SphereObject(float radius = 1, int slice = 40, int stack = 40);
 
 	//void RemoveObject(shared_ptr<Object> object)
 	//{

@@ -50,6 +50,9 @@ uniform float numRoughness;
 uniform sampler2D aoMap;
 uniform bool isTextureAO;
 
+uniform bool isSkyBox;
+uniform samplerCube skyBoxMap;
+
 uniform int renderMode;
 
 //光照信息
@@ -76,6 +79,10 @@ float GeometrySmith(vec3 N,vec3 L,vec3 E,float roughness);
 vec3 Fresnel(float cosTheta,vec3 F0);
 
 vec3 GetNormalFromMap();
+
+vec4 GetSkyBoxColor(vec3 reflectV);
+
+vec3 WorldViewObjDir();
 
 void main() 
 {
@@ -249,8 +256,30 @@ vec3 CalculateBRDF(vec3 lightDir, vec3 radiance, vec3 albedo, vec3 N, float roug
 	float NdotL = max(dot(N, lightDir), 0.0);
 	colorBRDF += (KD * albedo / PI + specular) * radiance * NdotL;
 
-	vec3 ambient = vec3(0.03) * albedo * ao;
+
+	vec3 skyBoxColor = vec3(1);
+	if(isSkyBox)
+	{
+		vec3 sampleV = reflect(WorldViewObjDir(), normalize(normalW));
+		skyBoxColor = GetSkyBoxColor(sampleV).rgb;
+	}
+	
+
+	vec3 ambient = vec3(0.03) * albedo * ao * skyBoxColor;
 	colorBRDF = ambient + colorBRDF;
 
 	return colorBRDF;
+}
+
+vec4 GetSkyBoxColor(vec3 reflectV)
+{
+	vec4 res = vec4(texture(skyBoxMap, reflectV).rgb, 1.0);
+	return res;
+}
+
+// 获取世界坐标下的视点到顶点的向量
+vec3 WorldViewObjDir()
+{
+	vec3 res = normalize(posW - eyePos);
+	return res;
 }

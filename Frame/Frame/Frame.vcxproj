@@ -212,6 +212,8 @@
     <None Include="shader\SF_PBR.v" />
     <None Include="shader\SF_Phong.f" />
     <None Include="shader\SF_Phong.v" />
+    <None Include="shader\SF_ReflectAndRefract.f" />
+    <None Include="shader\SF_ReflectAndRefract.v" />
     <None Include="shader\SF_ScreenRender.f" />
     <None Include="shader\SF_ScreenRender.v" />
     <None Include="shader\SF_SimpleColor.f" />

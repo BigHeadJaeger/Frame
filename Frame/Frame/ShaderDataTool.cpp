@@ -31,6 +31,15 @@ void ShaderDataTool::SetTexture(GLuint& texId, int num, GLenum texNum, string sa
 	glUniform1i(texLocation, num);									//指定采样器对应当前绑定的纹理单元0
 }
 
+void ShaderDataTool::SetTextureCube(GLuint& texId, int num, GLenum texNum, string samplerName, weak_ptr<ShaderProgram> p)
+{
+	GLuint texLocation;
+	glActiveTexture(texNum);
+	glBindTexture(GL_TEXTURE_CUBE_MAP, texId);
+	texLocation = glGetUniformLocation(p.lock()->p, samplerName.c_str());
+	glUniform1i(texLocation, num);
+}
+
 //void ShaderDataTool::SetTexture(shared_ptr<Texture> texture, int num, GLenum texNum, string samplerName, weak_ptr<ShaderProgram> p)
 //{
 //	texture->SettingTexture();

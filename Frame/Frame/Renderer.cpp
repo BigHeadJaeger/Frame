@@ -94,6 +94,7 @@ void MeshRenderer::DrawObject()
 	SetCamera(shader);
 	SetTransform(shader);
 	SetLight(shader);
+
 	material->Transfer();
 	glDrawArrays(meshReference->vertexData.drawType, 0, meshReference->vertexData.totalVertex);
 	glBindVertexArray(0);

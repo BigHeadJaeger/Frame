@@ -26,3 +26,16 @@ shared_ptr<Object> ObjectManager::BoxObject(float width, float height, float dep
 	bR->material = MaterialManager::GetInstance().GetMaterial("DefaultSpecular");
 	return box;
 }
+
+shared_ptr<Object> ObjectManager::SphereObject(float radius, int slice, int stack)
+{
+	shared_ptr<Object> sphere = make_shared<Object>();
+	sphere->SetName("sphere" + to_string(sphereCount));
+	sphereCount++;
+	sphere->AddComponent<Transform>();
+	auto meshReference = sphere->AddComponent<MeshReference>();
+	meshReference->CreateSphere(radius, slice, stack);
+	auto bR = sphere->AddComponent<MeshRenderer>();
+	bR->material = MaterialManager::GetInstance().GetMaterial("DefaultSpecular");
+	return sphere;
+}

@@ -84,16 +84,20 @@ void MyScene::Init()
 	//rootObject->AddChild(grid2);
 	//grid2MRE->material = MaterialManager::GetInstance().GetMaterial("defaultSpecular");
 
-	auto box = objectManager.BoxObject();
-	rootObject->AddChild(box);
-	box->SetPosition(vec3(0, 0, 0));
-	box->GetComponent<MeshRenderer>()->material = MaterialManager::GetInstance().GetMaterial("oakfloor");
+	//auto box = objectManager.BoxObject();
+	//rootObject->AddChild(box);
+	//box->SetPosition(vec3(0, 0, 0));
+	//box->GetComponent<MeshRenderer>()->material = MaterialManager::GetInstance().GetMaterial("environment");
 	//box->isSelect = true;
 
-	auto box2 = objectManager.BoxObject();
-	rootObject->AddChild(box2);
-	box2->SetPosition(vec3(-2, 0, 0));
-	box2->GetComponent<MeshRenderer>()->material = MaterialManager::GetInstance().GetMaterial("metalgrid");
+	auto sphere = objectManager.SphereObject();
+	rootObject->AddChild(sphere);
+	sphere->GetComponent<MeshRenderer>()->material = MaterialManager::GetInstance().GetMaterial("metalgrid");
+
+	//auto box2 = objectManager.BoxObject();
+	//rootObject->AddChild(box2);
+	//box2->SetPosition(vec3(-2, 0, 0));
+	//box2->GetComponent<MeshRenderer>()->material = MaterialManager::GetInstance().GetMaterial("metalgrid");
 
 	//auto grid2 = objectManager.GridObject(1, 1);
 	//rootObject->AddChild(grid2);
@@ -108,17 +112,18 @@ void MyScene::Init()
 	//grid3->GetComponent<MeshRenderer>()->material = MaterialManager::GetInstance().GetMaterial("TransparentSpecular");
 	//grid3->isSelect = true;
 
-	auto grid1 = objectManager.GridObject(10, 10);
-	rootObject->AddChild(grid1);
-	grid1->SetPosition(vec3(0, -1, 0));
-	grid1->GetComponent<MeshRenderer>()->material = MaterialManager::GetInstance().GetMaterial("metalgrid");
+	//auto grid1 = objectManager.GridObject(10, 10);
+	//rootObject->AddChild(1grid1);
+	//grid1->SetPosition(vec3(0, -1, 0));
+	//grid1->GetComponent<MeshRenderer>()->material = MaterialManager::GetInstance().GetMaterial("metalgrid");
 
 	//grid2MRE->material = specularMa;
 	
 	//decltype(auto) modelGenerator = ModelGenerator::GetInstance();
 	//auto testModel = modelGenerator.Create(file::GetResPath("Model/nanosuit/nanosuit.obj"));
 	//testModel->transform->SetScaler(vec3(0.1));
-
+	//testModel->SetPosition(vec3(2, 0, 0));
+	//testModel->transform->SetRotation(vec3(0, -90, 0));
 	//rootObject->AddChild(testModel);
 }
 
@@ -154,7 +159,7 @@ void MyScene::MaterialInit()
 	auto material1 = materialManager.CreateMaterial<PBRMaterial>("metalgrid");
 	material1->SetTextureBase(file::GetResPath("Material/metalgrid/basecolor.png"));
 	material1->SetTextureNormal(file::GetResPath("Material/metalgrid/normal.png"));
-	material1->SetTextureMetallic(file::GetResPath("Material/metalgrid/metallic.png"));
+	material1->SetTextureMetallic(file::GetResPath("Material/metalgrid/metalic.png"));
 	material1->SetTextureAO(file::GetResPath("Material/metalgrid/AO.png"));
 	material1->SetTextureRoughness(file::GetResPath("Material/metalgrid/roughness.png"));
 
@@ -167,6 +172,11 @@ void MyScene::MaterialInit()
 
 	auto material4 = materialManager.CreateMaterial<PBRMaterial>("oakfloor");
 	material4->SetTextureBase(file::GetResPath("Material/oakfloor/basecolor.png"));
+
+	auto material5 = materialManager.CreateMaterial<EnvironmentMapping>("environment");
+	material5->SetMode(0);
+	material5->SetTextureBase(file::GetResPath("Material/metalsheet/basecolor.png"));
+	material5->SetTextureAO(file::GetResPath("Material/metalsheet/AO.png"));
 }
 
 void MyScene::SkyBoxInit()
@@ -174,6 +184,8 @@ void MyScene::SkyBoxInit()
 	decltype(auto) materialManager = MaterialManager::GetInstance();
 	auto skyBoxMaterial = materialManager.CreateMaterial<SkyBoxMaterial>("SkyBox1");
 	skyBoxMaterial->InitSkyBox(file::GetResPath("Skybox/skybox1/skybox1"));
+
+	RenderFrameModel::GetInstance().SetSkyBoxMaterial(skyBoxMaterial);
 
 	skyBox.InitSkyBox(skyBoxMaterial);
 }
@@ -248,9 +260,9 @@ void MyScene::DrawScene()
 		glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
 	}
 
-	skyBox.Render();
-
 	renderQueue.Render(rootObject);
+
+	skyBox.Render();
 	//RenderObject(rootObject);
 
 }

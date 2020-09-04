@@ -247,5 +247,11 @@
     <None Include="shader\SF_SkyBox.f">
       <Filter>Shader</Filter>
     </None>
+    <None Include="shader\SF_ReflectAndRefract.v">
+      <Filter>Shader</Filter>
+    </None>
+    <None Include="shader\SF_ReflectAndRefract.f">
+      <Filter>Shader</Filter>
+    </None>
   </ItemGroup>
 </Project>

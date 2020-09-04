@@ -13,6 +13,9 @@ uniform float shininess;
 uniform sampler2D albedoMap;
 uniform vec4 baseColor;
 
+uniform bool isSkyBox;
+uniform samplerCube skyBoxMap;
+
 struct DirLight
 {
 	bool isAble;
@@ -36,6 +39,20 @@ struct PointLight
 uniform DirLight dirLights[DIR_LIGHT_NUM];
 #define POINT_LIGHT_NUM 10
 uniform PointLight pointLights[POINT_LIGHT_NUM];
+
+vec4 GetSkyBoxColor(vec3 reflectV)
+{
+	vec4 res = vec4(texture(skyBoxMap, reflectV).rgb, 1.0);
+	return res;
+	//return vec4(1, 0, 0, 1);
+}
+
+// 获取世界坐标下的视点到顶点的向量
+vec3 WorldViewObjDir()
+{
+	vec3 res = normalize(positionW - eyePos);
+	return res;
+}
 
 vec4 CalDirLight(DirLight dirLight, vec3 normal, vec3 viewDir)
 {
@@ -90,7 +107,6 @@ vec4 DefaultSpecular(vec3 posW, vec3 normalW)
 			color += CalPointLight(pointLights[i], normal, viewDir, posW);
 		}
 	}
-			
 
 	return color;
 }
@@ -98,7 +114,13 @@ vec4 DefaultSpecular(vec3 posW, vec3 normalW)
 void main()
 {
 	vec4 res = DefaultSpecular(positionW, normalW);
-	if(res.a < 0.05)
-		discard;
+	/*if(res.a < 0.05)
+		discard;*/
+	/*if(isSkyBox)
+	{
+		vec3 viewObjRe = reflect(WorldViewObjDir(), normalize(normalW));
+		vec4 skyBoxRes = GetSkyBoxColor(viewObjRe);
+		res *= skyBoxRes;
+	}*/
 	 FragColor = res;
 }

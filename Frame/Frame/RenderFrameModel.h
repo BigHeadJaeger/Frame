@@ -13,6 +13,7 @@ class MyScene;
 class LightComponent;
 class Object;
 class ObjectManager;
+class SkyBoxMaterial;
 
 class RenderFrameModel : public DataModel
 {
@@ -30,11 +31,18 @@ public:
 	//map<string, weak_ptr<Camera>>cameraList;
 	std::vector<shared_ptr<LightComponent>> lightList;
 	weak_ptr<Camera> mainCamera;
+
+	weak_ptr<SkyBoxMaterial> skyBoxMaterial;
 public:
 	void SetCurrentScene(shared_ptr<MyScene> scene) { currentScene = scene; }
 	void SetMainCamera(shared_ptr<Camera> camera)
 	{
 		mainCamera = camera;
+	}
+
+	void SetSkyBoxMaterial(shared_ptr<SkyBoxMaterial> _skyBox)
+	{
+		skyBoxMaterial = _skyBox;
 	}
 
 	void PushLight(shared_ptr<LightComponent> lightComponent)
@@ -65,4 +73,11 @@ public:
 	shared_ptr<Object> GetSceneRoot();
 
 	ObjectManager& GetCurrentObjectManager();
+
+	shared_ptr<SkyBoxMaterial> GetSkyBoxMaterial()
+	{
+		if (!skyBoxMaterial.expired())
+			return skyBoxMaterial.lock();
+		return nullptr;
+	}
 };
