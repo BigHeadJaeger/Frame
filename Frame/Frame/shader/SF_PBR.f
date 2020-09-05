@@ -122,6 +122,18 @@ void main()
 	F0 = mix(F0, albedo, metallic);
 
 	vec3 color = vec3(0.0);
+	vec3 ambient = vec3(0.03) * albedo * ao;
+
+	// 先计算天空盒贡献的颜色
+	vec3 skyBoxColor = vec3(1);
+	if(isSkyBox)
+	{
+		vec3 sampleV = reflect(WorldViewObjDir(), normalize(normalW));
+		sampleV = normalize(sampleV);
+		skyBoxColor = GetSkyBoxColor(sampleV).rgb;
+		ambient *= skyBoxColor;
+	}
+
 	for(int i = 0; i < POINT_LIGHT_NUM; i++)
 	{
 		if(pointLights[i].isAble)
@@ -145,6 +157,8 @@ void main()
 			color += CalculateBRDF(lightDir, radiance, albedo, N, roughness, ao, metallic);
 		}
 	}
+
+	color += ambient;
 
 	//伽马校正
 	color = color / (color + vec3(1.0));
@@ -257,16 +271,16 @@ vec3 CalculateBRDF(vec3 lightDir, vec3 radiance, vec3 albedo, vec3 N, float roug
 	colorBRDF += (KD * albedo / PI + specular) * radiance * NdotL;
 
 
-	vec3 skyBoxColor = vec3(1);
+	/*vec3 skyBoxColor = vec3(1);
 	if(isSkyBox)
 	{
 		vec3 sampleV = reflect(WorldViewObjDir(), normalize(normalW));
 		skyBoxColor = GetSkyBoxColor(sampleV).rgb;
-	}
+	}*/
 	
 
-	vec3 ambient = vec3(0.03) * albedo * ao * skyBoxColor;
-	colorBRDF = ambient + colorBRDF;
+	/*vec3 ambient = vec3(0.03) * albedo * ao;
+	colorBRDF = ambient + colorBRDF;*/
 
 	return colorBRDF;
 }
