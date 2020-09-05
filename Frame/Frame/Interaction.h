@@ -11,6 +11,9 @@ enum KEYNAME
 	BTNS,
 	BTND,
 	BTN1,
+	BTN2,
+	BTN3,
+	BTN4,
 	BTNC,
 	NONE,
 };

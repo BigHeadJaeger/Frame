@@ -12,6 +12,7 @@ void key_callback(GLFWwindow* window, int key, int scancode, int action, int mod
 void mouse_button_callback(GLFWwindow* window, int button, int action, int mods);
 void cursor_position_callback(GLFWwindow* window, double xpos, double ypos);
 void mouse_scroll_callback(GLFWwindow* window, double xoffset, double yoffset);
+void framebuffer_size_callback(GLFWwindow* window, int width, int height);
 
 //MyScene scene;
 
@@ -22,9 +23,6 @@ GLFWwindow* window;
 
 int main(void)
 {
-	
-
-
 	//初始化glfw
 	if (!glfwInit())
 		return -1;
@@ -52,6 +50,7 @@ int main(void)
 	glfwSetCursorPosCallback(window, cursor_position_callback);		//鼠标指针事件
 
 	glfwSetScrollCallback(window, mouse_scroll_callback);			// 鼠标滚轮事件
+	glfwSetFramebufferSizeCallback(window, framebuffer_size_callback);
 
 
 	//创建场景
@@ -132,6 +131,31 @@ void key_callback(GLFWwindow* window, int key, int scancode, int action, int mod
 		scene->drawMode.isLine = !scene->drawMode.isLine;
 			});
 
+	if (key == GLFW_KEY_2 && action == GLFW_PRESS)
+	{
+		scene->screenRender.isOpen = !scene->screenRender.isOpen;
+		scene->screenRender.SetScreenType(SCREEN_RENDER_TYPE::INVERSE_COLOR);
+	}
+
+	if (key == GLFW_KEY_3 && action == GLFW_PRESS)
+	{
+		scene->screenRender.isOpen = !scene->screenRender.isOpen;
+		scene->screenRender.SetScreenType(SCREEN_RENDER_TYPE::KERNEL);
+		scene->screenRender.SetSharpenKernel();
+	}
+
+	if (key == GLFW_KEY_4 && action == GLFW_PRESS)
+	{
+		scene->screenRender.isOpen = !scene->screenRender.isOpen;
+		scene->screenRender.SetScreenType(SCREEN_RENDER_TYPE::KERNEL);
+		scene->screenRender.SetBlurKernel();
+	}
+
+	if (key == GLFW_KEY_0 && action == GLFW_PRESS)
+	{
+		scene->screenRender.isOpen = false;
+	}
+
 	if (key == GLFW_KEY_ESCAPE && action == GLFW_PRESS)
 	{
 		glfwSetWindowShouldClose(window, true);
@@ -199,4 +223,9 @@ void mouse_scroll_callback(GLFWwindow* window, double xoffset, double yoffset)
 	{
 		mainCamera->fov = MAXFOV;
 	}
+}
+
+void framebuffer_size_callback(GLFWwindow* window, int width, int height)
+{
+	glViewport(0, 0, width, height);
 }

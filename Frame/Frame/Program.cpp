@@ -61,18 +61,25 @@ char * ShaderProgram::textFileRead(const char * fn)
 	return content;
 }
 
-void ShaderProgram::SetShader(const char*VSFile, const char*FSFile)
+void ShaderProgram::SetShader(const char*VSFile, const char*FSFile, const char* GSFile)
 {
-	char*vs, *fs;
+	char*vs, *fs, *gs;
+	const char* vv;
+	const char* ff;
+	const char* gg;
+	//创建一个shader程序
+	p = glCreateProgram();
 	//根据参数确定产生什么着色器
 	v = glCreateShader(GL_VERTEX_SHADER);
 	f = glCreateShader(GL_FRAGMENT_SHADER);
+
+	
 	//读取shader到字符串
 	vs = textFileRead(VSFile);
 	fs = textFileRead(FSFile);
 
-	const char*vv = vs;
-	const char*ff = fs;
+	vv = vs;
+	ff = fs;
 	//为产生的buffer指定shader源
 	glShaderSource(v, 1, &vv, NULL);
 	glShaderSource(f, 1, &ff, NULL);
@@ -85,15 +92,24 @@ void ShaderProgram::SetShader(const char*VSFile, const char*FSFile)
 
 	printShaderInfoLog(v);
 	printShaderInfoLog(f);
-	//创建一个shader程序
-	p = glCreateProgram();
+
+	const char* temp = "";
+	if (*GSFile != *temp)
+	{
+		g = glCreateShader(GL_GEOMETRY_SHADER);
+		gs = textFileRead(GSFile);
+		gg = gs;
+		glShaderSource(g, 1, &gg, NULL);
+		free(gs);
+		glCompileShader(g);
+		printShaderInfoLog(g);
+		glAttachShader(p, g);
+	}
+
 	//将两个着色器绑定到shader程序上
 	glAttachShader(p, v);
 	glAttachShader(p, f);
 	//链接shader程序到OpenGL程序上
 	glLinkProgram(p);
-
-
 	printProgramInfoLog(p);
-
 }

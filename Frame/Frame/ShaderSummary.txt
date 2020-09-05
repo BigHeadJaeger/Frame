@@ -1,0 +1,22 @@
+uniform mat4 world;
+uniform mat4 worldViewProj;
+uniform mat4 worldInvTranspose;
+
+
+
+
+
+// 获取世界坐标下的视点到顶点的向量
+vec3 WorldViewObjDir()
+
+// 模型空间到世界空间位置变换
+vec4 ModelToWorld()
+
+// 模型空间到相机空间位置变换
+vec4 ModelToView()
+
+// 模型空间到裁剪空间
+vec4 ModelToClip()
+
+// 物体世界坐标中的法线
+vec3 ObjWorldNormal()

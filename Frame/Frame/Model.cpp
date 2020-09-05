@@ -3,7 +3,7 @@
 bool Model::LoadModel(string _path)
 {
 	path = _path;
-	auto index = path.find_last_of('\\');
+	auto index = path.find_last_of('/');
 	auto fullName = path.substr(index + 1);
 	name = fullName.substr(0, fullName.find_last_of('.'));
 
@@ -139,8 +139,8 @@ void Model::LoadMaterialTexture(aiMaterial* mat, aiTextureType type, shared_ptr<
 		aiString str;
 		mat->GetTexture(type, 0, &str);
 
-		string prefix = path.substr(0, path.find_last_of('\\'));
-		string absolutePath = prefix +"\\" + str.C_Str();
+		string prefix = path.substr(0, path.find_last_of('/'));
+		string absolutePath = prefix +"/" + str.C_Str();
 
 		auto texture = textureManager.GetTexture(absolutePath);
 		//return;

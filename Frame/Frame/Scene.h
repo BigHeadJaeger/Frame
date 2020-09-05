@@ -2,11 +2,11 @@
 #include<map>
 using namespace std;
 #include"ObjectManager.h"
-#include"Object.h"
 #include"RenderFrameModel.h"
-//#include"ParticleGroup.h"
-//#include"MPSWaterParticleGroup.h"
 #include"Interaction.h"
+#include"RenderQueue.h"
+#include"ScreenRender.h"
+#include"SkyBox.h"
 
 struct DrawMode
 {
@@ -15,16 +15,9 @@ struct DrawMode
 class MyScene
 {
 private:
-	//各种场景信息（相机、材质、灯光、各种物体的各种矩阵）
-	//map<string, Object*> objects;
-	//map<string, map<string, shared_ptr<Object>>> objectManager;
-	
-	//map<string, shared_ptr<Object>> objects;
-
-	
+	RenderQueue renderQueue;
 public:
 	map<KEYNAME, Key> keys;
-
 	Mouse mouse;
 
 	DrawMode drawMode;
@@ -33,8 +26,10 @@ public:
 
 	// 当前场景的根物体
 	shared_ptr<Object> rootObject;
-	//---------------------------------------------------------------------------------
 
+	ScreenRender screenRender;
+
+	SkyBox skyBox;
 private:
 
 public:
@@ -46,11 +41,6 @@ public:
 		rootObject = root;
 		root->SetName("scene");
 		objectManager.InsertObject(root);
-		//shared_ptr<Object> rootObject(new Object);
-		////root = rootObject;s
-		//rootObject->parent.reset();
-		//rootObject->name = "scene";
-		//objects.insert(make_pair(rootObject->name, rootObject));
 	}
 
 	~MyScene()
@@ -71,8 +61,13 @@ public:
 	void InitKeys();
 	void ModelInit();
 	void MaterialInit();
+	void SkyBoxInit();
+	// 初始化屏幕渲染
+	void ScreenRenderInit();
 
 	void Update(float& dt);			//需要动画时，计算各种矩阵（暂时不传入shader中）
-	void Draw();					//绘制场景
+	void Draw();					// 总的绘制（包括场景绘制， 屏幕渲染等）
+
+	void DrawScene();				// 绘制场景
 private:
 };

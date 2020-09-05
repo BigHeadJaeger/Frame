@@ -8,7 +8,7 @@
 using namespace std;
 #include"Renderer.h"
 #include"LightComponent.h"
-#include"ObjectManager.h"
+//#include"ObjectManager.h"
 //#include"MarchingCube.h"
 //#include"DistributeFun.h"
 //#include"Component.h"
@@ -33,7 +33,7 @@ public:
 	shared_ptr<Transform> transform;
 
 	weak_ptr<Object> parent;
-	list<weak_ptr<Object>> children;
+	list<shared_ptr<Object>> children;
 
 	bool isSelect;
 public:
@@ -46,6 +46,7 @@ public:
 
 	~Object()
 	{
+		cout << "object " + name + " destroy" << endl;
 	}
 
 	void Update(float dt)
@@ -112,10 +113,6 @@ public:
 		}
 		children.push_back(obj);
 		obj->parent = self_ptr;
-		
-		// 讲一个物体加入树形结构中时则将其保存在manager中
-		decltype(auto) manager = RenderFrameModel::GetInstance().GetCurrentObjectManager();
-		manager.InsertObject(obj);
 	}
 
 	// 自身从父节点上移除
@@ -130,11 +127,9 @@ public:
 		auto it = parent.lock()->children.begin();
 		while (it != parent.lock()->children.end())
 		{
-			if (it->lock() == shared_from_this())
+			if ((*it) == shared_from_this())
 			{
 				it = parent.lock()->children.erase(it);
-				decltype(auto) manager = RenderFrameModel::GetInstance().GetCurrentObjectManager();
-				manager.RemoveObject(shared_from_this());
 			}
 			else
 				it++;
@@ -149,14 +144,8 @@ public:
 		name = _name;
 	}
 
-	void SetPosition(vec3&& pos)
-	{
-		transform->SetPosition(pos);
-	}
-	void SetPosition(vec3& pos)
-	{
-		transform->SetPosition(pos);
-	}
+	void SetPosition(vec3&& pos) { transform->SetPosition(pos); }
+	void SetPosition(vec3& pos) { transform->SetPosition(pos); }
 
 public:
 	//Get

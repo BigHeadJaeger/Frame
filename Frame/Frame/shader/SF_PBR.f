@@ -21,7 +21,9 @@ struct PointLight
 	vec3 position;
 	vec3 color;
 	float radius;
-	float attenuation;
+	float constant;
+	float linear;
+	float quadratic;
 };
 
 //阴影贴图纹理采样器
@@ -48,6 +50,11 @@ uniform float numRoughness;
 uniform sampler2D aoMap;
 uniform bool isTextureAO;
 
+uniform bool isSkyBox;
+uniform samplerCube skyBoxMap;
+
+uniform int renderMode;
+
 //光照信息
 #define DIR_LIGHT_NUM 10
 uniform DirLight dirLights[DIR_LIGHT_NUM];
@@ -72,6 +79,10 @@ float GeometrySmith(vec3 N,vec3 L,vec3 E,float roughness);
 vec3 Fresnel(float cosTheta,vec3 F0);
 
 vec3 GetNormalFromMap();
+
+vec4 GetSkyBoxColor(vec3 reflectV);
+
+vec3 WorldViewObjDir();
 
 void main() 
 {
@@ -115,10 +126,10 @@ void main()
 	{
 		if(pointLights[i].isAble)
 		{
-			vec3 lightColor = pointLights[i].color * vec3(255);
+			vec3 lightColor = pointLights[i].color;
 			vec3 lightDir = normalize(pointLights[i].position - posW);
 			float distance = length(pointLights[i].position - posW);
-			float attenuation = 1.0 / (distance * distance) * pointLights[i].attenuation;			//计算衰减
+			float attenuation = 1.0 / (pointLights[i].constant + pointLights[i].linear * distance + (distance * distance) * pointLights[i].quadratic);
 			vec3 radiance = lightColor * attenuation;
 			color += CalculateBRDF(lightDir, radiance, albedo, N, roughness, ao, metallic);
 		}
@@ -128,7 +139,7 @@ void main()
 	{
 		if(dirLights[i].isAble)
 		{
-			vec3 lightColor = dirLights[i].color * vec3(255);
+			vec3 lightColor = dirLights[i].color;
 			vec3 lightDir = normalize(-dirLights[i].dir);
 			vec3 radiance = lightColor;
 			color += CalculateBRDF(lightDir, radiance, albedo, N, roughness, ao, metallic);
@@ -151,7 +162,11 @@ void main()
 	}*/
 	color*=visibility;
 
-    FragColor = vec4(color, 1.0); 
+	// 如果是完全透明且渲染模式是镂空，则舍弃像素
+	if(renderMode != 0 && texture(albedoMap, TexCoord).a < 0.1)
+		discard;
+	
+    FragColor = vec4(color, texture(albedoMap, TexCoord).a); 
 } 
 
 //正态分布函数
@@ -241,8 +256,30 @@ vec3 CalculateBRDF(vec3 lightDir, vec3 radiance, vec3 albedo, vec3 N, float roug
 	float NdotL = max(dot(N, lightDir), 0.0);
 	colorBRDF += (KD * albedo / PI + specular) * radiance * NdotL;
 
-	vec3 ambient = vec3(0.03) * albedo * ao;
+
+	vec3 skyBoxColor = vec3(1);
+	if(isSkyBox)
+	{
+		vec3 sampleV = reflect(WorldViewObjDir(), normalize(normalW));
+		skyBoxColor = GetSkyBoxColor(sampleV).rgb;
+	}
+	
+
+	vec3 ambient = vec3(0.03) * albedo * ao * skyBoxColor;
 	colorBRDF = ambient + colorBRDF;
 
 	return colorBRDF;
+}
+
+vec4 GetSkyBoxColor(vec3 reflectV)
+{
+	vec4 res = vec4(texture(skyBoxMap, reflectV).rgb, 1.0);
+	return res;
+}
+
+// 获取世界坐标下的视点到顶点的向量
+vec3 WorldViewObjDir()
+{
+	vec3 res = normalize(posW - eyePos);
+	return res;
 }
