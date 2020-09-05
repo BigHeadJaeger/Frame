@@ -30,8 +30,6 @@ public:
 	ScreenRender screenRender;
 
 	SkyBox skyBox;
-private:
-
 public:
 	MyScene()
 	{
@@ -69,5 +67,7 @@ public:
 	void Draw();					// 总的绘制（包括场景绘制， 屏幕渲染等）
 
 	void DrawScene();				// 绘制场景
-private:
+public:
+	void Scene1Init();
+	void Scene2Init();
 };

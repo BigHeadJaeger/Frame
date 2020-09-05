@@ -9,7 +9,7 @@ Camera::Camera()
 	lookDir = vec3(0.0f, 0.0f, -1.0f);
 	view = mat4(0);
 	pro = mat4(0);
-	cameraSpeed = 2;
+	cameraSpeed = 5;
 	fov = 45.f;
 	type = COMPONENT_CAMERA;
 }

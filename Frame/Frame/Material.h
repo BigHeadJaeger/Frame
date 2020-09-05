@@ -348,6 +348,7 @@ public:
     {
         isSkyBox = true;
         shader = ShaderManager::GetInstance().GetShader("SF_ReflectAndRefract");
+        SetTextureBase("");
     }
 
     void SetMode(int _mode)
@@ -367,7 +368,12 @@ public:
         tool.SetUniform("mode", mode, shader);
         tool.SetUniform("ratio", ratio, shader);
         tool.SetTexture(baseTex->id, 0, GL_TEXTURE0, "baseColorMap", shader);
-        tool.SetTexture(aoTex->id, 1, GL_TEXTURE1, "AOMap", shader);
+        if (aoTex)
+        {
+            tool.SetUniform("isAO", true, shader);
+            tool.SetTexture(aoTex->id, 1, GL_TEXTURE1, "AOMap", shader);
+        }
+        tool.SetUniform("isAO", false, shader);
 
         if (!isSkyBox)
         {
