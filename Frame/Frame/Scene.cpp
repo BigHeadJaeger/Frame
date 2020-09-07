@@ -22,9 +22,10 @@ void MyScene::Init()
 	}
 
 	ModelInit();
-	MaterialInit();
+	//MaterialInit();
+	MaterialTestInit();
 	ScreenRenderInit();
-	SkyBoxInit();
+	//SkyBoxInit();
 
 	drawMode.isLine = false;
 
@@ -114,8 +115,37 @@ void MyScene::Init()
 	//testModel->transform->SetRotation(vec3(0, -90, 0));
 	//rootObject->AddChild(testModel);
 
-	Scene1Init();
+	SceneTest();
+	//Scene1Init();
 	//Scene2Init();
+}
+
+
+
+void MyScene::SceneTest()
+{
+	shared_ptr<Object> mainCamera = make_shared<Object>();
+	mainCamera->AddComponent<Transform>();
+	rootObject->AddChild(mainCamera);
+	mainCamera->SetName("MainCamera");
+	mainCamera->SetPosition(vec3(0, 2, 3));
+	auto cameraComponent = mainCamera->AddComponent<Camera>();
+	cameraComponent->Init(vec3(0, 0, 0));
+	RenderFrameModel::GetInstance().SetMainCamera(cameraComponent);
+
+
+	shared_ptr<Object> light1 = make_shared<Object>();
+	light1->AddComponent<Transform>();
+	light1->SetName("light1");
+	rootObject->AddChild(light1);
+	light1->SetPosition(vec3(-3, 5, 0));
+	auto light1Component = light1->AddComponent<LightComponent>();
+	light1Component->SetLightType(LIGHT_TYPE::POINT_LIGHT);
+
+	auto grid1 = objectManager.GridObject(10, 10);
+	rootObject->AddChild(grid1);
+	grid1->SetPosition(vec3(0, 0, 0));
+	grid1->GetComponent<MeshRenderer>()->material = MaterialManager::GetInstance().GetMaterial("Phong");
 }
 
 void MyScene::Scene1Init()
@@ -294,7 +324,6 @@ void MyScene::MaterialInit()
 	auto material8 = materialManager.CreateMaterial<EnvironmentMapping>("environmentRefract");
 	material8->SetMode(1);
 
-
 	auto material6 = materialManager.CreateMaterial<PBRMaterial>("metalsheet");
 	material6->SetTextureBase(file::GetResPath("Material/metalsheet/basecolor.png"));
 	material6->SetTextureMetallic(file::GetResPath("Material/metalsheet/metalic.png"));
@@ -307,6 +336,19 @@ void MyScene::MaterialInit()
 	material7->SetTextureMetallic(file::GetResPath("Material/rustediron/metalic.png"));
 	material7->SetTextureNormal(file::GetResPath("Material/rustediron/normal.png"));
 	material7->SetTextureRoughness(file::GetResPath("Material/rustediron/roughness.png"));
+}
+
+void MyScene::MaterialTestInit()
+{
+	decltype(auto) materialManager = MaterialManager::GetInstance();
+
+	materialManager.CreateMaterial<NoneMaterial>("none");
+
+	auto material1 = materialManager.CreateMaterial<DefaultSpecularMaterial>("DefaultSpecular");
+	material1->SetTextureBase("");
+
+	auto material2 = materialManager.CreateMaterial<PhongMaterial>("Phong");
+	material2->SetBaseColor(vec4(255, 0, 0, 1));
 }
 
 void MyScene::SkyBoxInit()
