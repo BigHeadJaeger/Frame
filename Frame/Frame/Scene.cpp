@@ -28,24 +28,21 @@ void MyScene::Init()
 
 	drawMode.isLine = false;
 
-	shared_ptr<Object> mainCamera = make_shared<Object>();
-	mainCamera->AddComponent<Transform>();
-	rootObject->AddChild(mainCamera);
-	mainCamera->SetName("MainCamera");
-	mainCamera->SetPosition(vec3(0, 2, 3));
-	auto cameraComponent = mainCamera->AddComponent<Camera>();
-	cameraComponent->Init(vec3(0, 0, 0));
-	RenderFrameModel::GetInstance().SetMainCamera(cameraComponent);
-	//objectManager.InsertObject(mainCamera);
-	//objects.insert(make_pair(mainCamera->GetName(), mainCamera));
+	//shared_ptr<Object> mainCamera = make_shared<Object>();
+	//mainCamera->AddComponent<Transform>();
+	//rootObject->AddChild(mainCamera);
+	//mainCamera->SetName("MainCamera");
+	//mainCamera->SetPosition(vec3(0, 2, 3));
+	//auto cameraComponent = mainCamera->AddComponent<Camera>();
+	//cameraComponent->Init(vec3(0, 0, 0));
+	//RenderFrameModel::GetInstance().SetMainCamera(cameraComponent);
 
-
-	shared_ptr<Object> light1 = make_shared<Object>();
-	light1->AddComponent<Transform>();
-	light1->SetName("light1");
-	rootObject->AddChild(light1);
-	light1->SetPosition(vec3(-3, 3, 0));
-	auto light1Component = light1->AddComponent<LightComponent>();
+	//shared_ptr<Object> light1 = make_shared<Object>();
+	//light1->AddComponent<Transform>();
+	//light1->SetName("light1");
+	//rootObject->AddChild(light1);
+	//light1->SetPosition(vec3(-3, 3, 0));
+	//auto light1Component = light1->AddComponent<LightComponent>();
 	//light1Component->SetLightType(LIGHT_TYPE::POINT_LIGHT);
 
 	//shared_ptr<Object> light2 = make_shared<Object>();
@@ -56,21 +53,10 @@ void MyScene::Init()
 	//auto light2Component = light2->AddComponent<LightComponent>();
 	//light2Component->SetLightType(LIGHT_TYPE::POINT_LIGHT);
 
-	//shared_ptr<Object> box(new Object);
-	//box->AddComponent<Transform>();
-	//box->SetPosition(vec3(-1, 0, 0));
-	//box->transform->SetRotation(vec3(0, 60, 0));
-	//rootObject->AddChild(box);
-	//box->SetName("box1");
-	//auto meshReference = box->AddComponent<MeshReference>();
-	//meshReference->CreateBox(1, 1, 1);
-	//auto bR = box->AddComponent<MeshRenderer>();
-	//box->isSelect = true;
-	//bR->material = MaterialManager::GetInstance().GetMaterial("metalgrid");
 
-	shared_ptr<DefaultSpecularMaterial> specularMa = make_shared<DefaultSpecularMaterial>();
+	//shared_ptr<DefaultSpecularMaterial> specularMa = make_shared<DefaultSpecularMaterial>();
 	//specularMa->SetTextureBase("Material\\btn_sz.png");
-	specularMa->SetTextureBase(file::GetResPath("Material/blending_transparent_window.png"));
+	//specularMa->SetTextureBase(file::GetResPath("Material/blending_transparent_window.png"));
 	//specularMa->SetTextureBase("Material\\oakfloor\\basecolor.png");
 
 
@@ -90,9 +76,9 @@ void MyScene::Init()
 	//box->GetComponent<MeshRenderer>()->material = MaterialManager::GetInstance().GetMaterial("environment");
 	//box->isSelect = true;
 
-	auto sphere = objectManager.SphereObject();
-	rootObject->AddChild(sphere);
-	sphere->GetComponent<MeshRenderer>()->material = MaterialManager::GetInstance().GetMaterial("none");
+	//auto sphere = objectManager.SphereObject();
+	//rootObject->AddChild(sphere);
+	//sphere->GetComponent<MeshRenderer>()->material = MaterialManager::GetInstance().GetMaterial("metalsheet");
 
 	//sphere->GetComponent<MeshReference>()->vertexData.drawType = GL_POINTS;
 
@@ -127,6 +113,125 @@ void MyScene::Init()
 	//testModel->SetPosition(vec3(2, 0, 0));
 	//testModel->transform->SetRotation(vec3(0, -90, 0));
 	//rootObject->AddChild(testModel);
+
+	//Scene1Init();
+	Scene2Init();
+}
+
+void MyScene::Scene1Init()
+{
+	shared_ptr<Object> mainCamera = make_shared<Object>();
+	mainCamera->AddComponent<Transform>();
+	rootObject->AddChild(mainCamera);
+	mainCamera->SetName("MainCamera");
+	mainCamera->SetPosition(vec3(0, 2, 3));
+	auto cameraComponent = mainCamera->AddComponent<Camera>();
+	cameraComponent->Init(vec3(0, 0, 0));
+	RenderFrameModel::GetInstance().SetMainCamera(cameraComponent);
+
+
+	shared_ptr<Object> light1 = make_shared<Object>();
+	light1->AddComponent<Transform>();
+	light1->SetName("light1");
+	rootObject->AddChild(light1);
+	light1->SetPosition(vec3(-3, 3, 0));
+	auto light1Component = light1->AddComponent<LightComponent>();
+	//light1Component->SetLightType(LIGHT_TYPE::POINT_LIGHT);
+
+	auto sphere1 = objectManager.SphereObject(0.5);
+	rootObject->AddChild(sphere1);
+	sphere1->SetPosition(vec3(-2, 0, 0));
+	sphere1->GetComponent<MeshRenderer>()->material = MaterialManager::GetInstance().GetMaterial("metalsheet");
+
+	auto sphere2 = objectManager.SphereObject(0.5);
+	rootObject->AddChild(sphere2);
+	sphere2->SetPosition(vec3(0, 2, 0));
+	sphere2->GetComponent<MeshRenderer>()->material = MaterialManager::GetInstance().GetMaterial("metalgrid");
+
+	auto sphere3 = objectManager.SphereObject(0.5);
+	rootObject->AddChild(sphere3);
+	sphere3->SetPosition(vec3(2, 4, 0));
+	sphere3->GetComponent<MeshRenderer>()->material = MaterialManager::GetInstance().GetMaterial("oakfloor");
+
+	auto sphere4 = objectManager.SphereObject(0.5);
+	rootObject->AddChild(sphere4);
+	sphere4->SetPosition(vec3(-2, 0, 2));
+	sphere4->GetComponent<MeshRenderer>()->material = MaterialManager::GetInstance().GetMaterial("rustediron");
+
+	auto sphere5 = objectManager.SphereObject(0.5);
+	rootObject->AddChild(sphere5);
+	sphere5->SetPosition(vec3(0, 2, 2));
+	sphere5->GetComponent<MeshRenderer>()->material = MaterialManager::GetInstance().GetMaterial("environmentReflect");
+
+	auto sphere6 = objectManager.SphereObject(0.5);
+	rootObject->AddChild(sphere6);
+	sphere6->SetPosition(vec3(2, 4, 2));
+	sphere6->GetComponent<MeshRenderer>()->material = MaterialManager::GetInstance().GetMaterial("environmentRefract");
+}
+
+void MyScene::Scene2Init()
+{
+	shared_ptr<Object> mainCamera = make_shared<Object>();
+	mainCamera->AddComponent<Transform>();
+	rootObject->AddChild(mainCamera);
+	mainCamera->SetName("MainCamera");
+	mainCamera->SetPosition(vec3(0, 2, 3));
+	auto cameraComponent = mainCamera->AddComponent<Camera>();
+	cameraComponent->Init(vec3(0, 0, 0));
+	RenderFrameModel::GetInstance().SetMainCamera(cameraComponent);
+
+	shared_ptr<Object> light1 = make_shared<Object>();
+	light1->AddComponent<Transform>();
+	light1->SetName("light1");
+	rootObject->AddChild(light1);
+	light1->SetPosition(vec3(-3, 3, 0));
+	auto light1Component = light1->AddComponent<LightComponent>();
+	//light1Component->SetLightType(LIGHT_TYPE::POINT_LIGHT);
+
+	shared_ptr<Object> light2 = make_shared<Object>();
+	light2->AddComponent<Transform>();
+	light2->SetName("light2");
+	rootObject->AddChild(light2);
+	light2->SetPosition(vec3(-3, 3, 0));
+	auto light2Component = light2->AddComponent<LightComponent>();
+	dynamic_pointer_cast<DirLight>(light2Component->light)->lightDir = vec3(-1, -1, -1);
+
+	auto grid1 = objectManager.GridObject(50, 50);
+	rootObject->AddChild(grid1);
+	grid1->SetPosition(vec3(0, 0, 0));
+	grid1->GetComponent<MeshRenderer>()->material = MaterialManager::GetInstance().GetMaterial("metalgrid");
+
+	decltype(auto) modelGenerator = ModelGenerator::GetInstance();
+	auto model1 = modelGenerator.Create(file::GetResPath("Model/nanosuit/nanosuit.obj"));
+	model1->transform->SetScaler(vec3(0.5));
+	model1->SetPosition(vec3(4, 0, 0));
+	model1->transform->SetRotation(vec3(0, -90, 0));
+	rootObject->AddChild(model1);
+
+	auto model2 = modelGenerator.Create(file::GetResPath("OBJ/bucket.obj"));
+	model2->transform->SetScaler(vec3(0.004));
+	model2->SetPosition(vec3(0, 0, 0));
+	for (auto it = model2->children.begin(); it != model2->children.end(); it++)
+	{
+		(*it)->GetComponent<MeshRenderer>()->material = MaterialManager::GetInstance().GetMaterial("oakfloor");
+	}
+	rootObject->AddChild(model2);
+
+	auto model3 = modelGenerator.Create(file::GetResPath("OBJ/cow.obj"));
+	model3->transform->SetScaler(vec3(10));
+	model3->SetPosition(vec3(-6, 3, 5));
+	model3->transform->SetRotation(vec3(0, 45, 0));
+	for (auto it = model3->children.begin(); it != model3->children.end(); it++)
+	{
+		(*it)->GetComponent<MeshRenderer>()->material = MaterialManager::GetInstance().GetMaterial("environmentReflect");
+	}
+	rootObject->AddChild(model3);
+
+	auto grid2 = objectManager.GridObject(10, 10);
+	rootObject->AddChild(grid2);
+	grid2->SetPosition(vec3(-9, 5, 10));
+	grid2->transform->SetRotation(vec3(90, 0, 0));
+	grid2->GetComponent<MeshRenderer>()->material = MaterialManager::GetInstance().GetMaterial("TransparentSpecular");
 }
 
 void MyScene::InitKeys()
@@ -149,6 +254,8 @@ void MyScene::ModelInit()
 	//modelManager.InitModel("OBJ\\Neptune.obj");
 	//modelManager.InitModel("Model\\backpack\\backpack.obj");
 	//modelManager.InitModel(file::GetResPath("Model/nanosuit/nanosuit.obj"));
+	//modelManager.InitModel(file::GetResPath("OBJ/bucket.obj"));
+	//modelManager.InitModel(file::GetResPath("OBJ/cow.obj"));
 	
 }
 
@@ -165,20 +272,41 @@ void MyScene::MaterialInit()
 	material1->SetTextureAO(file::GetResPath("Material/metalgrid/AO.png"));
 	material1->SetTextureRoughness(file::GetResPath("Material/metalgrid/roughness.png"));
 
-	//auto material2 = materialManager.CreateMaterial<PBRMaterial>("TransparentSpecular");
-	//material2->SetTextureBase(file::GetResPath("Material/blending_transparent_window.png"));
-	//material2->SetRenderMode(RenderMode::Transparent);
+	auto material2 = materialManager.CreateMaterial<PBRMaterial>("TransparentSpecular");
+	material2->SetTextureBase(file::GetResPath("Material/blending_transparent_window.png"));
+	material2->SetRenderMode(RenderMode::Transparent);
 
 	auto material3 = materialManager.CreateMaterial<DefaultSpecularMaterial>("DefaultSpecular");
 	material3->SetTextureBase("");
 
 	auto material4 = materialManager.CreateMaterial<PBRMaterial>("oakfloor");
 	material4->SetTextureBase(file::GetResPath("Material/oakfloor/basecolor.png"));
+	material4->SetTextureAO(file::GetResPath("Material/oakfloor/AOTest.png"));
+	material4->SetTextureNormal(file::GetResPath("Material/oakfloor/normal.png"));
+	material4->SetTextureRoughness(file::GetResPath("Material/oakfloor/roughness.png"));
 
-	auto material5 = materialManager.CreateMaterial<EnvironmentMapping>("environment");
+
+	auto material5 = materialManager.CreateMaterial<EnvironmentMapping>("environmentReflect");
 	material5->SetMode(0);
-	material5->SetTextureBase(file::GetResPath("Material/metalsheet/basecolor.png"));
-	material5->SetTextureAO(file::GetResPath("Material/metalsheet/AO.png"));
+	//material5->SetTextureBase(file::GetResPath("Material/metalsheet/basecolor.png"));
+	//material5->SetTextureAO(file::GetResPath("Material/metalsheet/AO.png"));
+
+	auto material8 = materialManager.CreateMaterial<EnvironmentMapping>("environmentRefract");
+	material8->SetMode(1);
+
+
+	auto material6 = materialManager.CreateMaterial<PBRMaterial>("metalsheet");
+	material6->SetTextureBase(file::GetResPath("Material/metalsheet/basecolor.png"));
+	material6->SetTextureMetallic(file::GetResPath("Material/metalsheet/metalic.png"));
+	material6->SetTextureNormal(file::GetResPath("Material/metalsheet/normal.png"));
+	material6->SetTextureRoughness(file::GetResPath("Material/metalsheet/roughness.png"));
+	material6->SetTextureAO(file::GetResPath("Material/metalsheet/AO.png"));
+
+	auto material7 = materialManager.CreateMaterial<PBRMaterial>("rustediron");
+	material7->SetTextureBase(file::GetResPath("Material/rustediron/basecolor.png"));
+	material7->SetTextureMetallic(file::GetResPath("Material/rustediron/metalic.png"));
+	material7->SetTextureNormal(file::GetResPath("Material/rustediron/normal.png"));
+	material7->SetTextureRoughness(file::GetResPath("Material/rustediron/roughness.png"));
 }
 
 void MyScene::SkyBoxInit()
@@ -264,12 +392,16 @@ void MyScene::DrawScene()
 		glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
 	}
 
+	if (!skyBox.material.expired())
+		skyBox.Render();
+
 	renderQueue.Render(rootObject);
 
-	skyBox.Render();
 	//RenderObject(rootObject);
 
 }
+
+
 
 void MyScene::RenderObject(shared_ptr<Object> obj)
 {

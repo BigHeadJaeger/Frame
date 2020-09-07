@@ -17,6 +17,7 @@ uniform samplerCube skyBoxMap;
 
 uniform sampler2D baseColorMap;
 uniform sampler2D AOMap;
+uniform bool isAO;
 
 vec4 GetSkyBoxColor(vec3 reflectV)
 {
@@ -39,7 +40,10 @@ void main()
 	vec4 baseColor = vec4(texture(baseColorMap, texcoordF).rgb, 1.0);
 
 	// AO贴图的第一位存的是反射率
-	reflectRate = texture(AOMap, texcoordF).r;
+	if(isAO)
+		reflectRate = texture(AOMap, texcoordF).r;
+	else
+		reflectRate = 1.0;
 	
 	vec3 sampleV;
 	if(mode == 0)
