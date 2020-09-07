@@ -164,6 +164,7 @@
     <ClCompile Include="RenderFrameModel.cpp" />
     <ClCompile Include="RenderQueue.cpp" />
     <ClCompile Include="Scene.cpp" />
+    <ClCompile Include="ScreenRender.cpp" />
     <ClCompile Include="ShaderDataTool.cpp" />
     <ClCompile Include="Texture.cpp" />
     <ClCompile Include="TextureManager.cpp" />

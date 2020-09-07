@@ -114,8 +114,8 @@ void MyScene::Init()
 	//testModel->transform->SetRotation(vec3(0, -90, 0));
 	//rootObject->AddChild(testModel);
 
-	//Scene1Init();
-	Scene2Init();
+	Scene1Init();
+	//Scene2Init();
 }
 
 void MyScene::Scene1Init()
@@ -371,6 +371,8 @@ void MyScene::DrawScene()
 	//绘制,包含缓冲区的清空，各种效果的开启（blend、 cull之类的）
 	glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);
+
+	glEnable(GL_MULTISAMPLE);
 
 	//glEnable(GL_BLEND);
 	// 源在上， 目标在下， 混合公式Cs * Fs + Ct * (1 - Fs)

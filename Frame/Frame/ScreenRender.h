@@ -21,7 +21,12 @@ class ScreenRender
 public:
 	GLuint FBO;
 	GLuint texColorBuffer;
-	GLuint DSRenderBuffer;		// 深度和模板的RBO
+	GLuint DSRenderBuffer;				// 深度和模板的RBO
+
+	GLuint multiSampledBuffer;			// 多重采样的缓冲
+	GLuint multiSampledColorBuffer;		// 多重采样的纹理附件
+	GLuint multiSampledRenderBuffer;	// 多重采样的深度和模板的RBO
+
 
 	// 屏幕顶点
 	//GLuint VAO;
@@ -30,6 +35,8 @@ public:
 	VertexData planeData;
 
 	bool isOpen;				// 是否开启屏幕渲染
+
+	bool isMultiSampled;		// 是否开启多采样
 
 	SCREEN_RENDER_TYPE type;
 
@@ -51,47 +58,11 @@ public:
 		texOffset = 1 / 300.f;
 		isOpen = false;
 		type = SCREEN_RENDER_TYPE::NONE;
+		isMultiSampled = true;
 	}
 
 	// 默认帧缓冲初始化（纹理作为附件， 带有深度缓冲和模板缓冲）
-	void InitDefaultFrameBuffer()
-	{
-		glDeleteFramebuffers(1, &FBO);		// 先清除已有的缓冲
-		glGenFramebuffers(1, &FBO);
-		glBindFramebuffer(GL_FRAMEBUFFER, FBO);
-
-		glDeleteTextures(1, &texColorBuffer);
-		glGenTextures(1, &texColorBuffer);
-		glBindTexture(GL_TEXTURE_2D, texColorBuffer);
-		glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, WIDTH, HEIGHT, 0, GL_RGB, GL_UNSIGNED_BYTE, nullptr);
-		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-		glBindTexture(GL_TEXTURE_2D, 0);
-
-		glFramebufferTexture(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, texColorBuffer, 0);
-
-		glDeleteRenderbuffers(1, &DSRenderBuffer);
-		glGenRenderbuffers(1, &DSRenderBuffer);
-		glBindRenderbuffer(GL_RENDERBUFFER, DSRenderBuffer);
-		glRenderbufferStorage(GL_RENDERBUFFER, GL_DEPTH24_STENCIL8, WIDTH, HEIGHT);
-		glBindRenderbuffer(GL_RENDERBUFFER, 0);
-
-		glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_DEPTH_STENCIL_ATTACHMENT, GL_RENDERBUFFER, DSRenderBuffer);
-
-		if (glCheckFramebufferStatus(GL_FRAMEBUFFER) != GL_FRAMEBUFFER_COMPLETE)
-			std::cout << "framebuffer not complete" << std::endl;
-		glBindFramebuffer(GL_FRAMEBUFFER, 0);		// 复位默认帧缓冲
-
-		// 初始化顶点
-		InitDefaultVertexBuffer();
-	}
-
-	// 初始化默认的屏幕顶点缓冲
-	void InitDefaultVertexBuffer()
-	{
-		CreatePlane();
-		ShaderDataTool::GetInstance().InitVertexBuffer(planeData, planeData.VAO, planeData.VBO);
-	}
+	void InitDefaultFrameBuffer();
 
 	void SetScreenType(SCREEN_RENDER_TYPE _type)
 	{
@@ -126,10 +97,20 @@ public:
 			return;
 		}
 
-		glBindFramebuffer(GL_FRAMEBUFFER, FBO);
+		if (isMultiSampled)
+			glBindFramebuffer(GL_FRAMEBUFFER, multiSampledBuffer);
+		else
+			glBindFramebuffer(GL_FRAMEBUFFER, FBO);
+		
 		glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 		renderFun();
+		if (isMultiSampled)
+		{
+			glBindFramebuffer(GL_READ_FRAMEBUFFER, multiSampledBuffer);
+			glBindFramebuffer(GL_DRAW_FRAMEBUFFER, FBO);
+			glBlitFramebuffer(0, 0, WIDTH, HEIGHT, 0, 0, WIDTH, HEIGHT, GL_COLOR_BUFFER_BIT, GL_NEAREST);
+		}
 		glBindFramebuffer(GL_FRAMEBUFFER, 0);
 	}
 
@@ -139,6 +120,7 @@ public:
 		// 可以根据type进行不同的渲染
 		decltype(auto) tool = ShaderDataTool::GetInstance();
 		glBindFramebuffer(GL_FRAMEBUFFER, 0);
+
 		glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
 		glClear(GL_COLOR_BUFFER_BIT);
 		glDisable(GL_DEPTH_TEST);		// 此处关闭深度测试，因为不进行矩阵乘法，深度值是写死的0
@@ -160,26 +142,19 @@ public:
 	}
 
 private:
-	void CreatePlane()
+	void CreatePlane();
+	// 创建普通纹理
+	void CreateTexAttach(GLuint& tex);
+	// 创建采样纹理
+	void CreateMultiSampledTexAttach(GLuint& tex);
+	// 创建采样缓冲
+	void CreateMultiSampledFBO(GLuint& FBO);
+	// 创建普通缓冲
+	void CreateFBO(GLuint& FBO);
+	// 初始化默认的屏幕顶点缓冲
+	void InitDefaultVertexBuffer()
 	{
-		planeData.Clear();
-		planeData.totalVertex = 6;
-		planeData.setState(STATE_TYPE_POSITION, true);
-		planeData.setLocation(STATE_TYPE_POSITION, 0);
-		planeData.position.push_back(vec3(-1.f, 1.f, 0.f));
-		planeData.position.push_back(vec3(-1.f, -1.f, 0.f));
-		planeData.position.push_back(vec3(1.f, -1.f, 0.f));
-		planeData.position.push_back(vec3(-1.f, 1.f, 0.f));
-		planeData.position.push_back(vec3(1.f, -1.f, 0.f));
-		planeData.position.push_back(vec3(1.f, 1.f, 0.f));
-
-		planeData.setState(STATE_TYPE_TEXCOORD, true);
-		planeData.setLocation(STATE_TYPE_TEXCOORD, 1);
-		planeData.texcoord.push_back(vec2(0.f, 1.f));
-		planeData.texcoord.push_back(vec2(0.f, 0.f));
-		planeData.texcoord.push_back(vec2(1.f, 0.f));
-		planeData.texcoord.push_back(vec2(0.f, 1.f));
-		planeData.texcoord.push_back(vec2(1.f, 0.f));
-		planeData.texcoord.push_back(vec2(1.f, 1.f));
+		CreatePlane();
+		ShaderDataTool::GetInstance().InitVertexBuffer(planeData, planeData.VAO, planeData.VBO);
 	}
 };
