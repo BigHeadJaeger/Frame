@@ -59,6 +59,7 @@ public:
 	void InitKeys();
 	void ModelInit();
 	void MaterialInit();
+	void MaterialTestInit();
 	void SkyBoxInit();
 	// 初始化屏幕渲染
 	void ScreenRenderInit();
@@ -68,6 +69,7 @@ public:
 
 	void DrawScene();				// 绘制场景
 public:
+	void SceneTest();
 	void Scene1Init();
 	void Scene2Init();
 };

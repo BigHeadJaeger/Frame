@@ -107,6 +107,14 @@ public:
         shader = ShaderManager::GetInstance().GetShader("SF_Phong");
     }
 
+    void SetBaseColor(vec4 _color)
+    {
+        baseColor = _color;
+        ambient = vec3(_color);
+        diffuse = vec3(_color);
+        specular = vec3(_color);
+    }
+
     void Transfer() override
     {
         decltype(auto) tool = ShaderDataTool::GetInstance();

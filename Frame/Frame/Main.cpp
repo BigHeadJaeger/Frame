@@ -28,6 +28,7 @@ int main(void)
 		return -1;
 	glfwWindowHint(GLFW_VERSION_MAJOR, 4);
 	glfwWindowHint(GLFW_VERSION_MINOR, 6);
+	glfwWindowHint(GLFW_SAMPLES, 4);
 	//glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
 
 	/* Create a windowed mode window and its OpenGL context */
@@ -51,6 +52,8 @@ int main(void)
 
 	glfwSetScrollCallback(window, mouse_scroll_callback);			// 鼠标滚轮事件
 	glfwSetFramebufferSizeCallback(window, framebuffer_size_callback);
+
+	
 
 
 	//创建场景
