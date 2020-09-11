@@ -76,8 +76,8 @@
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <LinkIncremental>true</LinkIncremental>
-    <IncludePath>E:\Program\ComputerGraphics\Frame\ExternalLib\64\glm;E:\Program\ComputerGraphics\Frame\ExternalLib\64\include;$(IncludePath)</IncludePath>
-    <LibraryPath>E:\Program\ComputerGraphics\Frame\ExternalLib\64\lib;$(LibraryPath)</LibraryPath>
+    <IncludePath>E:\MyProgram\ComputerGraphics\Render\Frame\ExternalLib\64\glm;E:\MyProgram\ComputerGraphics\Render\Frame\ExternalLib\64\include;$(IncludePath)</IncludePath>
+    <LibraryPath>E:\MyProgram\ComputerGraphics\Render\Frame\ExternalLib\64\lib;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <LinkIncremental>false</LinkIncremental>
@@ -177,6 +177,7 @@
     <ClInclude Include="DataModel.h" />
     <ClInclude Include="DistributeFun.h" />
     <ClInclude Include="FileInterface.h" />
+    <ClInclude Include="HDRTexture.h" />
     <ClInclude Include="Interaction.h" />
     <ClInclude Include="Light.h" />
     <ClInclude Include="LightComponent.h" />
@@ -199,6 +200,7 @@
     <ClInclude Include="ShaderDataTool.h" />
     <ClInclude Include="ShaderManager.h" />
     <ClInclude Include="SkyBox.h" />
+    <ClInclude Include="stb_image.h" />
     <ClInclude Include="Texture.h" />
     <ClInclude Include="TextureManager.h" />
     <ClInclude Include="Transform.h" />
