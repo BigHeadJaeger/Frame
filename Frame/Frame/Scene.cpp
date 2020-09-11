@@ -142,10 +142,15 @@ void MyScene::SceneTest()
 	auto light1Component = light1->AddComponent<LightComponent>();
 	light1Component->SetLightType(LIGHT_TYPE::POINT_LIGHT);
 
-	auto grid1 = objectManager.GridObject(10, 10);
-	rootObject->AddChild(grid1);
-	grid1->SetPosition(vec3(0, 0, 0));
-	grid1->GetComponent<MeshRenderer>()->material = MaterialManager::GetInstance().GetMaterial("Phong");
+	//auto grid1 = objectManager.GridObject(10, 10);
+	//rootObject->AddChild(grid1);
+	//grid1->SetPosition(vec3(0, 0, 0));
+	//grid1->GetComponent<MeshRenderer>()->material = MaterialManager::GetInstance().GetMaterial("Phong");
+
+	auto sphere1 = objectManager.SphereObject();
+	rootObject->AddChild(sphere1);
+	sphere1->GetComponent<MeshRenderer>()->material = MaterialManager::GetInstance().GetMaterial("PBR2");
+
 }
 
 void MyScene::Scene1Init()
@@ -349,6 +354,18 @@ void MyScene::MaterialTestInit()
 
 	auto material2 = materialManager.CreateMaterial<PhongMaterial>("Phong");
 	material2->SetBaseColor(vec4(255, 0, 0, 1));
+
+	auto material3 = materialManager.CreateMaterial<PBRMaterial>("PBR1");
+	material3->SetTextureBase(file::GetResPath("Material/metalsheet/basecolor.png"));
+	material3->numMetallic = 1;
+	material3->numRoughness = 1;
+
+	auto material4 = materialManager.CreateMaterial<PBRMaterial>("PBR2");
+	material4->SetTextureBase(file::GetResPath("Material/metalsheet/basecolor.png"));
+	material4->SetTextureMetallic(file::GetResPath("Material/metalsheet/metalic.png"));
+	material4->SetTextureNormal(file::GetResPath("Material/metalsheet/normal.png"));
+	material4->SetTextureRoughness(file::GetResPath("Material/metalsheet/roughness.png"));
+	material4->SetTextureAO(file::GetResPath("Material/metalsheet/AO.png"));
 }
 
 void MyScene::SkyBoxInit()
