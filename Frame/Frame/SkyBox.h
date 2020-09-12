@@ -56,6 +56,7 @@ public:
 		glUseProgram(0);
 		//glDepthMask(GL_TRUE);
 		glDepthFunc(GL_LESS);
+		glEnable(GL_CULL_FACE);
 	}
 private:
 	// 将网格数据转化为openg使用的顶点数据

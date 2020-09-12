@@ -16,7 +16,7 @@ vec4 Kernel(mat3 ker, float offset);
 
 void main()
 {
-	vec4 resColor;
+	vec4 resColor = vec4(0);
 	if(screenType == 0)
 		resColor = texture(screenTexture, texcoordF);
 	else if(screenType == 1)
