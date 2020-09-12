@@ -22,4 +22,7 @@ public:
 	TextureManager(TextureManager&) = delete;
 	shared_ptr<Texture> InitTexture(string path);
 	shared_ptr<Texture> GetTexture(string path);
+
+	shared_ptr<Texture> InitHDRTexture(string path);
+	shared_ptr<Texture> GetHDRTexture(string path);
 };

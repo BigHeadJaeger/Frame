@@ -187,6 +187,7 @@ void main()
 float DistributionGGX(vec3 H,vec3 N,float roughness)
 {
 	float a = roughness * roughness;
+	//float a2 = roughness * roughness;
 	float a2 = a * a;
 	float NdotH = max(dot(N, H),0.0);
 	float NdotH2 = NdotH * NdotH;
@@ -212,31 +213,31 @@ float GeometrySchlickGGX(vec3 N, vec3 v, float roughness)
 }
 
 //几何阴影和几何遮蔽
-float GeometrySmith(vec3 N,vec3 L,vec3 E,float roughness)			
+float GeometrySmith(vec3 N, vec3 L, vec3 E, float roughness)			
 {
-	float GSGGXL=GeometrySchlickGGX(N,L,roughness);
-	float GSGGXE=GeometrySchlickGGX(N,E,roughness);
+	float GSGGXL = GeometrySchlickGGX(N, L, roughness);
+	float GSGGXE = GeometrySchlickGGX(N, E, roughness);
 
-	return GSGGXL*GSGGXE;
+	return GSGGXL * GSGGXE;
 }
 
 //菲涅尔方程
-vec3 Fresnel(float cosTheta,vec3 F0)
+vec3 Fresnel(float cosTheta, vec3 F0)
 {
 	return F0 + (1.0 - F0) * pow(1.0 - cosTheta, 5.0);
 }
 
 vec3 GetNormalFromMap()
 {
-	vec3 tangentNormal = texture(normalMap, TexCoord).xyz * 2.0 - 1.0;
+	vec3 tangentNormal = texture(normalMap, TexCoord).xyz * 2.0 - 1.0;	// 从[0, 1]转换到[-1, 1]
 
     vec3 Q1  = dFdx(posW);
     vec3 Q2  = dFdy(posW);
     vec2 st1 = dFdx(TexCoord);
     vec2 st2 = dFdy(TexCoord);
 
-    vec3 N   = normalize(normalW);
-    vec3 T  = normalize(Q1*st2.t - Q2*st1.t);
+    vec3 N  = normalize(normalW);
+    vec3 T  = normalize(Q1 * st2.t - Q2 * st1.t);
     vec3 B  = -normalize(cross(N, T));
     mat3 TBN = mat3(T, B, N);
 

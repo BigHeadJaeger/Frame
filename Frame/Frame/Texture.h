@@ -98,6 +98,8 @@ public:
 	}
 
 
+	void LoadHDRTexture(string path);
+
 	~Texture()
 	{
 		delete imgResult;
