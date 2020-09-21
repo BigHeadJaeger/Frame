@@ -21,6 +21,7 @@ void main()
 {
 	posW=(world*vec4(VertexPosition,1.0)).xyz;
 	normalW=(worldInvTranspose*vec4(normal,1.0)).xyz;
+	normalW = mat3(worldInvTranspose) * normal;
 	gl_Position=worldViewProj*vec4(VertexPosition,1.0);
 
 	//shadowCoord=depthBiasMVP*world*vec4(VertexPosition,1.0);	

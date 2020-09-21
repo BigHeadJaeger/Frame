@@ -15,7 +15,8 @@ uniform vec3 eyePos;
 void main()
 {
 	positionW = (world * vec4(positionL, 1.0)).xyz;
-	normalW = (worldInvTranspose * vec4(normalL, 1.0)).xyz;
+	//normalW = (worldInvTranspose * vec4(normalL, 1.0)).xyz;
+	normalW = mat3(worldInvTranspose) * normalL;
 	gl_Position = worldViewProj * vec4(positionL, 1.0);
 }
 

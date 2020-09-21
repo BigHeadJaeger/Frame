@@ -232,9 +232,6 @@
     <None Include="shader\SF_VertexColor.f">
       <Filter>Shader</Filter>
     </None>
-    <None Include="shader\SF_VertexColor.frag">
-      <Filter>Shader</Filter>
-    </None>
     <None Include="shader\SF_VertexColor.v">
       <Filter>Shader</Filter>
     </None>

@@ -15,7 +15,8 @@ uniform mat4 worldInvTranspose;
 void main()
 {
 	positionW = (world * vec4(positionL, 1.0)).xyz;
-	normalW = (worldInvTranspose * vec4(normalL, 1.0)).xyz;
+	//normalW = (worldInvTranspose * vec4(normalL, 0.0)).xyz;
+	normalW = mat3(worldInvTranspose) * normalL;
 	texcoordF = texcoordV;
 	gl_Position = worldViewProj * vec4(positionL, 1.0);
 }

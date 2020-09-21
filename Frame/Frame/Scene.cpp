@@ -150,7 +150,7 @@ void MyScene::SceneTest()
 	auto sphere1 = objectManager.SphereObject();
 	rootObject->AddChild(sphere1);
 	sphere1->GetComponent<MeshRenderer>()->material = MaterialManager::GetInstance().GetMaterial("PBR2");
-
+	sphere1->SetPosition(vec3(2.0, 0, 0));
 }
 
 void MyScene::Scene1Init()

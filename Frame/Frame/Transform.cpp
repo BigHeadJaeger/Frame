@@ -64,6 +64,7 @@ void Transform::UpdateMatrix()
 		parent = parent.lock()->parent;
 	}
 
+	//worldInvTranspose = mat4(mat3(transpose(inverse(world))));
 	worldInvTranspose = transpose(inverse(world));
 	auto mainCamera = RenderFrameModel::GetInstance().GetMainCamera();
 	worldViewProj = mainCamera->pro * mainCamera->view * world;

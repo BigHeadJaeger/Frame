@@ -222,7 +222,6 @@
     <None Include="shader\SF_SkyBox.f" />
     <None Include="shader\SF_SkyBox.v" />
     <None Include="shader\SF_VertexColor.f" />
-    <None Include="shader\SF_VertexColor.frag" />
     <None Include="shader\SF_VertexColor.v" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
