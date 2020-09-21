@@ -3,7 +3,7 @@
 #include<glm.hpp>
 #include<gtc\matrix_transform.hpp>
 #include<gtc\type_ptr.hpp>
-#include<SOIL.h>
+//#include<SOIL.h>
 #include<string>
 using namespace glm;
 using namespace std;
@@ -24,7 +24,7 @@ public:
 	}
 	ShaderDataTool(ShaderDataTool&) = delete;
 	// 从文件初始化图片到id中
-	void InitTextureWithFile(GLuint& texID, string texPath);
+	//void InitTextureWithFile(GLuint& texID, string texPath);
 	//传texture到shader中
 	void SetTexture(GLuint& texId, int num, GLenum texNum, string samplerName, weak_ptr<ShaderProgram> p);
 	void SetTextureCube(GLuint& texId, int num, GLenum texNum, string samplerName, weak_ptr<ShaderProgram> p);

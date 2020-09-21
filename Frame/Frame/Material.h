@@ -8,6 +8,8 @@ using namespace glm;
 #include"ShaderDataTool.h"
 #include"TextureManager.h"
 
+#include"stb_image.h"
+
 enum RenderMode
 {
     Opaque,
@@ -144,16 +146,19 @@ public:
         for (size_t i = 0; i < 6; i++)
         {
             string imgPath = pathPreix + "_" + to_string(i + 1) + ".jpg";
-            pResult = SOIL_load_image(imgPath.c_str(), &width, &height, &numChannels, SOIL_LOAD_RGB);
+            //pResult = SOIL_load_image(imgPath.c_str(), &width, &height, &numChannels, SOIL_LOAD_RGB);
+            pResult = stbi_load(imgPath.c_str(), &width, &height, &numChannels, 0);
             if (pResult)
             {
                 glTexImage2D(GL_TEXTURE_CUBE_MAP_POSITIVE_X + i, 0, GL_RGB, width, height, 0, GL_RGB, GL_UNSIGNED_BYTE, pResult);
-                SOIL_free_image_data(pResult);
+                //SOIL_free_image_data(pResult);
+                stbi_image_free(pResult);
             }
             else
             {
                 cout << "the " + imgPath + " cubemap load failed" << endl;
-                SOIL_free_image_data(pResult);
+                //SOIL_free_image_data(pResult);
+                stbi_image_free(pResult);
             }
         }
 

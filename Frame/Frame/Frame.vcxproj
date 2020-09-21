@@ -108,7 +108,7 @@
     <Link>
       <SubSystem>Console</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalDependencies>glfw3.lib;openGL32.lib;glew32s.lib;SOIL.lib;OpenMeshCored.lib;OpenMeshToolsd.lib;assimp-vc142-mtd.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>glfw3.lib;openGL32.lib;glew32s.lib;OpenMeshCored.lib;OpenMeshToolsd.lib;assimp-vc142-mtd.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
@@ -166,6 +166,7 @@
     <ClCompile Include="Scene.cpp" />
     <ClCompile Include="ScreenRender.cpp" />
     <ClCompile Include="ShaderDataTool.cpp" />
+    <ClCompile Include="stb_image.cpp" />
     <ClCompile Include="Texture.cpp" />
     <ClCompile Include="TextureManager.cpp" />
     <ClCompile Include="Transform.cpp" />
@@ -199,6 +200,7 @@
     <ClInclude Include="ShaderDataTool.h" />
     <ClInclude Include="ShaderManager.h" />
     <ClInclude Include="SkyBox.h" />
+    <ClInclude Include="stb_image.h" />
     <ClInclude Include="Texture.h" />
     <ClInclude Include="TextureManager.h" />
     <ClInclude Include="Transform.h" />

@@ -2,7 +2,6 @@
 #pragma once
 #include<string>
 #include<glad/glad.h>
-#include<SOIL.h>
 #include<iostream>
 using namespace std;
 
