@@ -178,6 +178,7 @@
     <ClInclude Include="DataModel.h" />
     <ClInclude Include="DistributeFun.h" />
     <ClInclude Include="FileInterface.h" />
+    <ClInclude Include="HDRTexture.h" />
     <ClInclude Include="Interaction.h" />
     <ClInclude Include="Light.h" />
     <ClInclude Include="LightComponent.h" />
