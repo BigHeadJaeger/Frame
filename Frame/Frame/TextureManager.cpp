@@ -1,14 +1,14 @@
 #include "TextureManager.h"
 
-shared_ptr<Texture> TextureManager::InitTexture(string path)
+shared_ptr<Texture2D> TextureManager::InitTexture2D(string path)
 {
-	shared_ptr<Texture> texture = make_shared<Texture>();
-	texture->LoadTexture(path);
+	shared_ptr<Texture2D> texture = make_shared<Texture2D>();
+	texture->CreateFromFile(path);
 	textureMap.insert(make_pair(path, texture));
 	return texture;
 }
 
-shared_ptr<Texture> TextureManager::GetTexture(string path)
+shared_ptr<Texture2D> TextureManager::GetTexture2D(string path)
 {
 	auto it = textureMap.find(path);
 	if (it != textureMap.end())
@@ -16,7 +16,7 @@ shared_ptr<Texture> TextureManager::GetTexture(string path)
 	else
 	{
 		// Éú³ÉÎÆÀí
-		auto texture = InitTexture(path);
+		auto texture = InitTexture2D(path);
 		if (!texture)
 		{
 			cout << "get texture failled" << endl;

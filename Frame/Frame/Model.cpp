@@ -142,7 +142,7 @@ void Model::LoadMaterialTexture(aiMaterial* mat, aiTextureType type, shared_ptr<
 		string prefix = path.substr(0, path.find_last_of('/'));
 		string absolutePath = prefix +"/" + str.C_Str();
 
-		auto texture = textureManager.GetTexture(absolutePath);
+		auto texture = textureManager.GetTexture2D(absolutePath);
 		//return;
 		switch (type)
 		{
