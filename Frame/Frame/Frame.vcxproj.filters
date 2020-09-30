@@ -206,6 +206,12 @@
     <ClInclude Include="HDRTexture.h">
       <Filter>头文件</Filter>
     </ClInclude>
+    <ClInclude Include="Texture2D.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="TextureCube.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="shader\SF_DefaultSpecular.f">
