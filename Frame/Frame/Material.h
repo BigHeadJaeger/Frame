@@ -30,15 +30,15 @@ public:
 public:
     string name;
     vec4 baseColor = vec4(225, 225, 225, 255);      // 基础颜色值
-    shared_ptr<Texture> baseTex;                    // 基础贴图
+    shared_ptr<Texture2D> baseTex;                    // 基础贴图
 
     bool isSkyBox;
 public:
     void SetTextureBase(string fileName);
-    void SetTextureBase(shared_ptr<Texture> tex)
+    void SetTextureBase(shared_ptr<Texture2D> tex)
     { 
         baseTex = tex; 
-        baseTex->SettingTexture();
+        //baseTex->SettingTexture();
     }
 
     // 每个材质有自己的方法将数据传输到shader中
@@ -195,14 +195,14 @@ public:
 class PBRMaterial :public Material
 {
 public:
-    shared_ptr<Texture> metalicTex;
+    shared_ptr<Texture2D> metalicTex;
     float numMetallic = 0.5;
 
-    shared_ptr<Texture> roughnessTex;
+    shared_ptr<Texture2D> roughnessTex;
     float numRoughness = 0.5;
 
-    shared_ptr<Texture> aoTex;
-    shared_ptr<Texture> normalTex;
+    shared_ptr<Texture2D> aoTex;
+    shared_ptr<Texture2D> normalTex;
 public:
     PBRMaterial()
     {
@@ -214,46 +214,46 @@ public:
 
     void SetTextureMetallic(string fileName) 
     {
-        metalicTex = texManager.GetTexture(fileName);
-        metalicTex->SettingTexture();
+        metalicTex = texManager.GetTexture2D(fileName);
+        //metalicTex->SettingTexture();
     }
-    void SetTextureMetallic(shared_ptr<Texture> tex)
+    void SetTextureMetallic(shared_ptr<Texture2D> tex)
     {
         metalicTex = tex;
-        metalicTex->SettingTexture();
+        //metalicTex->SettingTexture();
     }
 
     void SetTextureRoughness(string fileName)
     {
-        roughnessTex = texManager.GetTexture(fileName);
-        roughnessTex->SettingTexture();
+        roughnessTex = texManager.GetTexture2D(fileName);
+        //roughnessTex->SettingTexture();
     }
-    void SetTextureRoughness(shared_ptr<Texture> tex) 
+    void SetTextureRoughness(shared_ptr<Texture2D> tex) 
     {
         roughnessTex = tex; 
-        roughnessTex->SettingTexture();
+        //roughnessTex->SettingTexture();
     }
 
     void SetTextureAO(string fileName)
     {
-        aoTex = texManager.GetTexture(fileName); 
-        aoTex->SettingTexture();
+        aoTex = texManager.GetTexture2D(fileName); 
+        //aoTex->SettingTexture();
     }
-    void SetTextureAO(shared_ptr<Texture> tex) 
+    void SetTextureAO(shared_ptr<Texture2D> tex) 
     {
         aoTex = tex; 
-        aoTex->SettingTexture();
+        //aoTex->SettingTexture();
     }
 
     void SetTextureNormal(string fileName) 
     {
-        normalTex = texManager.GetTexture(fileName);
-        normalTex->SettingTexture();
+        normalTex = texManager.GetTexture2D(fileName);
+        //normalTex->SettingTexture();
     }
-    void SetTextureNormal(shared_ptr<Texture> tex) 
+    void SetTextureNormal(shared_ptr<Texture2D> tex) 
     {
         normalTex = tex;  
-        normalTex->SettingTexture();
+        //normalTex->SettingTexture();
     }
 
     void SetRenderMode(RenderMode mode) { renderMode = mode; }
@@ -355,7 +355,7 @@ public:
     float ratio = 1.f / 1.52f;
     int mode = 0;
 
-    shared_ptr<Texture> aoTex;
+    shared_ptr<Texture2D> aoTex;
 public:
     EnvironmentMapping()
     {
@@ -371,8 +371,8 @@ public:
 
     void SetTextureAO(string fileName)
     {
-        aoTex = texManager.GetTexture(fileName);
-        aoTex->SettingTexture();
+        aoTex = texManager.GetTexture2D(fileName);
+        //aoTex->SettingTexture();
     }
 
     void Transfer() override

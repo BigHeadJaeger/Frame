@@ -30,14 +30,14 @@ public:
 		pixelFormat = _pixelFormat;
 		isMipmap = _isMipMap;
 		glBindTexture(type, id);
-		glTexImage2D(type, 0, channelFormat, width, height, 0, pixelFormat, GL_UNSIGNED_BYTE, nullptr);
+		glTexImage2D(type, 0, channelFormat, width, height, 0, pixelFormat, dataFormat, nullptr);
 		if (isMipmap)
 			glGenerateMipmap(type);
 		
 		glBindTexture(type, 0);
 	}
 
-	bool CreateFromFile(string path) override
+	bool CreateFromImage(string path) override
 	{
 		unsigned char* imgResult;
 		glGenTextures(1, &id);					//生成一个纹理ID
@@ -70,7 +70,7 @@ public:
 		isMipmap = true;
 
 		glBindTexture(type, id);
-		glTexImage2D(type, 0, channelFormat, width, height, 0, pixelFormat, GL_UNSIGNED_BYTE, imgResult);
+		glTexImage2D(type, 0, channelFormat, width, height, 0, pixelFormat, dataFormat, imgResult);
 		if (isMipmap)
 			glGenerateMipmap(type);
 		//解除绑定

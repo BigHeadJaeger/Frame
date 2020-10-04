@@ -24,6 +24,7 @@ public:
 
 	GLint channelFormat;
 	GLenum pixelFormat;
+	GLenum dataFormat;
 	GLuint type;
 	GLuint warpSMode;
 	GLuint warpTMode;
@@ -47,6 +48,7 @@ public:
 		magFilter = GL_LINEAR;
 		pixelFormat = GL_RGB;
 		channelFormat = GL_RGB;
+		dataFormat = GL_UNSIGNED_BYTE;
 		isMipmap = true;
 	}
 
@@ -54,7 +56,7 @@ public:
 	//virtual void Create() = 0;
 
 	// 从文件读取纹理内容
-	virtual bool CreateFromFile(string path) = 0;
+	virtual bool CreateFromImage(string path) = 0;
 
 	//// 设置图片的属性，纹理的设置推迟到绑定材质之前，可按照需求先设置不同的属性(提高利用率和灵活性)
 	//void SettingTexture(bool isReset = false)

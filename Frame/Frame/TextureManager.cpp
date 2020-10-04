@@ -3,7 +3,7 @@
 shared_ptr<Texture2D> TextureManager::InitTexture2D(string path)
 {
 	shared_ptr<Texture2D> texture = make_shared<Texture2D>();
-	texture->CreateFromFile(path);
+	texture->CreateFromImage(path);
 	textureMap.insert(make_pair(path, texture));
 	return texture;
 }

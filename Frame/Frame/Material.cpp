@@ -6,12 +6,12 @@ void Material::SetTextureBase(string fileName)
     decltype(auto) tool = ShaderDataTool::GetInstance();
     if (fileName == "")
     {
-        baseTex = texManager.GetTexture(file::GetResPath("Material/Default/BaseColor.png"));
+        baseTex = texManager.GetTexture2D(file::GetResPath("Material/Default/BaseColor.png"));
     }
     else
     {
-        baseTex = texManager.GetTexture(fileName);
+        baseTex = texManager.GetTexture2D(fileName);
     }
     // 材质绑定的时候再设置纹理属性
-    baseTex->SettingTexture();
+    //baseTex->SettingTexture();
 }

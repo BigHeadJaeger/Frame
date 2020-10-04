@@ -7,6 +7,7 @@
 #include"Const.h"
 #include"ShaderDataTool.h"
 #include"ShaderManager.h"
+#include"Texture2D.h"
 
 enum class SCREEN_RENDER_TYPE
 {
@@ -20,7 +21,7 @@ class ScreenRender
 {
 public:
 	GLuint FBO;
-	GLuint texColorBuffer;
+	shared_ptr<Texture2D> texColorAttach;
 	GLuint DSRenderBuffer;				// 深度和模板的RBO
 
 	GLuint multiSampledBuffer;			// 多重采样的缓冲
@@ -47,18 +48,10 @@ public:
 	ScreenRender()
 	{
 		kernel = mat3(1);
-		//kernel = mat3(1, 2, 3, 4, 5, 6, 7, 8, 9);
-		//mat3x4 m1 = mat3x4(1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12);
-		//auto test = m1.length();
-		//auto test2 = m1[0].length();
-		//for (size_t i = 0; i < kernel.length(); i++)
-		//{
-
-		//}
 		texOffset = 1 / 300.f;
 		isOpen = false;
 		type = SCREEN_RENDER_TYPE::NONE;
-		isMultiSampled = true;
+		isMultiSampled = false;
 	}
 
 	// 默认帧缓冲初始化（纹理作为附件， 带有深度缓冲和模板缓冲）
@@ -129,7 +122,7 @@ public:
 		glUseProgram(shader->p);
 		glBindVertexArray(planeData.VAO);
 		tool.SetUniform("screenType", (int)type, shader);
-		tool.SetTexture(texColorBuffer, 0, GL_TEXTURE0, "screenTexture", shader);
+		tool.SetTexture(texColorAttach->id, 0, GL_TEXTURE0, "screenTexture", shader);
 		if (type == SCREEN_RENDER_TYPE::KERNEL)
 		{
 			tool.SetUniform("kernel", kernel, shader);
@@ -144,13 +137,13 @@ public:
 private:
 	void CreatePlane();
 	// 创建普通纹理
-	void CreateTexAttach(GLuint& tex);
+	GLuint CreateTexAttach();
 	// 创建采样纹理
 	void CreateMultiSampledTexAttach(GLuint& tex);
 	// 创建采样缓冲
-	void CreateMultiSampledFBO(GLuint& FBO);
+	void CreateMultiSampledFBO();
 	// 创建普通缓冲
-	void CreateFBO(GLuint& FBO);
+	void CreateFBO();
 	// 初始化默认的屏幕顶点缓冲
 	void InitDefaultVertexBuffer()
 	{
