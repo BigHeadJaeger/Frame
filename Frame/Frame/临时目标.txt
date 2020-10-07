@@ -1,0 +1,8 @@
+texture的属性单独作为一个结构体存储
+cubemap的每个面单独存储信息
+
+cubemap只能是POT图片
+
+图片读取时控制图片的大小
+
+texture还有一层 meta层（或者是unity3d资源管理界面的asset）

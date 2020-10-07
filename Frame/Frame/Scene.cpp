@@ -25,7 +25,7 @@ void MyScene::Init()
 	//MaterialInit();
 	MaterialTestInit();
 	ScreenRenderInit();
-	//SkyBoxInit();
+	SkyBoxInit();
 
 	drawMode.isLine = false;
 
@@ -371,9 +371,11 @@ void MyScene::MaterialTestInit()
 void MyScene::SkyBoxInit()
 {
 	decltype(auto) materialManager = MaterialManager::GetInstance();
-	auto skyBoxMaterial = materialManager.CreateMaterial<SkyBoxMaterial>("SkyBox1");
-	skyBoxMaterial->InitSkyBox(file::GetResPath("Skybox/skybox1/skybox1"));
-
+	auto skyBoxMaterial = materialManager.CreateMaterial<SkyBoxCubeMapMaterial>("SkyBox1");
+	shared_ptr<TextureCube> skyBoxTex = make_shared<TextureCube>();
+	skyBoxTex->CreateFromImage(file::GetResPath("Skybox/skybox1/skybox1_1.jpg"));
+	//skyBoxMaterial->InitSkyBox(file::GetResPath("Skybox/skybox1/skybox1"));
+	skyBoxMaterial->SetTextureCube(skyBoxTex);
 	RenderFrameModel::GetInstance().SetSkyBoxMaterial(skyBoxMaterial);
 
 	skyBox.InitSkyBox(skyBoxMaterial);

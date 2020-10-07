@@ -41,27 +41,28 @@ void ScreenRender::CreatePlane()
 GLuint ScreenRender::CreateTexAttach()
 {
 	texColorAttach.reset();
-	texColorAttach = make_shared<Texture2D>();
-	texColorAttach->Create(WIDTH, HEIGHT);
+	texColorAttach = make_shared<Texture2D>(WIDTH, HEIGHT);
+	//texColorAttach->Create(WIDTH, HEIGHT);
 	return texColorAttach->id;
 }
 
 void ScreenRender::CreateMultiSampledTexAttach(GLuint& tex)
 {
+	multiSampledTexColorAttach = make_shared<Texture2D>();
 	glDeleteTextures(1, &tex);
 	glGenTextures(1, &tex);
 	glBindTexture(GL_TEXTURE_2D_MULTISAMPLE, tex);
 	glTexImage2DMultisample(GL_TEXTURE_2D_MULTISAMPLE, 4, GL_RGB, WIDTH, HEIGHT, GL_TRUE);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+	glTexParameteri(GL_TEXTURE_2D_MULTISAMPLE, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+	glTexParameteri(GL_TEXTURE_2D_MULTISAMPLE, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
 	glBindTexture(GL_TEXTURE_2D_MULTISAMPLE, 0);
 }
 
 void ScreenRender::CreateMultiSampledFBO()
 {
-	glDeleteFramebuffers(1, &multiSampledBuffer);		// 先清除已有的缓冲
-	glGenFramebuffers(1, &multiSampledBuffer);
-	glBindFramebuffer(GL_FRAMEBUFFER, multiSampledBuffer);
+	glDeleteFramebuffers(1, &multiSampledFrameBuffer);		// 先清除已有的缓冲
+	glGenFramebuffers(1, &multiSampledFrameBuffer);
+	glBindFramebuffer(GL_FRAMEBUFFER, multiSampledFrameBuffer);
 
 	CreateMultiSampledTexAttach(multiSampledColorBuffer);
 	glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D_MULTISAMPLE, multiSampledColorBuffer, 0);
@@ -81,9 +82,9 @@ void ScreenRender::CreateMultiSampledFBO()
 
 void ScreenRender::CreateFBO()
 {
-	glDeleteFramebuffers(1, &FBO);		// 先清除已有的缓冲
-	glGenFramebuffers(1, &FBO);
-	glBindFramebuffer(GL_FRAMEBUFFER, FBO);
+	glDeleteFramebuffers(1, &normalFrameBuffer);		// 先清除已有的缓冲
+	glGenFramebuffers(1, &normalFrameBuffer);
+	glBindFramebuffer(GL_FRAMEBUFFER, normalFrameBuffer);
 
 	auto textureID = CreateTexAttach();
 	

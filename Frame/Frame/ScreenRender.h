@@ -20,11 +20,12 @@ enum class SCREEN_RENDER_TYPE
 class ScreenRender
 {
 public:
-	GLuint FBO;
+	GLuint normalFrameBuffer;
 	shared_ptr<Texture2D> texColorAttach;
 	GLuint DSRenderBuffer;				// 深度和模板的RBO
 
-	GLuint multiSampledBuffer;			// 多重采样的缓冲
+	GLuint multiSampledFrameBuffer;		// 多重采样的缓冲
+	shared_ptr<Texture2D> multiSampledTexColorAttach;
 	GLuint multiSampledColorBuffer;		// 多重采样的纹理附件
 	GLuint multiSampledRenderBuffer;	// 多重采样的深度和模板的RBO
 
@@ -51,7 +52,7 @@ public:
 		texOffset = 1 / 300.f;
 		isOpen = false;
 		type = SCREEN_RENDER_TYPE::NONE;
-		isMultiSampled = false;
+		isMultiSampled = true;
 	}
 
 	// 默认帧缓冲初始化（纹理作为附件， 带有深度缓冲和模板缓冲）
@@ -91,17 +92,17 @@ public:
 		}
 
 		if (isMultiSampled)
-			glBindFramebuffer(GL_FRAMEBUFFER, multiSampledBuffer);
+			glBindFramebuffer(GL_FRAMEBUFFER, multiSampledFrameBuffer);
 		else
-			glBindFramebuffer(GL_FRAMEBUFFER, FBO);
+			glBindFramebuffer(GL_FRAMEBUFFER, normalFrameBuffer);
 		
 		glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 		renderFun();
 		if (isMultiSampled)
 		{
-			glBindFramebuffer(GL_READ_FRAMEBUFFER, multiSampledBuffer);
-			glBindFramebuffer(GL_DRAW_FRAMEBUFFER, FBO);
+			glBindFramebuffer(GL_READ_FRAMEBUFFER, multiSampledFrameBuffer);
+			glBindFramebuffer(GL_DRAW_FRAMEBUFFER, normalFrameBuffer);
 			glBlitFramebuffer(0, 0, WIDTH, HEIGHT, 0, 0, WIDTH, HEIGHT, GL_COLOR_BUFFER_BIT, GL_NEAREST);
 		}
 		glBindFramebuffer(GL_FRAMEBUFFER, 0);

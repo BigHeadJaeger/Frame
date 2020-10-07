@@ -4,18 +4,9 @@
 #include<glad/glad.h>
 #include<iostream>
 using namespace std;
-
 #include"stb_image.h"
 
-//enum class TEXTURE_TYPE
-//{
-//	BASECOLOR,
-//	NORMAL,
-//	ROUGHNESS,
-//	AO,
-//	HEIGHT,
-//	METALLIC
-//};
+#include"PublicStruct.h"
 
 class Texture
 {
@@ -33,7 +24,7 @@ public:
 	GLuint magFilter;
 
 	bool isMipmap;
-	int width, height, numChannels;
+	int numChannels;
 
 	//bool isSetting;			// 标志是否已经设置过了
 
@@ -42,50 +33,22 @@ public:
 	{
 		//isSetting = false;
 		// 默认值
-		warpSMode = GL_REPEAT;
-		warpTMode = GL_REPEAT;
-		minFilter = GL_LINEAR;
-		magFilter = GL_LINEAR;
-		pixelFormat = GL_RGB;
-		channelFormat = GL_RGB;
-		dataFormat = GL_UNSIGNED_BYTE;
-		isMipmap = true;
+		//warpSMode = GL_REPEAT;
+		//warpTMode = GL_REPEAT;
+		//minFilter = GL_LINEAR;
+		//magFilter = GL_LINEAR;
+		//pixelFormat = GL_RGB;
+		//channelFormat = GL_RGB;
+		//dataFormat = GL_UNSIGNED_BYTE;
+		//isMipmap = true;
 	}
-
-	//// 创建一个没有内容的纹理
-	//virtual void Create() = 0;
 
 	// 从文件读取纹理内容
 	virtual bool CreateFromImage(string path) = 0;
 
-	//// 设置图片的属性，纹理的设置推迟到绑定材质之前，可按照需求先设置不同的属性(提高利用率和灵活性)
-	//void SettingTexture(bool isReset = false)
-	//{
-	//	// 已经设置过了判断是否重置，否则不管是否重置都要设置一遍
-	//	if (isSetting && !isReset)
-	//		return;
-	//	glBindTexture(type, id);
-	//	//指定贴图方法
-	//	glTexParameteri(type, GL_TEXTURE_WRAP_S, warpSMode);
-	//	glTexParameteri(type, GL_TEXTURE_WRAP_T, warpTMode);
-	//	//if (type == GL_TEXTURE_CUBE_MAP)
-	//	//	glTexParameteri(type, GL_TEXTURE_WRAP_R, warpRMode);
-	//	glTexParameteri(type, GL_TEXTURE_MIN_FILTER, minFilter);
-	//	glTexParameteri(type, GL_TEXTURE_MAG_FILTER, magFilter);
+public:
+	GLuint GetChannelFormat() { return channelFormat; }
+	GLenum GetPixelFormat() { return pixelFormat; }
+	GLenum GetDataFormat() { return dataFormat; }
 
-	//	glTexImage2D(type, 0, channelFormat, width, height, 0, pixelFormat, GL_UNSIGNED_BYTE, imgResult);
-	//	if(isMipmap)
-	//		glGenerateMipmap(type);
-	//	//解除绑定并释放
-	//	glBindTexture(type, 0);
-	//	isSetting = true;
-	//}
-
-
-	void LoadHDRTexture(string path);
-
-	//~Texture()
-	//{
-	//	delete imgResult;
-	//}
 };
