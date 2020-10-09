@@ -128,12 +128,12 @@ public:
 	}
 	bool LoadPostiveY(string path)
 	{
-		return LoadTexByDir(GL_TEXTURE_CUBE_MAP_POSITIVE_X, path);
+		return LoadTexByDir(GL_TEXTURE_CUBE_MAP_POSITIVE_Y, path);
 
 	}
 	bool LoadNegativeY(string path)
 	{
-		return LoadTexByDir(GL_TEXTURE_CUBE_MAP_NEGATIVE_X, path);
+		return LoadTexByDir(GL_TEXTURE_CUBE_MAP_NEGATIVE_Y, path);
 
 	}
 	bool LoadPostiveZ(string path)
@@ -147,6 +147,6 @@ public:
 
 	}
 
-	// 形成六个面（从已有的Texture2D中）
+	// 形成六个面（从已有的Texture2D中，可以在从texture上封装一层）
 
 };

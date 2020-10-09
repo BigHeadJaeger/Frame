@@ -130,12 +130,12 @@ public:
 class SkyBoxMaterial : public Material
 {
 public:
+    shared_ptr<TextureCube> texCube;
+public:
     SkyBoxMaterial()
     {
         shader = ShaderManager::GetInstance().GetShader("SF_SkyBox");
     }
-    //GLuint texBoxID;
-    shared_ptr<TextureCube> texCube;
 
     GLuint& GetTexCubeID()
     {
@@ -149,32 +149,50 @@ public:
     }
 };
 
+// 使用cubeMap初始化的
 class SkyBoxCubeMapMaterial : public SkyBoxMaterial
 {
 public:
-
-public:
-    //SkyBoxCubeMapMaterial()
-    //{
-    //    
-    //}
-
     void SetTextureCube(shared_ptr<TextureCube> tex)
     {
         texCube = tex;
     }
 };
 
-class SkyBox6SideMaterial : public Material
+// 使用六张图片初始化的
+class SkyBox6SideMaterial : public SkyBoxMaterial
 {
 public:
+    SkyBox6SideMaterial()
+    {
+        // 不需要外部的cubemap自行创建
+        texCube = make_shared<TextureCube>();
+    }
     // 分别初始化每一个面的值
-    //void InitSkyBoxPostiveX(string path);
-    //void InitSkyBoxNegativeX(string path);
-    //void InitSkyBoxPostiveY(string path);
-    //void InitSkyBoxNegativeY(string path);
-    //void InitSkyBoxPostiveZ(string path);
-    //void InitSkyBoxNegativeZ(string path);
+    void InitSkyBoxPostiveX(string path)
+    {
+        texCube->LoadPostiveX(path);
+    }
+    void InitSkyBoxNegativeX(string path)
+    {
+        texCube->LoadNegativeX(path);
+    }
+    void InitSkyBoxPostiveY(string path)
+    {
+        texCube->LoadPostiveY(path);
+    }
+    void InitSkyBoxNegativeY(string path)
+    {
+        texCube->LoadNegativeY(path);
+    }
+    void InitSkyBoxPostiveZ(string path)
+    {
+        texCube->LoadPostiveZ(path);
+    }
+    void InitSkyBoxNegativeZ(string path)
+    {
+        texCube->LoadNegativeZ(path);
+    }
 };
 
 class PBRMaterial :public Material

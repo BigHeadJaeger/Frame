@@ -371,14 +371,23 @@ void MyScene::MaterialTestInit()
 void MyScene::SkyBoxInit()
 {
 	decltype(auto) materialManager = MaterialManager::GetInstance();
-	auto skyBoxMaterial = materialManager.CreateMaterial<SkyBoxCubeMapMaterial>("SkyBox1");
-	shared_ptr<TextureCube> skyBoxTex = make_shared<TextureCube>();
-	skyBoxTex->CreateFromImage(file::GetResPath("Skybox/skybox1/skybox1_1.jpg"));
-	//skyBoxMaterial->InitSkyBox(file::GetResPath("Skybox/skybox1/skybox1"));
-	skyBoxMaterial->SetTextureCube(skyBoxTex);
-	RenderFrameModel::GetInstance().SetSkyBoxMaterial(skyBoxMaterial);
+	//auto skyBoxMaterial = materialManager.CreateMaterial<SkyBoxCubeMapMaterial>("SkyBox1");
+	//shared_ptr<TextureCube> skyBoxTex = make_shared<TextureCube>();
+	//skyBoxTex->CreateFromImage(file::GetResPath("Skybox/skybox1/skybox1_1.jpg"));
+	//skyBoxMaterial->SetTextureCube(skyBoxTex);
+	//RenderFrameModel::GetInstance().SetSkyBoxMaterial(skyBoxMaterial);
 
-	skyBox.InitSkyBox(skyBoxMaterial);
+	auto skyBox6Side = materialManager.CreateMaterial<SkyBox6SideMaterial>("SkyBox2");
+	skyBox6Side->InitSkyBoxPostiveX(file::GetResPath("Skybox/skybox1/skybox1_1.jpg"));
+	skyBox6Side->InitSkyBoxNegativeX(file::GetResPath("Skybox/skybox1/skybox1_2.jpg"));
+	skyBox6Side->InitSkyBoxPostiveY(file::GetResPath("Skybox/skybox1/skybox1_3.jpg"));
+	skyBox6Side->InitSkyBoxNegativeY(file::GetResPath("Skybox/skybox1/skybox1_4.jpg"));
+	skyBox6Side->InitSkyBoxPostiveZ(file::GetResPath("Skybox/skybox1/skybox1_5.jpg"));
+	skyBox6Side->InitSkyBoxNegativeZ(file::GetResPath("Skybox/skybox1/skybox1_6.jpg"));
+
+	RenderFrameModel::GetInstance().SetSkyBoxMaterial(skyBox6Side);
+
+	skyBox.InitSkyBox(skyBox6Side);
 }
 
 void MyScene::ScreenRenderInit()

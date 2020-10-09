@@ -4,5 +4,11 @@ cubemap的每个面单独存储信息
 cubemap只能是POT图片
 
 图片读取时控制图片的大小
+	cubemap单独指定图片时需要保证每个面有一样的尺寸，所以需要将读取的图片转换为指定的大小
+
+skybox的渲染一般化（通用性增强）
+	可以将skyboxmaterial使用到任意的一个物体上
 
 texture还有一层 meta层（或者是unity3d资源管理界面的asset）
+
+vertexData 接受一个网格参数，转化为自己需要的格式
